@@ -10,20 +10,16 @@ import static com.fd.algorithmlearn.linked.LinkUtil.*;
  * @date-time: 2021/3/13 16:31
  */
 public class LinkIsPalindrome {
-    /**
-     * 左侧指针
-     */
-
-    ListNode left;
 
 
     public boolean isPalindrome(ListNode head) {
         if (head == null) {
             return false;
         }
-        if (head.next == null){
+        if (head.next == null) {
             return true;
         }
+        // 用于还原 输入链表的原始结构
         ListNode p = head, q = head;
 
         ListNode slow, fast;
@@ -69,7 +65,16 @@ public class LinkIsPalindrome {
         }
         return pre;
     }
+    /* ---------------------------------------- */
+    /**
+     * 左侧指针
+     */
+    ListNode left;
 
+    boolean isPalindrome1(ListNode head) {
+        left = head;
+        return traverse(head);
+    }
 
     boolean traverse(ListNode right) {
         if (right == null) {
@@ -82,6 +87,9 @@ public class LinkIsPalindrome {
         left = left.next;
         return res;
     }
+
+    /* ---------------------------------------- */
+
 
     public static void main(String[] args) {
         int[] arr = {1, 2, 1, 2};
