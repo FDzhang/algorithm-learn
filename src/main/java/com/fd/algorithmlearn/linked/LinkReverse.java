@@ -3,8 +3,8 @@ package com.fd.algorithmlearn.linked;
 import java.util.List;
 
 /**
- * 题目：https://leetcode-cn.com/problems/reverse-linked-list-ii/
- *
+ * 题目：92. 反转链表 II
+ * https://leetcode-cn.com/problems/reverse-linked-list-ii/
  *
  * @author: zxq
  * @date-time: 2021/3/13 2:38
@@ -12,14 +12,6 @@ import java.util.List;
 
 public class LinkReverse {
 
-    static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-        }
-    }
 
     /**
      * 递归反转整个链表
@@ -76,6 +68,18 @@ public class LinkReverse {
     }
 
     public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4};
+        ListNode head = LinkUtil.create(arr);
+
+        LinkUtil.print(head);
+
+        LinkReverse reverse = new LinkReverse();
+
+//        ListNode newHead = reverse.reverse(head);
+//        ListNode newHead = reverse.reverseN(head, 3);
+        ListNode newHead = reverse.reverseBetween(head, 2, 3);
+
+        LinkUtil.print(newHead);
 
     }
 }

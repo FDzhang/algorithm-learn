@@ -1,17 +1,13 @@
 package com.fd.algorithmlearn.linked;
 
 /**
- * 题：https://leetcode-cn.com/problems/reverse-nodes-in-k-group
+ * 题：25. K 个一组翻转链表
+ * https://leetcode-cn.com/problems/reverse-nodes-in-k-group
  *
  * @author: zxq
  * @date-time: 2021/3/13 15:21
  */
 public class LinkReverseBetween {
-    static class ListNode {
-        int val;
-        ListNode next;
-    }
-
     /**
      * 反转以 a 为头结点的链表
      */
@@ -71,5 +67,18 @@ public class LinkReverseBetween {
         // 递归反转后续链表并连接起来
         a.next = reverseKGroup(b, k);
         return newHead;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6};
+        ListNode head = LinkUtil.create(arr);
+
+        LinkUtil.print(head);
+
+        LinkReverseBetween reverse = new LinkReverseBetween();
+
+        ListNode newHead = reverse.reverseKGroup(head, 2);
+
+        LinkUtil.print(newHead);
     }
 }
