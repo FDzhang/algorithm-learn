@@ -8,13 +8,14 @@ package com.fd.algorithmlearn.tree;
 public class TreeUtil {
 
 
-    public static void print(TreeNode root){
+    public static void print(TreeNode root) {
 
-        if (root == null){
+        if (root == null) {
+
             return;
         }
 
-        System.out.println(root.val);
+        System.out.print(root.val + ", ");
 
         print(root.left);
         print(root.right);
