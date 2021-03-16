@@ -18,24 +18,19 @@ package com.fd.algorithmlearn.tree;
 public class ConstructMaximumBinaryTreeAlgo {
 
     public TreeNode constructMaximumBinaryTree(int[] nums) {
-        TreeNode node = constructMaximumBinaryTree(nums, 0, nums.length - 1);
-        return node;
+        return build(nums, 0, nums.length - 1);
     }
 
-    public TreeNode constructMaximumBinaryTree(int[] nums, int start, int end) {
-        if (start > end) {
+    public TreeNode build(int[] nums, int lo, int hi) {
+        if (lo > hi) {
             return null;
         }
 
-        TreeNode root = new TreeNode();
-        int maxIndex = maxIndex(nums, start, end);
-        root.val = nums[maxIndex];
+        int maxIndex = maxIndex(nums, lo, hi);
+        TreeNode root = new TreeNode(nums[maxIndex]);
 
-        System.out.println(start + ", " + (maxIndex - 1) + ", left");
-        System.out.println((maxIndex + 1) + ", " + end + ", right");
-
-        root.left = constructMaximumBinaryTree(nums, start, maxIndex - 1);
-        root.right = constructMaximumBinaryTree(nums, maxIndex + 1, end);
+        root.left = build(nums, lo, maxIndex - 1);
+        root.right = build(nums, maxIndex + 1, hi);
         return root;
     }
 
