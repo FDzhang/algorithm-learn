@@ -1,8 +1,9 @@
 package com.fd.algorithmlearn.tree;
 
 /**
- * 105. 从前序与中序遍历序列构造二叉树
+ * 105. 从前序与中序遍历序列构造二叉树 （中等）
  * https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+ *
  * @author : zxq
  * @date-time : 2021/3/16 22:46
  */
@@ -18,22 +19,27 @@ public class BuildTreeAlgo {
         if (lo1 > hi1 || lo2 > hi2) {
             return null;
         }
-
-        TreeNode root = new TreeNode(preorder[lo1]);
-
+        // root 节点对应的值就是前序遍历数组的第一个元素
+        int rootVal = preorder[lo1];
+        // rootVal 在中序遍历数组中的索引
         int in = lo2;
         for (int i = lo2; i <= hi2; i++) {
-            if (preorder[lo1] == inorder[i]) {
+            if (rootVal == inorder[i]) {
                 in = i;
                 break;
             }
         }
 
-        int pre = in - lo2;
+        int leftSize = in - lo2;
 
-        root.left = buildTree(preorder, lo1 + 1, lo1 + pre,
+        // 先构造出当前根节点
+        TreeNode root = new TreeNode(rootVal);
+        // 递归构造左右子树
+        root.left = buildTree(
+                preorder, lo1 + 1, lo1 + leftSize,
                 inorder, lo2, in - 1);
-        root.right = buildTree(preorder, lo1 + pre + 1, hi1,
+        root.right = buildTree(
+                preorder, lo1 + leftSize + 1, hi1,
                 inorder, in + 1, hi2);
 
         return root;
