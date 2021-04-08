@@ -2,6 +2,7 @@ package com.fd.algorithmlearn.tree;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * 297. 二叉树的序列化与反序列化 （困难）
@@ -17,6 +18,9 @@ import java.util.List;
  */
 
 public class CodecAlgo {
+
+    /*-------------------------------------------前序遍历------------------------------------------------------------*/
+
 
     /*-------------------------- Encodes a tree to a single string.---------------------------------*/
 
@@ -74,10 +78,143 @@ public class CodecAlgo {
     /*--------------------------Decodes your encoded data to tree.---------------------------------*/
 
 
-    /*--------------------------后序遍历---------------------------------*/
+    /*-------------------------------------------前序遍历------------------------------------------------------------*/
 
 
 
     /*--------------------------后序遍历---------------------------------*/
+
+
+    public String serializeAfter(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serializeAfter(root, sb);
+        return sb.toString();
+    }
+
+    private void serializeAfter(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append(NULL).append(SEP);
+            return;
+        }
+        serializeAfter(root.left, sb);
+        serializeAfter(root.right, sb);
+
+        sb.append(root.val).append(SEP);
+    }
+
+    public TreeNode deserializeAfter(String data) {
+        LinkedList<String> nodes = new LinkedList<>();
+        for (String s : data.split(SEP)) {
+            nodes.add(s);
+        }
+        return deserializeAfter(nodes);
+    }
+
+    private TreeNode deserializeAfter(LinkedList<String> nodes) {
+        if (nodes.isEmpty()) {
+            return null;
+        }
+
+        String val = nodes.removeLast();
+        if (NULL.equals(val)) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(val));
+
+        root.right = deserializeAfter(nodes);
+        root.left = deserializeAfter(nodes);
+        return root;
+    }
+
+    /*--------------------------后序遍历---------------------------------*/
+
+
+    /*--------------------------层级遍历---------------------------------*/
+
+    void traverse(TreeNode root) {
+
+        if (root == null) {
+            return;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            System.out.println(node.val);
+
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+
+    }
+
+    public String serializeFor(TreeNode root) {
+        if (root == null) {
+            return "";
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        StringBuilder sb = new StringBuilder();
+
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+
+            if (node == null) {
+                sb.append(NULL).append(SEP);
+                continue;
+            }
+            sb.append(node.val).append(SEP);
+
+            queue.offer(node.left);
+            queue.offer(node.right);
+        }
+
+        return sb.toString();
+    }
+
+    public TreeNode deserializeFor(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        String[] nodes = data.split(SEP);
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+
+        for (int i = 0; i < nodes.length; ) {
+            TreeNode parent = queue.poll();
+
+            String left = nodes[i++];
+            if (!left.equals(NULL)) {
+                parent.left = new TreeNode(Integer.parseInt(left));
+                queue.offer(parent.left);
+            } else {
+                parent.left = null;
+            }
+
+            if (i>=nodes.length){
+                break;
+            }
+            String right = nodes[i++];
+            if (!right.equals(NULL)) {
+                parent.right = new TreeNode(Integer.parseInt(right));
+                queue.offer(parent.right);
+            } else {
+                parent.right = null;
+            }
+        }
+
+        return root;
+    }
+
+    /*--------------------------层级遍历---------------------------------*/
+
 
 }
