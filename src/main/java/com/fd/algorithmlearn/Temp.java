@@ -188,32 +188,43 @@ public class Temp {
         }
     }
 
+    public int reverse(int x) {
+        long res = 0;
+        while (x != 0) {
+            res = res * 10 + x % 10;
+            x /= 10;
+        }
+        return res == (int) res ? (int) res : 0;
+    }
+
+
     public static void main(String[] args) {
+        System.out.println(-4 % 10);
 //        System.out.println(1 << 1);
 //        System.out.println(1 << 2);
 //        System.out.println(1 << 3);
 //        System.out.println(0 << 1);
 //        System.out.println(0 << 2);
 //        System.out.println(0 << 3);
-
-        System.out.println(8 & 9);
-
-        int[] xx = {1, 2, 3,
-                4, 5, 3,
-                7, 8, 9};
-        int[] wz = new int[9];
-
-        int shift = 0;
-        for (int i : xx) {
-            shift = 1 << i;
-            System.out.println("shift: " + shift);
-
-            System.out.println("i&shift : " + (i & shift));
-
-            System.out.println("i|shift : " + (i | shift));
-
-            shift |= i;
-        }
+//
+//        System.out.println(8 & 9);
+//
+//        int[] xx = {1, 2, 3,
+//                4, 5, 3,
+//                7, 8, 9};
+//        int[] wz = new int[9];
+//
+//        int shift = 0;
+//        for (int i : xx) {
+//            shift = 1 << i;
+//            System.out.println("shift: " + shift);
+//
+//            System.out.println("i&shift : " + (i & shift));
+//
+//            System.out.println("i|shift : " + (i | shift));
+//
+//            shift |= i;
+//        }
 
 
 //        char[][] xxx = {{'5', '3', '.', '.', '7', '.', '.', '.', '.'}
