@@ -197,9 +197,26 @@ public class Temp {
         return res == (int) res ? (int) res : 0;
     }
 
+    public static int firstUniqChar(String s) {
+        char[] chars = s.toCharArray();
+        int[] zm = new int[26];
+        for (char c : chars) {
+            zm[c - 'a']++;
+        }
+        for (int i = 0; i < chars.length; i++) {
+            if (zm[chars[i] - 'a'] == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     public static void main(String[] args) {
-        System.out.println(-4 % 10);
+
+        int loveleetcode = firstUniqChar("loveleetcode");
+        System.out.println(loveleetcode);
+//        System.out.println(-4 % 10);
 //        System.out.println(1 << 1);
 //        System.out.println(1 << 2);
 //        System.out.println(1 << 3);
