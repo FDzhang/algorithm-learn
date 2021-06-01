@@ -211,6 +211,27 @@ public class Temp {
         return -1;
     }
 
+    public boolean isAnagram(String s, String t) {
+        int[] zmc = new int[26];
+        int[] zmt = new int[26];
+        char[] cs = s.toCharArray();
+        char[] ct = t.toCharArray();
+
+        for (char c : cs) {
+            zmc[c - 'a']++;
+        }
+        for (char c : ct) {
+            zmt[c - 'a']++;
+        }
+        for (int i = 0; i < 26; i++) {
+
+            if (zmc[i] != zmt[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static void main(String[] args) {
 
