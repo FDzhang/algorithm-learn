@@ -232,11 +232,43 @@ public class Temp {
         return true;
     }
 
+    public static boolean isPalindrome(String s) {
+        char[] cs = s.toLowerCase().toCharArray();
+        int i = 0;
+        int j = cs.length - 1;
+
+        while (i < j) {
+
+            while (i < j && !check(cs[i])) {
+                i++;
+            }
+            while (i < j && !check(cs[j])) {
+                j--;
+            }
+            if (i > j) {
+                break;
+            }
+            if (cs[i] != cs[j]) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    public static boolean check(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
+    }
+
 
     public static void main(String[] args) {
+        boolean isPalindrome = isPalindrome(".,");
+        System.out.println(isPalindrome);
 
-        int loveleetcode = firstUniqChar("loveleetcode");
-        System.out.println(loveleetcode);
+
+//        int loveleetcode = firstUniqChar("loveleetcode");
+//        System.out.println(loveleetcode);
 //        System.out.println(-4 % 10);
 //        System.out.println(1 << 1);
 //        System.out.println(1 << 2);
