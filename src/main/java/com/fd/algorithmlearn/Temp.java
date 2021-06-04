@@ -261,10 +261,71 @@ public class Temp {
         return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
     }
 
+    /**
+     * 1 忽略空白字符
+     * 2 第一个字符是否 是 '-' or '+' or 数字
+     * 3 接下来的 是否是 数字
+     * 4 数字 是否是 int 在范围内
+     *
+     * @param s
+     * @return
+     */
+    public static int myAtoi(String s) {
+        if (s == null || s.trim().length() == 0) {
+            return 0;
+        }
+        char[] cs = s.trim().toCharArray();
+
+        int res = 0;
+        int fh = 1;
+        if (checkNum(cs[0])) {
+            res += (cs[0] - '0') * fh;
+        } else if (cs[0] == '-') {
+            fh = -1;
+        } else if (cs[0] != '+') {
+            return 0;
+        }
+
+        for (int i = 1; i < cs.length; i++) {
+            if (checkNum(cs[i])) {
+                long newRes = (long) res * 10 + (cs[i] - '0') * fh;
+                if (newRes != (int) newRes) {
+                    return fh > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+                }
+                res = (int) newRes;
+            } else {
+                break;
+            }
+        }
+        return res;
+    }
+
+    public static boolean checkNum(char c) {
+        return c >= '0' && c <= '9';
+    }
+
+    public static int strStr(String haystack, String needle) {
+        int i = -1;
+        if (haystack != null) {
+            i = haystack.indexOf(needle);
+        }
+        return i;
+    }
+
 
     public static void main(String[] args) {
-        boolean isPalindrome = isPalindrome(".,");
-        System.out.println(isPalindrome);
+
+        System.out.println(strStr("hello", "ll"));
+        System.out.println(strStr("aaaaa", "bba"));
+        System.out.println(strStr("", ""));
+
+//        System.out.println((int)(-2147483648L));
+//        System.out.println((-2147483648 -8)/10 );
+//        int i = myAtoi("2147483648");
+//        System.out.println(i);
+
+//        boolean isPalindrome = isPalindrome(".,");
+//        System.out.println(isPalindrome);
 
 
 //        int loveleetcode = firstUniqChar("loveleetcode");
