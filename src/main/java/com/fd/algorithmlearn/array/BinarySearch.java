@@ -8,6 +8,9 @@ import java.util.Arrays;
  * <p>
  * 1011. 在 D 天内送达包裹的能力
  * https://leetcode-cn.com/problems/capacity-to-ship-packages-within-d-days/
+ * <p>
+ * 410. 分割数组的最大值
+ * https://leetcode-cn.com/problems/split-array-largest-sum/
  *
  * @author zhangxinqiang
  * @create 2021/5/19 10:28
@@ -36,11 +39,11 @@ public class BinarySearch {
         return time <= h;
     }
 
-    private int getMax(int[] piles) {
+    private static int getMax(int[] piles) {
         return Arrays.stream(piles).max().orElse(0);
     }
 
-    private int getSum(int[] weights) {
+    private static int getSum(int[] weights) {
         return Arrays.stream(weights).sum();
     }
 
@@ -98,6 +101,47 @@ public class BinarySearch {
 //            }
 //        }
 //        return false;
+    }
+
+    public static int splitArray(int[] nums, int m) {
+        int i = getMax(nums);
+        int j = getSum(nums);
+        while (i < j) {
+            int mid = i + (j - i) >> 1;
+            // 要求每组的和最大为 i， 则至少需要分多少组
+            int n = group(nums, mid);
+            if (n <= m) {
+                j = mid;
+            } else {
+                i = mid + 1;
+            }
+        }
+        return i;
+    }
+
+    private static int group(int[] nums, int max) {
+        int count = 1;
+        int sum = 0;
+        for (int num : nums) {
+            if (sum + num <= max) {
+                sum += num;
+            } else {
+                sum = num;
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(-20 >> 2);
+        System.out.println(20 >> 2);
+
+        System.out.println(-20 >>> 2);
+        System.out.println(20 >>> 2);
+//        int[] x = {7, 2, 5, 10, 8};
+//        System.out.println(splitArray(x, 2));
     }
 
 }
