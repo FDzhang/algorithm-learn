@@ -104,10 +104,15 @@ public class BinarySearch {
     }
 
     public static int splitArray(int[] nums, int m) {
-        int i = getMax(nums);
-        int j = getSum(nums);
+        int i = 0;
+        int j = 0;
+        for (int num : nums) {
+            i = Math.max(i, num);
+            j += num;
+        }
         while (i < j) {
-            int mid = i + (j - i) >> 1;
+            int mid = i + (j - i) / 2;
+            System.out.println(i+"--"+j+"--"+mid);
             // 要求每组的和最大为 i， 则至少需要分多少组
             int n = group(nums, mid);
             if (n <= m) {
@@ -123,25 +128,24 @@ public class BinarySearch {
         int count = 1;
         int sum = 0;
         for (int num : nums) {
-            if (sum + num <= max) {
-                sum += num;
-            } else {
-                sum = num;
+            if (sum + num > max) {
+                sum = 0;
                 count++;
             }
+            sum += num;
         }
         return count;
     }
 
     public static void main(String[] args) {
 
-        System.out.println(-20 >> 2);
-        System.out.println(20 >> 2);
-
-        System.out.println(-20 >>> 2);
-        System.out.println(20 >>> 2);
-//        int[] x = {7, 2, 5, 10, 8};
-//        System.out.println(splitArray(x, 2));
+//        System.out.println(-20 >> 2);
+//        System.out.println(20 >> 2);
+//
+//        System.out.println(-20 >>> 2);
+//        System.out.println(20 >>> 2);
+        int[] x = {7, 2, 5, 10, 8};
+        System.out.println(splitArray(x, 2));
     }
 
 }
