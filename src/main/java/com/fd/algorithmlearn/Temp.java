@@ -1,7 +1,6 @@
 package com.fd.algorithmlearn;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author zhangxinqiang
@@ -312,12 +311,51 @@ public class Temp {
         return i;
     }
 
+    public static String countAndSay(int n) {
+        String str = "1";
+        if (n == 1) {
+            return str;
+        }
+        for (int i = 1; i < n; i++) {
+            str = say(str);
+        }
+        return str;
+    }
+
+    private static String say(String s) {
+        char[] cs = s.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        int count = 1;
+        for (int i = 1; i < cs.length; i++) {
+            if (cs[i - 1] != cs[i]) {
+                sb.append(count).append(cs[i - 1]);
+                count = 0;
+            }
+            count++;
+        }
+        sb.append(count).append(cs[cs.length - 1]);
+        return sb.toString();
+    }
+
 
     public static void main(String[] args) {
 
-        System.out.println(strStr("hello", "ll"));
-        System.out.println(strStr("aaaaa", "bba"));
-        System.out.println(strStr("", ""));
+        System.out.println(say("1"));
+        System.out.println(say("11"));
+        System.out.println(say("21"));
+        System.out.println(say("1211"));
+        System.out.println(say("111221"));   // 31 22 11
+
+        System.out.println(countAndSay(1));
+        System.out.println(countAndSay(2));
+        System.out.println(countAndSay(3));
+        System.out.println(countAndSay(4));
+        System.out.println(countAndSay(5));
+
+//        System.out.println(strStr("hello", "ll"));
+//        System.out.println(strStr("aaaaa", "bba"));
+//        System.out.println(strStr("", ""));
 
 //        System.out.println((int)(-2147483648L));
 //        System.out.println((-2147483648 -8)/10 );
