@@ -338,20 +338,48 @@ public class Temp {
         return sb.toString();
     }
 
+    public static String longestCommonPrefix(String[] strs) {
+        // 找出最小长度的的字符串
+        int minLen = Integer.MAX_VALUE;
+        String minStr = "";
+        for (String str : strs) {
+            if (minLen > str.length()) {
+                minLen = str.length();
+                minStr = str;
+            }
+        }
+
+        for (String str : strs) {
+            while (minLen > 0) {
+                // 是否是共同前缀
+                boolean start = str.startsWith(minStr.substring(0, minLen));
+                if (start) {
+                    break;
+                } else {
+                    minLen--;
+                }
+            }
+        }
+        return minStr.substring(0, minLen);
+    }
+
 
     public static void main(String[] args) {
+        String[] strs = {"dog", "racecar", "car"};
+        System.out.println(longestCommonPrefix(strs));
 
-        System.out.println(say("1"));
-        System.out.println(say("11"));
-        System.out.println(say("21"));
-        System.out.println(say("1211"));
-        System.out.println(say("111221"));   // 31 22 11
-
-        System.out.println(countAndSay(1));
-        System.out.println(countAndSay(2));
-        System.out.println(countAndSay(3));
-        System.out.println(countAndSay(4));
-        System.out.println(countAndSay(5));
+//
+//        System.out.println(say("1"));
+//        System.out.println(say("11"));
+//        System.out.println(say("21"));
+//        System.out.println(say("1211"));
+//        System.out.println(say("111221"));   // 31 22 11
+//
+//        System.out.println(countAndSay(1));
+//        System.out.println(countAndSay(2));
+//        System.out.println(countAndSay(3));
+//        System.out.println(countAndSay(4));
+//        System.out.println(countAndSay(5));
 
 //        System.out.println(strStr("hello", "ll"));
 //        System.out.println(strStr("aaaaa", "bba"));
