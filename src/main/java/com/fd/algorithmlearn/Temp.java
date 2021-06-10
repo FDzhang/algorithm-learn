@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.linked.ListNode;
+
 import java.util.*;
 
 /**
@@ -364,9 +366,51 @@ public class Temp {
     }
 
 
+    public static void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        // 1 2 3 4 5 null
+        int i = 0;
+        while (fast != null && i < n) {
+            fast = fast.next;
+            i++;
+        }
+        if(fast == null){
+            head = head.next;
+            return head;
+        }
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        return head;
+    }
+
     public static void main(String[] args) {
-        String[] strs = {"dog", "racecar", "car"};
-        System.out.println(longestCommonPrefix(strs));
+        ListNode head = new ListNode();
+        ListNode n1 = new ListNode();
+
+        head.val = 1;
+        head.next = n1;
+
+        n1.val = 2;
+
+        ListNode listNode = removeNthFromEnd(head, 2);
+        while (listNode!=null){
+            System.out.println(listNode.val);
+            listNode = listNode.next;
+        }
+
+
+//        String[] strs = {"dog", "racecar", "car"};
+//        System.out.println(longestCommonPrefix(strs));
 
 //
 //        System.out.println(say("1"));

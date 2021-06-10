@@ -7,17 +7,17 @@ package com.fd.algorithmlearn.linked;
  * @date-time: 2021/3/13 16:33
  */
 public class ListNode {
-    int val;
+    public int val;
     public ListNode next;
 
-    ListNode() {
+    public ListNode() {
     }
 
-    ListNode(int val) {
+    public ListNode(int val) {
         this.val = val;
     }
 
-    ListNode(int val, ListNode next) {
+   public ListNode(int val, ListNode next) {
         this.val = val;
         this.next = next;
     }
