@@ -381,7 +381,7 @@ public class Temp {
             fast = fast.next;
             i++;
         }
-        if(fast == null){
+        if (fast == null) {
             head = head.next;
             return head;
         }
@@ -391,6 +391,26 @@ public class Temp {
         }
         slow.next = slow.next.next;
         return head;
+    }
+
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode pre = null;
+        ListNode cur = head;
+        ListNode next = null;
+
+        while (cur.next != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        cur.next = pre;
+
+        return cur;
     }
 
     public static void main(String[] args) {
@@ -403,7 +423,7 @@ public class Temp {
         n1.val = 2;
 
         ListNode listNode = removeNthFromEnd(head, 2);
-        while (listNode!=null){
+        while (listNode != null) {
             System.out.println(listNode.val);
             listNode = listNode.next;
         }
