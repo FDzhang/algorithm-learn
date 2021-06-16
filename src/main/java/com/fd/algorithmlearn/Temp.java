@@ -460,6 +460,44 @@ public class Temp {
         return head;
     }
 
+
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow, fast, left;
+        slow = fast = left = head;
+        // 快慢指针，找到中点
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        // 链表长度为奇数，slow再往前一步
+        if (fast != null) {
+            slow = slow.next;
+        }
+        // 翻转后半部分链表
+        ListNode right = reverse(slow);
+
+        while (right != null && left!=null) {
+            if (left.val != right.val) {
+                return false;
+            }
+            left = left.next;
+            right = right.next;
+        }
+        return true;
+    }
+    // 翻转链表，返回新链表的头结点
+    public ListNode reverse(ListNode head) {
+        ListNode pre = null, cur = head, next;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+
     public static void main(String[] args) {
         ListNode head = new ListNode();
         ListNode n1 = new ListNode();
