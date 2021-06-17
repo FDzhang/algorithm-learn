@@ -476,7 +476,7 @@ public class Temp {
         // 翻转后半部分链表
         ListNode right = reverse(slow);
 
-        while (right != null && left!=null) {
+        while (right != null && left != null) {
             if (left.val != right.val) {
                 return false;
             }
@@ -485,6 +485,7 @@ public class Temp {
         }
         return true;
     }
+
     // 翻转链表，返回新链表的头结点
     public ListNode reverse(ListNode head) {
         ListNode pre = null, cur = head, next;
@@ -497,6 +498,18 @@ public class Temp {
         return pre;
     }
 
+    // 判断链表是否有环
+    public boolean hasCycle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         ListNode head = new ListNode();
