@@ -5,10 +5,17 @@ import com.fd.algorithmlearn.linked.ListNode;
 import java.util.*;
 
 /**
+ * https://leetcode-cn.com/leetbook/detail/top-interview-questions-easy/
+ * 初级算法
+ * LeetCode 官方推出的经典面试题目清单 —— 「初级算法 - 帮助入门」
+ *
  * @author zhangxinqiang
  * @create 2021/5/14 14:16
  */
 public class Temp {
+    /**
+     * 删除排序数组中的重复项
+     */
     public int removeDuplicates(int[] nums) {
         int len = 0;
         for (int i = 1; i < nums.length; i++) {
@@ -20,6 +27,9 @@ public class Temp {
         return len;
     }
 
+    /**
+     * 买卖股票的最佳时机 II
+     */
     public int maxProfit(int[] prices) {
         int sum = 0;
         for (int i = 1; i < prices.length; i++) {
@@ -31,6 +41,9 @@ public class Temp {
         return sum;
     }
 
+    /**
+     * 旋转数组
+     */
     public void rotate(int[] nums, int k) {
         int len = nums.length;
         k = k % len;
@@ -49,6 +62,9 @@ public class Temp {
     }
 
 
+    /**
+     * 存在重复元素
+     */
     public boolean containsDuplicate(int[] nums) {
         Arrays.sort(nums);
         for (int i = 1; i < nums.length; i++) {
@@ -59,6 +75,9 @@ public class Temp {
         return false;
     }
 
+    /**
+     * 只出现一次的数字
+     */
     public int singleNumber(int[] nums) {
         int res = 0;
         for (int num : nums) {
@@ -67,6 +86,9 @@ public class Temp {
         return res;
     }
 
+    /**
+     * 两个数组的交集 II
+     */
     public int[] intersect(int[] nums1, int[] nums2) {
         Arrays.sort(nums1);
         Arrays.sort(nums2);
@@ -85,6 +107,9 @@ public class Temp {
         return res.stream().mapToInt(Integer::intValue).toArray();
     }
 
+    /**
+     * 加一
+     */
     public int[] plusOne(int[] digits) {
         int i = digits.length - 1;
         for (; i >= 0; i--) {
@@ -103,6 +128,9 @@ public class Temp {
         return digits;
     }
 
+    /**
+     * 移动零
+     */
     public void moveZeroes(int[] nums) {
         if (nums.length == 0) {
             return;
@@ -119,6 +147,9 @@ public class Temp {
         }
     }
 
+    /**
+     * 两数之和
+     */
     public int[] twoSum(int[] nums, int target) {
         Arrays.sort(nums);
         int i = 0;
@@ -135,6 +166,9 @@ public class Temp {
         return new int[]{-1, -1};
     }
 
+    /**
+     * 有效的数独
+     */
     public static boolean isValidSudoku(char[][] board) {
         Set<Character> num = new HashSet<>();
 
@@ -181,6 +215,16 @@ public class Temp {
         return true;
     }
 
+    /**
+     * 旋转图像
+     * https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnhhkv/
+     *
+     * 略
+     */
+
+    /**
+     * 反转字符串
+     */
     public void reverseString(char[] s) {
         for (int i = 0; i < s.length / 2; i++) {
             char temp = s[i];
@@ -189,6 +233,9 @@ public class Temp {
         }
     }
 
+    /**
+     * 反转字符串
+     */
     public int reverse(int x) {
         long res = 0;
         while (x != 0) {
@@ -198,6 +245,9 @@ public class Temp {
         return res == (int) res ? (int) res : 0;
     }
 
+    /**
+     * 字符串中的第一个唯一字符
+     */
     public static int firstUniqChar(String s) {
         char[] chars = s.toCharArray();
         int[] zm = new int[26];
@@ -212,6 +262,9 @@ public class Temp {
         return -1;
     }
 
+    /**
+     * 有效的字母异位词
+     */
     public boolean isAnagram(String s, String t) {
         int[] zmc = new int[26];
         int[] zmt = new int[26];
@@ -233,6 +286,9 @@ public class Temp {
         return true;
     }
 
+    /**
+     * 验证回文串
+     */
     public static boolean isPalindrome(String s) {
         char[] cs = s.toLowerCase().toCharArray();
         int i = 0;
@@ -263,13 +319,13 @@ public class Temp {
     }
 
     /**
+     * 字符串转换整数 (atoi)
+     * <p>
+     * 思路
      * 1 忽略空白字符
      * 2 第一个字符是否 是 '-' or '+' or 数字
      * 3 接下来的 是否是 数字
      * 4 数字 是否是 int 在范围内
-     *
-     * @param s
-     * @return
      */
     public static int myAtoi(String s) {
         if (s == null || s.trim().length() == 0) {
@@ -305,6 +361,9 @@ public class Temp {
         return c >= '0' && c <= '9';
     }
 
+    /**
+     * 实现 strStr()
+     */
     public static int strStr(String haystack, String needle) {
         int i = -1;
         if (haystack != null) {
@@ -313,6 +372,9 @@ public class Temp {
         return i;
     }
 
+    /**
+     * 外观数列
+     */
     public static String countAndSay(int n) {
         String str = "1";
         if (n == 1) {
@@ -340,6 +402,9 @@ public class Temp {
         return sb.toString();
     }
 
+    /**
+     * 最长公共前缀
+     */
     public static String longestCommonPrefix(String[] strs) {
         // 找出最小长度的的字符串
         int minLen = Integer.MAX_VALUE;
@@ -365,12 +430,17 @@ public class Temp {
         return minStr.substring(0, minLen);
     }
 
-
+    /**
+     * 删除链表中的节点
+     */
     public static void deleteNode(ListNode node) {
         node.val = node.next.val;
         node.next = node.next.next;
     }
 
+    /**
+     * 删除链表的倒数第N个节点
+     */
     public static ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode fast = head;
         ListNode slow = head;
@@ -393,6 +463,9 @@ public class Temp {
         return head;
     }
 
+    /**
+     * 反转链表
+     */
     public ListNode reverseList(ListNode head) {
         if (head == null) {
             return null;
@@ -422,6 +495,10 @@ public class Temp {
      * ListNode(int val) { this.val = val; }
      * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
      * }
+     */
+
+    /**
+     * 合并两个有序链表
      */
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null) {
@@ -461,6 +538,9 @@ public class Temp {
     }
 
 
+    /**
+     * 回文链表
+     */
     public boolean isPalindrome(ListNode head) {
         ListNode slow, fast, left;
         slow = fast = left = head;
@@ -486,7 +566,9 @@ public class Temp {
         return true;
     }
 
-    // 翻转链表，返回新链表的头结点
+    /**
+     * 翻转链表，返回新链表的头结点
+     */
     public ListNode reverse(ListNode head) {
         ListNode pre = null, cur = head, next;
         while (cur != null) {
@@ -498,7 +580,9 @@ public class Temp {
         return pre;
     }
 
-    // 判断链表是否有环
+    /**
+     * 环形链表
+     */
     public boolean hasCycle(ListNode head) {
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {
@@ -526,7 +610,10 @@ public class Temp {
      * }
      * }
      */
-    // 最大深度
+
+    /**
+     * 二叉树的最大深度
+     */
     public int maxDepth(TreeNode root) {
         if (root == null) {
             return 0;
