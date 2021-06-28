@@ -626,6 +626,65 @@ public class Temp {
         return Math.max(left, right) + 1;
     }
 
+    /**
+     * 对称二叉树
+     * 给定一个二叉树，检查它是否是镜像对称的。
+     * <p>
+     * <p>
+     * 思路：
+     * 方法一：
+     * 1 需要从子节点开始比较，两个子节点的值必须相同，
+     * 2 并且左子节点的右子节点（如果有）必须等于右子节点的左子节点，左子节点的左子节点必须等于右子节点的右子节点
+     * <p>
+     * 方法二：
+     * 1 翻转二叉树
+     * 2 判断前后两颗二叉树是否一致
+     */
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isSymmetric(root.left, root.right);
+    }
+
+    public boolean isSymmetric(TreeNode left, TreeNode right) {
+        // 叶子节点
+        if (left == null && right == null) {
+            return true;
+        }
+        // 节点不对称 or 值不同
+        if (left == null || right == null || left.val != right.val) {
+            return false;
+        }
+        // 左.右 == 右.左 && zuo.zuo == you.you
+        return isSymmetric(left.right, right.left) && isSymmetric(left.left, right.right);
+    }
+
+//    public List<Integer> treeToArray(TreeNode root, List<Integer> arr) {
+//        if (root == null) {
+//            arr.add(-1);
+//            return arr;
+//        }
+//        arr.add(root.val);
+//        treeToArray(root.left, arr);
+//        treeToArray(root.right, arr);
+//        return arr;
+//    }
+//
+//    public TreeNode reverse(TreeNode root) {
+//        if (root == null) {
+//            return null;
+//        }
+//        TreeNode temp = root.left;
+//        root.left = root.right;
+//        root.right = temp;
+//
+//        reverse(root.left);
+//        reverse(root.right);
+//
+//        return root;
+//    }
+
     public static void main(String[] args) {
         ListNode head = new ListNode();
         ListNode n1 = new ListNode();
