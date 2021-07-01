@@ -635,7 +635,7 @@ public class Temp {
      * 节点的左子树只包含小于当前节点的数。
      * 节点的右子树只包含大于当前节点的数。
      * 所有左子树和右子树自身必须也是二叉搜索树。
-     *
+     * <p>
      * 思路：
      * 1. root节点的值 要大于左节点，要小于右节点
      * 2. root节点的值 是左子树的最大值，是右子树的最小值
@@ -643,6 +643,7 @@ public class Temp {
     public boolean isValidBST(TreeNode root) {
         return isValidBST(root, null, null);
     }
+
     /* 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val */
     public boolean isValidBST(TreeNode root, TreeNode min, TreeNode max) {
         // base case
@@ -660,20 +661,48 @@ public class Temp {
         return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
     }
 
-    public static void main(String[] args) {
-        ListNode head = new ListNode();
-        ListNode n1 = new ListNode();
-
-        head.val = 1;
-        head.next = n1;
-
-        n1.val = 2;
-
-        ListNode listNode = removeNthFromEnd(head, 2);
-        while (listNode != null) {
-            System.out.println(listNode.val);
-            listNode = listNode.next;
+    /**
+     * 二叉树的层序遍历
+     * 1 创建 当前层的 val list
+     * 2 获取 下一层的 nodes
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
         }
+        List<List<Integer>> res = new ArrayList<>();
+
+        Queue<TreeNode> level = new LinkedList<>();
+        level.offer(root);
+
+        while (!level.isEmpty()) {
+            List<Integer> l = new ArrayList<>();
+            level = levelNode(level, l);
+            res.add(l);
+        }
+        return res;
+    }
+
+    /**
+     * 填充当前层的 val
+     * 返回下一层的nodes
+     */
+    public Queue<TreeNode> levelNode(Queue<TreeNode> level, List<Integer> list) {
+        Queue<TreeNode> next = new LinkedList<>();
+        while (!level.isEmpty()) {
+            TreeNode node = level.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                next.offer(node.left);
+            }
+            if (node.right != null) {
+                next.offer(node.right);
+            }
+        }
+        return next;
+    }
+
+    public static void main(String[] args) {
 
 
 //        String[] strs = {"dog", "racecar", "car"};
