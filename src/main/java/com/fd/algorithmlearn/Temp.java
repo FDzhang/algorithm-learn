@@ -702,6 +702,35 @@ public class Temp {
         return next;
     }
 
+    /**
+     * 将有序数组转换为二叉搜索树
+     * <p>
+     * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+     * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xninbt/
+     *
+     * eg: [-10,-3,0,5,9] 5
+     *
+     * 思路：
+     * 1 将 mid(1/2位置)上的值放到 root
+     * 2 将 left ~ mid-1 放到左子树， 将 mid+1 ~ right 放到右子树
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode sortedArrayToBST(int[] nums, int left, int right) {
+        if (right < left) {
+            return null;
+        }
+        int index = left + (right - left) / 2;
+        TreeNode root = new TreeNode(nums[index]);
+        root.left = sortedArrayToBST(nums, left, index-1);
+        root.right = sortedArrayToBST(nums, index + 1, right);
+        return root;
+    }
+
     public static void main(String[] args) {
 
 
