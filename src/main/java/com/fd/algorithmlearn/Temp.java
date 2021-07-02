@@ -627,6 +627,111 @@ public class Temp {
     }
 
     /**
+     * 验证二叉搜索树
+     * 给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+     * <p>
+     * 假设一个二叉搜索树具有如下特征：
+     * <p>
+     * 节点的左子树只包含小于当前节点的数。
+     * 节点的右子树只包含大于当前节点的数。
+     * 所有左子树和右子树自身必须也是二叉搜索树。
+     * <p>
+     * 思路：
+     * 1. root节点的值 要大于左节点，要小于右节点
+     * 2. root节点的值 是左子树的最大值，是右子树的最小值
+     */
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null, null);
+    }
+
+    /* 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val */
+    public boolean isValidBST(TreeNode root, TreeNode min, TreeNode max) {
+        // base case
+        if (root == null) {
+            return true;
+        }
+        // 若 root.val 不符合 max 和 min 的限制，说明不是合法 BST
+        if (min != null && root.val <= min.val) {
+            return false;
+        }
+        if (max != null && root.val >= max.val) {
+            return false;
+        }
+        // 限定左子树的最大值是 root.val，右子树的最小值是 root.val
+        return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
+    }
+
+    /**
+     * 二叉树的层序遍历
+     * 1 创建 当前层的 val list
+     * 2 获取 下一层的 nodes
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> res = new ArrayList<>();
+
+        Queue<TreeNode> level = new LinkedList<>();
+        level.offer(root);
+
+        while (!level.isEmpty()) {
+            List<Integer> l = new ArrayList<>();
+            level = levelNode(level, l);
+            res.add(l);
+        }
+        return res;
+    }
+
+    /**
+     * 填充当前层的 val
+     * 返回下一层的nodes
+     */
+    public Queue<TreeNode> levelNode(Queue<TreeNode> level, List<Integer> list) {
+        Queue<TreeNode> next = new LinkedList<>();
+        while (!level.isEmpty()) {
+            TreeNode node = level.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                next.offer(node.left);
+            }
+            if (node.right != null) {
+                next.offer(node.right);
+            }
+        }
+        return next;
+    }
+
+    /**
+     * 将有序数组转换为二叉搜索树
+     * <p>
+     * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+     * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xninbt/
+     *
+     * eg: [-10,-3,0,5,9] 5
+     *
+     * 思路：
+     * 1 将 mid(1/2位置)上的值放到 root
+     * 2 将 left ~ mid-1 放到左子树， 将 mid+1 ~ right 放到右子树
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode sortedArrayToBST(int[] nums, int left, int right) {
+        if (right < left) {
+            return null;
+        }
+        int index = left + (right - left) / 2;
+        TreeNode root = new TreeNode(nums[index]);
+        root.left = sortedArrayToBST(nums, left, index-1);
+        root.right = sortedArrayToBST(nums, index + 1, right);
+        return root;
+    }
+
+    /**
      * 对称二叉树
      * 给定一个二叉树，检查它是否是镜像对称的。
      * <p>
