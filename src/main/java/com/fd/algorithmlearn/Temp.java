@@ -709,9 +709,9 @@ public class Temp {
      * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xninbt/
-     *
+     * <p>
      * eg: [-10,-3,0,5,9] 5
-     *
+     * <p>
      * 思路：
      * 1 将 mid(1/2位置)上的值放到 root
      * 2 将 left ~ mid-1 放到左子树， 将 mid+1 ~ right 放到右子树
@@ -726,7 +726,7 @@ public class Temp {
         }
         int index = left + (right - left) / 2;
         TreeNode root = new TreeNode(nums[index]);
-        root.left = sortedArrayToBST(nums, left, index-1);
+        root.left = sortedArrayToBST(nums, left, index - 1);
         root.right = sortedArrayToBST(nums, index + 1, right);
         return root;
     }
@@ -790,7 +790,66 @@ public class Temp {
 //        return root;
 //    }
 
+    /**
+     * 合并两个有序数组
+     * <p>
+     * 给你两个有序整数数组nums1 和 nums2，请你将 nums2 合并到nums1中，使 nums1 成为一个有序数组。
+     * 初始化nums1 和 nums2 的元素数量分别为m 和 n 。你可以假设nums1 的空间大小等于m + n，这样它就有足够的空间保存来自 nums2 的元素。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnumcr/
+     * <p>
+     * 思路：
+     * 1、 把 nums1 ,nums2 和并到 nums3 中
+     * 2、 将 nums3 覆盖到 nums1 中
+     * <p>
+     * 思路2：
+     * 1、从后往前写
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n - 1, writeIdx = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            nums1[writeIdx--] = nums1[i] > nums2[j] ? nums1[i--] : nums2[j--];
+        }
+        while (j >= 0) {
+            nums1[writeIdx--] = nums2[j--];
+        }
+    }
+//    public static void merge(int[] nums1, int m, int[] nums2, int n) {
+//        int[] nums3 = new int[m + n];
+//
+//        int i = 0;
+//        int j = 0;
+//        while (i < m && j < n) {
+//            if (nums1[i] < nums2[j]) {
+//                nums3[i + j] = nums1[i];
+//                i++;
+//            } else {
+//                nums3[i + j] = nums2[j];
+//                j++;
+//            }
+//        }
+//        while (i < m) {
+//            nums3[i + j] = nums1[i];
+//            i++;
+//        }
+//        while (j < n) {
+//            nums3[i + j] = nums2[j];
+//            j++;
+//        }
+//
+//        if (nums3.length >= 0) {
+//            System.arraycopy(nums3, 0, nums1, 0, nums3.length);
+//        }
+//    }
+
     public static void main(String[] args) {
+        int[] nums1 = {1, 2, 3, 0, 0, 0};
+        int[] nums2 = {2, 5, 6};
+
+//        merge(nums1,nums1.length-nums2.length,nums2,nums2.length);
+
+        System.out.println(Arrays.toString(nums1));
+
         ListNode head = new ListNode();
         ListNode n1 = new ListNode();
 
