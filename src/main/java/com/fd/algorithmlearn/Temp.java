@@ -874,27 +874,54 @@ public class Temp {
         return version >= 4;
     }
 
-    public static void main(String[] args) {
-        int[] nums1 = {1, 2, 3, 0, 0, 0};
-        int[] nums2 = {2, 5, 6};
-
-//        merge(nums1,nums1.length-nums2.length,nums2,nums2.length);
-
-        System.out.println(Arrays.toString(nums1));
-
-        ListNode head = new ListNode();
-        ListNode n1 = new ListNode();
-
-        head.val = 1;
-        head.next = n1;
-
-        n1.val = 2;
-
-        ListNode listNode = removeNthFromEnd(head, 2);
-        while (listNode != null) {
-            System.out.println(listNode.val);
-            listNode = listNode.next;
+    /**
+     * 爬楼梯
+     * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+     * 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+     * 注意：给定 n 是一个正整数。
+     * <p>
+     * 思路：
+     * 1、爬n阶有几种方法 = 爬 n-1 有几种方法 + 爬 n-2 阶有几种方法
+     */
+    public static int climbStairs(int n) {
+        if (n == 1) {
+            return 1;
         }
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i < n + 1; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+
+
+        System.out.println(climbStairs(4));
+
+
+//        int[] nums1 = {1, 2, 3, 0, 0, 0};
+//        int[] nums2 = {2, 5, 6};
+//
+////        merge(nums1,nums1.length-nums2.length,nums2,nums2.length);
+//
+//        System.out.println(Arrays.toString(nums1));
+//
+//        ListNode head = new ListNode();
+//        ListNode n1 = new ListNode();
+//
+//        head.val = 1;
+//        head.next = n1;
+//
+//        n1.val = 2;
+//
+//        ListNode listNode = removeNthFromEnd(head, 2);
+//        while (listNode != null) {
+//            System.out.println(listNode.val);
+//            listNode = listNode.next;
+//        }
 
 
 //        String[] strs = {"dog", "racecar", "car"};
