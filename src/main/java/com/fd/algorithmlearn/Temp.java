@@ -903,7 +903,7 @@ public class Temp {
      * 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xn8fsh/
-     *
+     * <p>
      * 思路：
      * 1、当天能获得的最大利润 = 今天之前的股价最低的那天买入，今天卖出
      * 2、记录之前的最低股价，记录最大利润
@@ -925,10 +925,51 @@ public class Temp {
         return max;
     }
 
-    public static void main(String[] args) {
-        int[] x = {7, 1, 5, 3, 6, 4};
+    /**
+     * 最大子序和
+     * 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+     * <p>
+     * https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xn3cg3/
+     * 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+     * 输出：6
+     * 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+     * <p>
+     * -2 1 -2 4 3 5 6 1 5
+     * <p>
+     * 思路：
+     * dp[n+1] : 记录走到第n个位置为止(包括nums[n])的最大值
+     * 若 前一步的最大值+本身 大于 本身，则 取最大值+本身，反之 取 本身
+     * 所以 dp[i+1] = Math.max(dp[i] + nums[i], nums[i]);
+     * <p>
+     * 补： cur 代替 dp[n]
+     */
+    public static int maxSubArray(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int cur = 0;
+        for (int num : nums) {
+            cur = Math.max(cur + num, num);
+            max = Math.max(cur, max);
+        }
+        return max;
+    }
 
-        System.out.println(maxProfit1(x));
+//    public static int maxSubArray(int[] nums) {
+//        int max = Integer.MIN_VALUE;
+//        int[] dp = new int[nums.length + 1];
+//        for (int i = 0; i < nums.length; i++) {
+//            dp[i + 1] = Math.max(dp[i] + nums[i], nums[i]);
+//            max = Math.max(max, dp[i + 1]);
+//        }
+//        return max;
+//    }
+
+
+    public static void main(String[] args) {
+
+        int[] x = {-10000};
+
+        System.out.println(maxSubArray(x));
+//        System.out.println(maxProfit1(x));
 
 //        System.out.println(climbStairs(4));
 
