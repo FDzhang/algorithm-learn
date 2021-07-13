@@ -990,7 +990,7 @@ public class Temp {
         dp[1] = nums[0];
         for (int i = 1; i < nums.length; i++) {
             dp[i + 1] = Math.max(dp[i], dp[i - 1] + nums[i]);
-            max = Math.max(dp[i+1], max);
+            max = Math.max(dp[i + 1], max);
         }
         return max;
     }
@@ -998,7 +998,7 @@ public class Temp {
 
     public static void main(String[] args) {
 
-        int[] x = {2,7,9,3,1};
+        int[] x = {2, 7, 9, 3, 1};
 
         System.out.println(rob(x));
 //        System.out.println(maxProfit1(x));
@@ -1132,3 +1132,93 @@ class TreeNode {
         this.right = right;
     }
 }
+
+/***
+ * 打乱数组
+ * 给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。
+ *
+ * 实现 Solution class:
+ *
+ * Solution(int[] nums) 使用整数数组 nums 初始化对象
+ * int[] reset() 重设数组到它的初始状态并返回
+ * int[] shuffle() 返回数组随机打乱后的结果
+ *
+ * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xn6gq1/
+ *
+ * 输入
+ * ["Solution", "shuffle", "reset", "shuffle"]
+ * [[[1, 2, 3]], [], [], []]
+ * 输出
+ * [null, [3, 1, 2], [1, 2, 3], [1, 3, 2]]
+ *
+ * 解释
+ * Solution solution = new Solution([1, 2, 3]);
+ * solution.shuffle();    // 打乱数组 [1,2,3] 并返回结果。任何 [1,2,3]的排列返回的概率应该相同。例如，返回 [3, 1, 2]
+ * solution.reset();      // 重设数组到它的初始状态 [1, 2, 3] 。返回 [1, 2, 3]
+ * solution.shuffle();    // 随机返回数组 [1, 2, 3] 打乱后的结果。例如，返回 [1, 3, 2]
+ *
+ */
+class Solution {
+    private int[] origin;
+    private int[] shu;
+
+    public Solution(int[] nums) {
+        origin = nums;
+        shu = Arrays.copyOf(origin, nums.length);
+    }
+
+    /**
+     * Resets the array to its original configuration and return it.
+     */
+    public int[] reset() {
+        return this.origin;
+    }
+
+    /**
+     * Returns a random shuffling of the array.
+     */
+    public int[] shuffle() {
+        Random random = new Random();
+        int length = shu.length;
+        for (int i = length - 1; i > 0; i--) {
+            int pre = random.nextInt(i + 1);
+            int temp = shu[pre];
+            shu[pre] = shu[i];
+            shu[i] = temp;
+        }
+        return shu;
+    }
+
+
+//    /**
+//     * Returns a random shuffling of the array.
+//     */
+//    public int[] shuffle() {
+//        int limit = nums.length;
+//        Random random = new Random();
+//        Set<Integer> result = new LinkedHashSet<>(limit);
+//        while (result.size() < limit) {
+//            result.add(randomEle(random, limit));
+//        }
+//        int[] res = new int[limit];
+//        int i = 0;
+//        for (int v : result) {
+//            res[i++] = v;
+//        }
+//        return res;
+//    }
+//
+//    public Integer randomEle(Random random, int limit) {
+//        if (nums.length < limit) {
+//            limit = nums.length;
+//        }
+//        return nums[random.nextInt(limit)];
+//    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int[] param_1 = obj.reset();
+ * int[] param_2 = obj.shuffle();
+ */
