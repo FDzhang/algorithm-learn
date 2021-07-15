@@ -1222,3 +1222,90 @@ class Solution {
  * int[] param_1 = obj.reset();
  * int[] param_2 = obj.shuffle();
  */
+
+/**
+ * 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+ * <p>
+ * push(x) —— 将元素 x 推入栈中。
+ * pop() —— 删除栈顶的元素。
+ * top() —— 获取栈顶元素。
+ * getMin() —— 检索栈中的最小元素。
+ * <p>
+ * LinkList
+ * : push 加入尾部
+ * : pop 删除尾部
+ * : top 尾部元素
+ * ：getMin 记录最小元素
+ * <p>
+ * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnkq37/
+ *
+ * 思路：
+ * 1、借助java自带的小顶堆，记录最小值
+ * 2、栈使用链表实现
+ */
+//class MinStack {
+//    private LinkedList<Integer> list = new LinkedList<>();
+//    private PriorityQueue<Integer> small = new PriorityQueue<>();
+//
+//    /**
+//     * initialize your data structure here.
+//     */
+//    public MinStack() {
+//
+//    }
+//
+//    public void push(int val) {
+//        list.offer(val);
+//        small.offer(val);
+//    }
+//
+//    public void pop() {
+//        Integer last = list.removeLast();
+//        small.remove(last);
+//    }
+//
+//    public int top() {
+//        return list.getLast();
+//    }
+//
+//    public int getMin() {
+//        return small.peek();
+//    }
+//}
+class MinStack {
+    private Stack<int[]> stack = new Stack<>();
+    /**
+     * initialize your data structure here.
+     */
+    public MinStack() {
+
+    }
+
+    public void push(int val) {
+        if (stack.isEmpty()) {
+            stack.push(new int[]{val, val});
+        } else {
+            stack.push(new int[]{val, Math.min(val, stack.peek()[1])});
+        }
+    }
+
+    public void pop() {
+        stack.pop();
+    }
+
+    public int top() {
+        return stack.peek()[0];
+    }
+
+    public int getMin() {
+        return stack.peek()[1];
+    }
+}
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(val);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
