@@ -995,12 +995,44 @@ public class Temp {
         return max;
     }
 
+    /**
+     * Fizz Buzz
+     * 写一个程序，输出从 1 到 n 数字的字符串表示。
+     * 1. 如果n是3的倍数，输出“Fizz”；
+     * 2. 如果n是5的倍数，输出“Buzz”；
+     * 3. 如果n同时是3和5的倍数，输出 “FizzBuzz”。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xngt85/
+     */
+    public static List<String> fizzBuzz(int n) {
+        List<String> strList = new ArrayList<>();
+        boolean a;
+        boolean b;
+        for (int i = 1; i <= n; i++) {
+            a = i % 3 == 0;
+            b = i % 5 == 0;
+            if (a && b) {
+                strList.add("FizzBuzz");
+            } else if (a) {
+                strList.add("Fizz");
+            } else if (b) {
+                strList.add("Buzz");
+            } else {
+                // ""+i 和 String.valueOf(i) 有一定的差距, String.valueOf(i)更快
+                strList.add(String.valueOf(i));
+            }
+        }
+        return strList;
+    }
+
 
     public static void main(String[] args) {
 
         int[] x = {2, 7, 9, 3, 1};
 
-        System.out.println(rob(x));
+        System.out.println(fizzBuzz(15));
+
+//        System.out.println(rob(x));
 //        System.out.println(maxProfit1(x));
 
 //        System.out.println(climbStairs(4));
@@ -1238,7 +1270,7 @@ class Solution {
  * ：getMin 记录最小元素
  * <p>
  * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnkq37/
- *
+ * <p>
  * 思路：
  * 1、借助java自带的小顶堆，记录最小值
  * 2、栈使用链表实现
@@ -1274,6 +1306,7 @@ class Solution {
 //}
 class MinStack {
     private Stack<int[]> stack = new Stack<>();
+
     /**
      * initialize your data structure here.
      */
