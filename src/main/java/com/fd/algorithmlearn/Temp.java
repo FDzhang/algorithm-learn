@@ -1025,12 +1025,66 @@ public class Temp {
         return strList;
     }
 
+    /**
+     * 计数质数
+     * 统计所有小于非负整数 n 的质数的数量。
+     * 输入：n = 10
+     * 输出：4
+     * 解释：小于 10 的质数一共有 4 个, 它们是 2, 3, 5, 7 。
+     * <p>
+     * 思路：
+     * 埃拉托斯特尼筛法，简称埃氏筛或爱氏筛
+     */
+    public static int countPrimes(int n) {
+        if (n < 3) {
+            return 0;
+        }
+
+        boolean[] isNotPrimes = new boolean[n];
+        isNotPrimes[0] = true;
+        isNotPrimes[1] = true;
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (!isNotPrimes[i]) {
+                count++;
+                aiFilter(n, isNotPrimes, i);
+            }
+        }
+
+        return count;
+    }
+
+    private static void aiFilter(int n, boolean[] isNotPrimes, int i) {
+        if (i <= Math.sqrt(n)) {
+            for (int j = i * i; j < n; j += i) {
+                isNotPrimes[j] = true;
+            }
+        }
+    }
+
+    public int countPrimes1(int n) {
+        boolean[] isPrime = new boolean[n];
+        for (int i = 2; i < n; i++) {
+            isPrime[i] = true;
+        }
+        for (int i = 2; i * i < n; i++) {
+            if (!isPrime[i]) continue;
+            for (int j = i * i; j < n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+        int ans = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i]) ans++;
+        }
+        return ans;
+    }
 
     public static void main(String[] args) {
-
         int[] x = {2, 7, 9, 3, 1};
+        System.out.println(countPrimes(499979));
 
-        System.out.println(fizzBuzz(15));
+//        System.out.println(fizzBuzz(15));
 
 //        System.out.println(rob(x));
 //        System.out.println(maxProfit1(x));
