@@ -1166,7 +1166,7 @@ public class Temp {
     /**
      * MCMXCIV
      * M = 1000, CM = 900, XC = 90, IV = 4.
-     *
+     * <p>
      * 1000 < 100 ?     res=1000
      * 100  < 1000 ?    res = 900
      * 1000 < 10 ?      res = 1900
@@ -1213,14 +1213,44 @@ public class Temp {
         }
     }
 
+    /**
+     * 位1的个数
+     * 编写一个函数，输入是一个无符号整数（以二进制串的形式），返回其二进制表达式中数字位数为 '1' 的个数（也被称为汉明重量）。
+     */
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int i) {
+        i = (i & 0x55555555) + ((i >> 1) & 0x55555555);
+        i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+        i = (i & 0x0F0F0F0F) + ((i >> 4) & 0x0F0F0F0F);
+        i = (i * (0x01010101) >> 24);
+        return i;
+    }
+
+    // you need to treat n as an unsigned value
+    public int hammingWeight1(int n) {
+        int count = 0;
+        while (n != 0) {
+            count += n & 1;
+            n = n >>> 1;
+        }
+        return count;
+    }
+
+    public int hammingWeight2(int i) {
+        return Integer.bitCount(i);
+    }
+
     public static void main(String[] args) {
         int[] x = {2, 7, 9, 3, 1};
 
-        System.out.println(romanToInt("III"));
-        System.out.println(romanToInt("IV"));
-        System.out.println(romanToInt("IX"));
-        System.out.println(romanToInt("LVIII"));
-        System.out.println(romanToInt("MCMXCIV"));
+//        hammingWeight(8);
+
+
+//        System.out.println(romanToInt("III"));
+//        System.out.println(romanToInt("IV"));
+//        System.out.println(romanToInt("IX"));
+//        System.out.println(romanToInt("LVIII"));
+//        System.out.println(romanToInt("MCMXCIV"));
 
 //        System.out.println(isPowerOfThree(27));
 //        System.out.println(isPowerOfThree(0));
