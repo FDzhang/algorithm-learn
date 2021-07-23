@@ -14,159 +14,6 @@ import java.util.*;
  */
 public class Temp {
     /**
-     * 删除排序数组中的重复项
-     */
-    public int removeDuplicates(int[] nums) {
-        int len = 0;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[len] != nums[i]) {
-                nums[++len] = nums[i];
-            }
-        }
-        len++;
-        return len;
-    }
-
-    /**
-     * 买卖股票的最佳时机 II
-     */
-    public int maxProfit(int[] prices) {
-        int sum = 0;
-        for (int i = 1; i < prices.length; i++) {
-            int x = prices[i] - prices[i - 1];
-            if (x > 0) {
-                sum += x;
-            }
-        }
-        return sum;
-    }
-
-    /**
-     * 旋转数组
-     */
-    public void rotate(int[] nums, int k) {
-        int len = nums.length;
-        k = k % len;
-
-        reverse(nums, 0, len - k);
-        reverse(nums, len - k, len);
-        reverse(nums, 0, len);
-    }
-
-    public void reverse(int[] nums, int start, int end) {
-        for (int i = start, j = end - 1; i < j; i++, j--) {
-            int temp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = temp;
-        }
-    }
-
-
-    /**
-     * 存在重复元素
-     */
-    public boolean containsDuplicate(int[] nums) {
-        Arrays.sort(nums);
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] == nums[i - 1]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 只出现一次的数字
-     */
-    public int singleNumber(int[] nums) {
-        int res = 0;
-        for (int num : nums) {
-            res ^= num;
-        }
-        return res;
-    }
-
-    /**
-     * 两个数组的交集 II
-     */
-    public int[] intersect(int[] nums1, int[] nums2) {
-        Arrays.sort(nums1);
-        Arrays.sort(nums2);
-        List<Integer> res = new ArrayList<>();
-        for (int i = 0, j = 0; i < nums1.length && j < nums2.length; ) {
-            if (nums1[i] > nums2[j]) {
-                j++;
-            } else if (nums1[i] < nums2[j]) {
-                i++;
-            } else {
-                res.add(nums1[i]);
-                i++;
-                j++;
-            }
-        }
-        return res.stream().mapToInt(Integer::intValue).toArray();
-    }
-
-    /**
-     * 加一
-     */
-    public int[] plusOne(int[] digits) {
-        int i = digits.length - 1;
-        for (; i >= 0; i--) {
-            if (digits[i] == 9) {
-                digits[i] = 0;
-            } else {
-                digits[i] += 1;
-                break;
-            }
-        }
-        if (i < 0) {
-            int[] res = new int[digits.length + 1];
-            res[0] = 1;
-            return res;
-        }
-        return digits;
-    }
-
-    /**
-     * 移动零
-     */
-    public void moveZeroes(int[] nums) {
-        if (nums.length == 0) {
-            return;
-        }
-        //声明快慢指针
-        int fast = 0, slow = 0;
-        for (; fast < nums.length; fast++) {
-            if (nums[fast] != 0) {
-                nums[slow++] = nums[fast];
-            }
-        }
-        for (; slow < nums.length; slow++) {
-            nums[slow] = 0;
-        }
-    }
-
-    /**
-     * 两数之和
-     */
-    public int[] twoSum(int[] nums, int target) {
-        Arrays.sort(nums);
-        int i = 0;
-        int j = nums.length - 1;
-        while (i < j) {
-            if (nums[i] + nums[j] < target) {
-                i++;
-            } else if (nums[i] + nums[j] > target) {
-                j--;
-            } else {
-                return new int[]{i, j};
-            }
-        }
-        return new int[]{-1, -1};
-    }
-
-    /**
      * 有效的数独
      */
     public static boolean isValidSudoku(char[][] board) {
@@ -216,36 +63,6 @@ public class Temp {
     }
 
     /**
-     * 旋转图像
-     * https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnhhkv/
-     *
-     * 略
-     */
-
-    /**
-     * 反转字符串
-     */
-    public void reverseString(char[] s) {
-        for (int i = 0; i < s.length / 2; i++) {
-            char temp = s[i];
-            s[i] = s[s.length - 1 - i];
-            s[s.length - 1 - i] = temp;
-        }
-    }
-
-    /**
-     * 反转字符串
-     */
-    public int reverse(int x) {
-        long res = 0;
-        while (x != 0) {
-            res = res * 10 + x % 10;
-            x /= 10;
-        }
-        return res == (int) res ? (int) res : 0;
-    }
-
-    /**
      * 字符串中的第一个唯一字符
      */
     public static int firstUniqChar(String s) {
@@ -260,30 +77,6 @@ public class Temp {
             }
         }
         return -1;
-    }
-
-    /**
-     * 有效的字母异位词
-     */
-    public boolean isAnagram(String s, String t) {
-        int[] zmc = new int[26];
-        int[] zmt = new int[26];
-        char[] cs = s.toCharArray();
-        char[] ct = t.toCharArray();
-
-        for (char c : cs) {
-            zmc[c - 'a']++;
-        }
-        for (char c : ct) {
-            zmt[c - 'a']++;
-        }
-        for (int i = 0; i < 26; i++) {
-
-            if (zmc[i] != zmt[i]) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -439,6 +232,13 @@ public class Temp {
     }
 
     /**
+     * 旋转图像
+     * https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnhhkv/
+     *
+     * 略
+     */
+
+    /**
      * 删除链表的倒数第N个节点
      */
     public static ListNode removeNthFromEnd(ListNode head, int n) {
@@ -461,417 +261,6 @@ public class Temp {
         }
         slow.next = slow.next.next;
         return head;
-    }
-
-    /**
-     * 反转链表
-     */
-    public ListNode reverseList(ListNode head) {
-        if (head == null) {
-            return null;
-        }
-
-        ListNode pre = null;
-        ListNode cur = head;
-        ListNode next = null;
-
-        while (cur.next != null) {
-            next = cur.next;
-            cur.next = pre;
-            pre = cur;
-            cur = next;
-        }
-        cur.next = pre;
-
-        return cur;
-    }
-
-    /**
-     * Definition for singly-linked list.
-     * public class ListNode {
-     * int val;
-     * ListNode next;
-     * ListNode() {}
-     * ListNode(int val) { this.val = val; }
-     * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-     * }
-     */
-
-    /**
-     * 合并两个有序链表
-     */
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
-        }
-        if (l2 == null) {
-            return l1;
-        }
-        ListNode head, cur;
-        if (l1.val > l2.val) {
-            head = l2;
-            cur = l2;
-            l2 = l2.next;
-        } else {
-            head = l1;
-            cur = l1;
-            l1 = l1.next;
-        }
-
-        while (l1 != null && l2 != null) {
-            if (l1.val > l2.val) {
-                cur.next = l2;
-                l2 = l2.next;
-            } else {
-                cur.next = l1;
-                l1 = l1.next;
-            }
-            cur = cur.next;
-        }
-        if (l1 != null) {
-            cur.next = l1;
-        }
-        if (l2 != null) {
-            cur.next = l2;
-        }
-        return head;
-    }
-
-
-    /**
-     * 回文链表
-     */
-    public boolean isPalindrome(ListNode head) {
-        ListNode slow, fast, left;
-        slow = fast = left = head;
-        // 快慢指针，找到中点
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        // 链表长度为奇数，slow再往前一步
-        if (fast != null) {
-            slow = slow.next;
-        }
-        // 翻转后半部分链表
-        ListNode right = reverse(slow);
-
-        while (right != null && left != null) {
-            if (left.val != right.val) {
-                return false;
-            }
-            left = left.next;
-            right = right.next;
-        }
-        return true;
-    }
-
-    /**
-     * 翻转链表，返回新链表的头结点
-     */
-    public ListNode reverse(ListNode head) {
-        ListNode pre = null, cur = head, next;
-        while (cur != null) {
-            next = cur.next;
-            cur.next = pre;
-            pre = cur;
-            cur = next;
-        }
-        return pre;
-    }
-
-    /**
-     * 环形链表
-     */
-    public boolean hasCycle(ListNode head) {
-        ListNode slow = head, fast = head;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-            if (slow == fast) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Definition for a binary tree node.
-     * public class TreeNode {
-     * int val;
-     * TreeNode left;
-     * TreeNode right;
-     * TreeNode() {}
-     * TreeNode(int val) { this.val = val; }
-     * TreeNode(int val, TreeNode left, TreeNode right) {
-     * this.val = val;
-     * this.left = left;
-     * this.right = right;
-     * }
-     * }
-     */
-
-    /**
-     * 二叉树的最大深度
-     */
-    public int maxDepth(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-
-        int left = maxDepth(root.left);
-
-        int right = maxDepth(root.right);
-
-        return Math.max(left, right) + 1;
-    }
-
-    /**
-     * 验证二叉搜索树
-     * 给定一个二叉树，判断其是否是一个有效的二叉搜索树。
-     * <p>
-     * 假设一个二叉搜索树具有如下特征：
-     * <p>
-     * 节点的左子树只包含小于当前节点的数。
-     * 节点的右子树只包含大于当前节点的数。
-     * 所有左子树和右子树自身必须也是二叉搜索树。
-     * <p>
-     * 思路：
-     * 1. root节点的值 要大于左节点，要小于右节点
-     * 2. root节点的值 是左子树的最大值，是右子树的最小值
-     */
-    public boolean isValidBST(TreeNode root) {
-        return isValidBST(root, null, null);
-    }
-
-    /* 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val */
-    public boolean isValidBST(TreeNode root, TreeNode min, TreeNode max) {
-        // base case
-        if (root == null) {
-            return true;
-        }
-        // 若 root.val 不符合 max 和 min 的限制，说明不是合法 BST
-        if (min != null && root.val <= min.val) {
-            return false;
-        }
-        if (max != null && root.val >= max.val) {
-            return false;
-        }
-        // 限定左子树的最大值是 root.val，右子树的最小值是 root.val
-        return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
-    }
-
-    /**
-     * 二叉树的层序遍历
-     * 1 创建 当前层的 val list
-     * 2 获取 下一层的 nodes
-     */
-    public List<List<Integer>> levelOrder(TreeNode root) {
-        if (root == null) {
-            return new ArrayList<>();
-        }
-        List<List<Integer>> res = new ArrayList<>();
-
-        Queue<TreeNode> level = new LinkedList<>();
-        level.offer(root);
-
-        while (!level.isEmpty()) {
-            List<Integer> l = new ArrayList<>();
-            level = levelNode(level, l);
-            res.add(l);
-        }
-        return res;
-    }
-
-    /**
-     * 填充当前层的 val
-     * 返回下一层的nodes
-     */
-    public Queue<TreeNode> levelNode(Queue<TreeNode> level, List<Integer> list) {
-        Queue<TreeNode> next = new LinkedList<>();
-        while (!level.isEmpty()) {
-            TreeNode node = level.poll();
-            list.add(node.val);
-            if (node.left != null) {
-                next.offer(node.left);
-            }
-            if (node.right != null) {
-                next.offer(node.right);
-            }
-        }
-        return next;
-    }
-
-    /**
-     * 将有序数组转换为二叉搜索树
-     * <p>
-     * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
-     * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
-     * <p>
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xninbt/
-     * <p>
-     * eg: [-10,-3,0,5,9] 5
-     * <p>
-     * 思路：
-     * 1 将 mid(1/2位置)上的值放到 root
-     * 2 将 left ~ mid-1 放到左子树， 将 mid+1 ~ right 放到右子树
-     */
-    public TreeNode sortedArrayToBST(int[] nums) {
-        return sortedArrayToBST(nums, 0, nums.length - 1);
-    }
-
-    private TreeNode sortedArrayToBST(int[] nums, int left, int right) {
-        if (right < left) {
-            return null;
-        }
-        int index = left + (right - left) / 2;
-        TreeNode root = new TreeNode(nums[index]);
-        root.left = sortedArrayToBST(nums, left, index - 1);
-        root.right = sortedArrayToBST(nums, index + 1, right);
-        return root;
-    }
-
-    /**
-     * 对称二叉树
-     * 给定一个二叉树，检查它是否是镜像对称的。
-     * <p>
-     * <p>
-     * 思路：
-     * 方法一：
-     * 1 需要从子节点开始比较，两个子节点的值必须相同，
-     * 2 并且左子节点的右子节点（如果有）必须等于右子节点的左子节点，左子节点的左子节点必须等于右子节点的右子节点
-     * <p>
-     * 方法二：
-     * 1 翻转二叉树
-     * 2 判断前后两颗二叉树是否一致
-     */
-    public boolean isSymmetric(TreeNode root) {
-        if (root == null) {
-            return true;
-        }
-        return isSymmetric(root.left, root.right);
-    }
-
-    public boolean isSymmetric(TreeNode left, TreeNode right) {
-        // 叶子节点
-        if (left == null && right == null) {
-            return true;
-        }
-        // 节点不对称 or 值不同
-        if (left == null || right == null || left.val != right.val) {
-            return false;
-        }
-        // 左.右 == 右.左 && zuo.zuo == you.you
-        return isSymmetric(left.right, right.left) && isSymmetric(left.left, right.right);
-    }
-
-//    public List<Integer> treeToArray(TreeNode root, List<Integer> arr) {
-//        if (root == null) {
-//            arr.add(-1);
-//            return arr;
-//        }
-//        arr.add(root.val);
-//        treeToArray(root.left, arr);
-//        treeToArray(root.right, arr);
-//        return arr;
-//    }
-//
-//    public TreeNode reverse(TreeNode root) {
-//        if (root == null) {
-//            return null;
-//        }
-//        TreeNode temp = root.left;
-//        root.left = root.right;
-//        root.right = temp;
-//
-//        reverse(root.left);
-//        reverse(root.right);
-//
-//        return root;
-//    }
-
-    /**
-     * 合并两个有序数组
-     * <p>
-     * 给你两个有序整数数组nums1 和 nums2，请你将 nums2 合并到nums1中，使 nums1 成为一个有序数组。
-     * 初始化nums1 和 nums2 的元素数量分别为m 和 n 。你可以假设nums1 的空间大小等于m + n，这样它就有足够的空间保存来自 nums2 的元素。
-     * <p>
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnumcr/
-     * <p>
-     * 思路：
-     * 1、 把 nums1 ,nums2 和并到 nums3 中
-     * 2、 将 nums3 覆盖到 nums1 中
-     * <p>
-     * 思路2：
-     * 1、从后往前写
-     */
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int i = m - 1, j = n - 1, writeIdx = m + n - 1;
-        while (i >= 0 && j >= 0) {
-            nums1[writeIdx--] = nums1[i] > nums2[j] ? nums1[i--] : nums2[j--];
-        }
-        while (j >= 0) {
-            nums1[writeIdx--] = nums2[j--];
-        }
-    }
-//    public static void merge(int[] nums1, int m, int[] nums2, int n) {
-//        int[] nums3 = new int[m + n];
-//
-//        int i = 0;
-//        int j = 0;
-//        while (i < m && j < n) {
-//            if (nums1[i] < nums2[j]) {
-//                nums3[i + j] = nums1[i];
-//                i++;
-//            } else {
-//                nums3[i + j] = nums2[j];
-//                j++;
-//            }
-//        }
-//        while (i < m) {
-//            nums3[i + j] = nums1[i];
-//            i++;
-//        }
-//        while (j < n) {
-//            nums3[i + j] = nums2[j];
-//            j++;
-//        }
-//
-//        if (nums3.length >= 0) {
-//            System.arraycopy(nums3, 0, nums1, 0, nums3.length);
-//        }
-//    }
-
-    /* The isBadVersion API is defined in the parent class VersionControl.
-      boolean isBadVersion(int version); */
-
-    /**
-     * 第一个错误的版本
-     * 你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。
-     * 假设你有 n 个版本 [1, 2, ..., n]，你想找出导致之后所有版本出错的第一个错误的版本。
-     * 你可以通过调用bool isBadVersion(version)接口来判断版本号 version 是否在单元测试中出错。实现一个函数来查找第一个错误的版本。你应该尽量减少对调用 API 的次数。
-     * <p>
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnto1s/
-     * <p>
-     * 思路： 二分
-     * 第一个错误版本，在最后一个false的下一个
-     */
-    public int firstBadVersion(int n) {
-        int i = 1;
-        int j = n;
-        while (j > i) {
-            int mid = i + (j - i) / 2;
-            if (isBadVersion(mid)) {
-                j = mid;
-            } else {
-                i = mid + 1;
-            }
-        }
-        return i;
-    }
-
-    boolean isBadVersion(int version) {
-        return version >= 4;
     }
 
     /**
@@ -952,16 +341,6 @@ public class Temp {
         }
         return max;
     }
-
-//    public static int maxSubArray(int[] nums) {
-//        int max = Integer.MIN_VALUE;
-//        int[] dp = new int[nums.length + 1];
-//        for (int i = 0; i < nums.length; i++) {
-//            dp[i + 1] = Math.max(dp[i] + nums[i], nums[i]);
-//            max = Math.max(max, dp[i + 1]);
-//        }
-//        return max;
-//    }
 
     /**
      * 打家劫舍
@@ -1062,24 +441,6 @@ public class Temp {
         }
     }
 
-    public int countPrimes1(int n) {
-        boolean[] isPrime = new boolean[n];
-        for (int i = 2; i < n; i++) {
-            isPrime[i] = true;
-        }
-        for (int i = 2; i * i < n; i++) {
-            if (!isPrime[i]) continue;
-            for (int j = i * i; j < n; j += i) {
-                isPrime[j] = false;
-            }
-        }
-        int ans = 0;
-        for (int i = 2; i < n; i++) {
-            if (isPrime[i]) ans++;
-        }
-        return ans;
-    }
-
     /**
      * 3的幂
      * 给定一个整数，写一个函数来判断它是否是 3 的幂次方。如果是，返回 true ；否则，返回 false 。
@@ -1105,7 +466,6 @@ public class Temp {
     public static boolean isPowerOfThree2(int n) {
         return (n > 0 && 1162261467 % n == 0);
     }
-
 
     /**
      * 罗马数字转整数
@@ -1164,108 +524,39 @@ public class Temp {
     }
 
     /**
-     * MCMXCIV
-     * M = 1000, CM = 900, XC = 90, IV = 4.
+     * 颠倒给定的 32 位无符号整数的二进制位。
      * <p>
-     * 1000 < 100 ?     res=1000
-     * 100  < 1000 ?    res = 900
-     * 1000 < 10 ?      res = 1900
-     * 10 < 100 ?       res = 1890
-     * 100 < 1 ？       res = 1990
-     * 1 < 5 ?         res = 1989
-     * 5               res = 1994
-     */
-    public int romanToInt1(String s) {
-        char[] chars = s.toCharArray();
-        int res = 0;
-
-        int preNum = getValue(chars[0]);
-        for (int i = 1; i < chars.length; i++) {
-            int curNum = getValue(chars[i]);
-            if (preNum < curNum) {
-                res -= preNum;
-            } else {
-                res += preNum;
-            }
-            preNum = curNum;
-        }
-        return res + preNum;
-    }
-
-    public int getValue(char ch) {
-        switch (ch) {
-            case 'I':
-                return 1;
-            case 'V':
-                return 5;
-            case 'X':
-                return 10;
-            case 'L':
-                return 50;
-            case 'C':
-                return 100;
-            case 'D':
-                return 500;
-            case 'M':
-                return 1000;
-            default:
-                return 0;
-        }
-    }
-
-    /**
-     * 位1的个数
-     * 编写一个函数，输入是一个无符号整数（以二进制串的形式），返回其二进制表达式中数字位数为 '1' 的个数（也被称为汉明重量）。
-     */
-    // you need to treat n as an unsigned value
-    public int hammingWeight(int i) {
-        i = (i & 0x55555555) + ((i >> 1) & 0x55555555);
-        i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
-        i = (i & 0x0F0F0F0F) + ((i >> 4) & 0x0F0F0F0F);
-        i = (i * (0x01010101) >> 24);
-        return i;
-    }
-
-    // you need to treat n as an unsigned value
-    public int hammingWeight1(int n) {
-        int count = 0;
-        while (n != 0) {
-            count += n & 1;
-            n = n >>> 1;
-        }
-        return count;
-    }
-
-    public int hammingWeight2(int i) {
-        return Integer.bitCount(i);
-    }
-
-    /**
-     * 汉明距离
-     * 两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。
-     * 给你两个整数 x 和 y，计算并返回它们之间的汉明距离。
-     *
-     * 输入：x = 1, y = 4
-     * 输出：2
-     * 解释：
-     * 1   (0 0 0 1)
-     * 4   (0 1 0 0)
-     *        ↑   ↑
-     * 上面的箭头指出了对应二进制位不同的位置。
-     *
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnyode/
+     * 提示：
+     * <p>
+     * 请注意，在某些语言（如 Java）中，没有无符号整数类型。在这种情况下，输入和输出都将被指定为有符号整数类型，并且不应影响您的实现，因为无论整数是有符号的还是无符号的，其内部的二进制表示形式都是相同的。
+     * 在 Java 中，编译器使用二进制补码记法来表示有符号整数。因此，在上面的 示例 2 中，输入表示有符号整数 -3，输出表示有符号整数 -1073741825。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnc5vg/
+     * <p>
+     * 输入: 00000010100101000001111010011100
+     * 输出: 00111001011110000010100101000000
+     * 解释: 输入的二进制串 00000010100101000001111010011100 表示无符号整数 43261596，
+     * 因此返回 964176192，其二进制表示形式为 00111001011110000010100101000000。
      *
      * 思路：
-     * 1、 异或运算
-     * 2、 计算 二进制形式 1 的个数
+     * 1、 n循环右移一位，将 n 的最后一位放入res
+     * 2、 res左移一位
+     * 3、 循环32次
      */
-    public int hammingDistance(int x, int y) {
-        int c = x^y;
-        return Integer.bitCount(c);
+    public static int reverseBits(int n) {
+        int res = 0;
+        for (int i = 0; i < 32; i++) {
+            res = res << 1;
+            res = res + (n & 1);
+            n = n >> 1;
+        }
+        return res;
     }
 
     public static void main(String[] args) {
         int[] x = {2, 7, 9, 3, 1};
+
+        System.out.println(reverseBits(43261596));
 
 //        hammingWeight(8);
 
@@ -1397,6 +688,744 @@ public class Temp {
 //        System.out.println(isValidSudoku(yyy));
 
 
+    }
+
+    /**
+     * 删除排序数组中的重复项
+     */
+    public int removeDuplicates(int[] nums) {
+        int len = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[len] != nums[i]) {
+                nums[++len] = nums[i];
+            }
+        }
+        len++;
+        return len;
+    }
+
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     * int val;
+     * ListNode next;
+     * ListNode() {}
+     * ListNode(int val) { this.val = val; }
+     * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
+
+    /**
+     * 买卖股票的最佳时机 II
+     */
+    public int maxProfit(int[] prices) {
+        int sum = 0;
+        for (int i = 1; i < prices.length; i++) {
+            int x = prices[i] - prices[i - 1];
+            if (x > 0) {
+                sum += x;
+            }
+        }
+        return sum;
+    }
+
+    /**
+     * 旋转数组
+     */
+    public void rotate(int[] nums, int k) {
+        int len = nums.length;
+        k = k % len;
+
+        reverse(nums, 0, len - k);
+        reverse(nums, len - k, len);
+        reverse(nums, 0, len);
+    }
+
+    public void reverse(int[] nums, int start, int end) {
+        for (int i = start, j = end - 1; i < j; i++, j--) {
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+        }
+    }
+
+    /**
+     * 存在重复元素
+     */
+    public boolean containsDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i - 1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     * int val;
+     * TreeNode left;
+     * TreeNode right;
+     * TreeNode() {}
+     * TreeNode(int val) { this.val = val; }
+     * TreeNode(int val, TreeNode left, TreeNode right) {
+     * this.val = val;
+     * this.left = left;
+     * this.right = right;
+     * }
+     * }
+     */
+
+    /**
+     * 只出现一次的数字
+     */
+    public int singleNumber(int[] nums) {
+        int res = 0;
+        for (int num : nums) {
+            res ^= num;
+        }
+        return res;
+    }
+
+    /**
+     * 两个数组的交集 II
+     */
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0, j = 0; i < nums1.length && j < nums2.length; ) {
+            if (nums1[i] > nums2[j]) {
+                j++;
+            } else if (nums1[i] < nums2[j]) {
+                i++;
+            } else {
+                res.add(nums1[i]);
+                i++;
+                j++;
+            }
+        }
+        return res.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    /**
+     * 加一
+     */
+    public int[] plusOne(int[] digits) {
+        int i = digits.length - 1;
+        for (; i >= 0; i--) {
+            if (digits[i] == 9) {
+                digits[i] = 0;
+            } else {
+                digits[i] += 1;
+                break;
+            }
+        }
+        if (i < 0) {
+            int[] res = new int[digits.length + 1];
+            res[0] = 1;
+            return res;
+        }
+        return digits;
+    }
+
+    /**
+     * 移动零
+     */
+    public void moveZeroes(int[] nums) {
+        if (nums.length == 0) {
+            return;
+        }
+        //声明快慢指针
+        int fast = 0, slow = 0;
+        for (; fast < nums.length; fast++) {
+            if (nums[fast] != 0) {
+                nums[slow++] = nums[fast];
+            }
+        }
+        for (; slow < nums.length; slow++) {
+            nums[slow] = 0;
+        }
+    }
+
+    /**
+     * 两数之和
+     */
+    public int[] twoSum(int[] nums, int target) {
+        Arrays.sort(nums);
+        int i = 0;
+        int j = nums.length - 1;
+        while (i < j) {
+            if (nums[i] + nums[j] < target) {
+                i++;
+            } else if (nums[i] + nums[j] > target) {
+                j--;
+            } else {
+                return new int[]{i, j};
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    /**
+     * 反转字符串
+     */
+    public void reverseString(char[] s) {
+        for (int i = 0; i < s.length / 2; i++) {
+            char temp = s[i];
+            s[i] = s[s.length - 1 - i];
+            s[s.length - 1 - i] = temp;
+        }
+    }
+
+    /**
+     * 反转字符串
+     */
+    public int reverse(int x) {
+        long res = 0;
+        while (x != 0) {
+            res = res * 10 + x % 10;
+            x /= 10;
+        }
+        return res == (int) res ? (int) res : 0;
+    }
+
+    /**
+     * 有效的字母异位词
+     */
+    public boolean isAnagram(String s, String t) {
+        int[] zmc = new int[26];
+        int[] zmt = new int[26];
+        char[] cs = s.toCharArray();
+        char[] ct = t.toCharArray();
+
+        for (char c : cs) {
+            zmc[c - 'a']++;
+        }
+        for (char c : ct) {
+            zmt[c - 'a']++;
+        }
+        for (int i = 0; i < 26; i++) {
+
+            if (zmc[i] != zmt[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 反转链表
+     */
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode pre = null;
+        ListNode cur = head;
+        ListNode next = null;
+
+        while (cur.next != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        cur.next = pre;
+
+        return cur;
+    }
+
+//    public List<Integer> treeToArray(TreeNode root, List<Integer> arr) {
+//        if (root == null) {
+//            arr.add(-1);
+//            return arr;
+//        }
+//        arr.add(root.val);
+//        treeToArray(root.left, arr);
+//        treeToArray(root.right, arr);
+//        return arr;
+//    }
+//
+//    public TreeNode reverse(TreeNode root) {
+//        if (root == null) {
+//            return null;
+//        }
+//        TreeNode temp = root.left;
+//        root.left = root.right;
+//        root.right = temp;
+//
+//        reverse(root.left);
+//        reverse(root.right);
+//
+//        return root;
+//    }
+
+    /**
+     * 合并两个有序链表
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        ListNode head, cur;
+        if (l1.val > l2.val) {
+            head = l2;
+            cur = l2;
+            l2 = l2.next;
+        } else {
+            head = l1;
+            cur = l1;
+            l1 = l1.next;
+        }
+
+        while (l1 != null && l2 != null) {
+            if (l1.val > l2.val) {
+                cur.next = l2;
+                l2 = l2.next;
+            } else {
+                cur.next = l1;
+                l1 = l1.next;
+            }
+            cur = cur.next;
+        }
+        if (l1 != null) {
+            cur.next = l1;
+        }
+        if (l2 != null) {
+            cur.next = l2;
+        }
+        return head;
+    }
+//    public static void merge(int[] nums1, int m, int[] nums2, int n) {
+//        int[] nums3 = new int[m + n];
+//
+//        int i = 0;
+//        int j = 0;
+//        while (i < m && j < n) {
+//            if (nums1[i] < nums2[j]) {
+//                nums3[i + j] = nums1[i];
+//                i++;
+//            } else {
+//                nums3[i + j] = nums2[j];
+//                j++;
+//            }
+//        }
+//        while (i < m) {
+//            nums3[i + j] = nums1[i];
+//            i++;
+//        }
+//        while (j < n) {
+//            nums3[i + j] = nums2[j];
+//            j++;
+//        }
+//
+//        if (nums3.length >= 0) {
+//            System.arraycopy(nums3, 0, nums1, 0, nums3.length);
+//        }
+//    }
+
+    /* The isBadVersion API is defined in the parent class VersionControl.
+      boolean isBadVersion(int version); */
+
+    /**
+     * 回文链表
+     */
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow, fast, left;
+        slow = fast = left = head;
+        // 快慢指针，找到中点
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        // 链表长度为奇数，slow再往前一步
+        if (fast != null) {
+            slow = slow.next;
+        }
+        // 翻转后半部分链表
+        ListNode right = reverse(slow);
+
+        while (right != null && left != null) {
+            if (left.val != right.val) {
+                return false;
+            }
+            left = left.next;
+            right = right.next;
+        }
+        return true;
+    }
+
+    /**
+     * 翻转链表，返回新链表的头结点
+     */
+    public ListNode reverse(ListNode head) {
+        ListNode pre = null, cur = head, next;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+    /**
+     * 环形链表
+     */
+    public boolean hasCycle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 二叉树的最大深度
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int left = maxDepth(root.left);
+
+        int right = maxDepth(root.right);
+
+        return Math.max(left, right) + 1;
+    }
+
+    /**
+     * 验证二叉搜索树
+     * 给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+     * <p>
+     * 假设一个二叉搜索树具有如下特征：
+     * <p>
+     * 节点的左子树只包含小于当前节点的数。
+     * 节点的右子树只包含大于当前节点的数。
+     * 所有左子树和右子树自身必须也是二叉搜索树。
+     * <p>
+     * 思路：
+     * 1. root节点的值 要大于左节点，要小于右节点
+     * 2. root节点的值 是左子树的最大值，是右子树的最小值
+     */
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null, null);
+    }
+
+//    public static int maxSubArray(int[] nums) {
+//        int max = Integer.MIN_VALUE;
+//        int[] dp = new int[nums.length + 1];
+//        for (int i = 0; i < nums.length; i++) {
+//            dp[i + 1] = Math.max(dp[i] + nums[i], nums[i]);
+//            max = Math.max(max, dp[i + 1]);
+//        }
+//        return max;
+//    }
+
+    /* 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val */
+    public boolean isValidBST(TreeNode root, TreeNode min, TreeNode max) {
+        // base case
+        if (root == null) {
+            return true;
+        }
+        // 若 root.val 不符合 max 和 min 的限制，说明不是合法 BST
+        if (min != null && root.val <= min.val) {
+            return false;
+        }
+        if (max != null && root.val >= max.val) {
+            return false;
+        }
+        // 限定左子树的最大值是 root.val，右子树的最小值是 root.val
+        return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
+    }
+
+    /**
+     * 二叉树的层序遍历
+     * 1 创建 当前层的 val list
+     * 2 获取 下一层的 nodes
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> res = new ArrayList<>();
+
+        Queue<TreeNode> level = new LinkedList<>();
+        level.offer(root);
+
+        while (!level.isEmpty()) {
+            List<Integer> l = new ArrayList<>();
+            level = levelNode(level, l);
+            res.add(l);
+        }
+        return res;
+    }
+
+    /**
+     * 填充当前层的 val
+     * 返回下一层的nodes
+     */
+    public Queue<TreeNode> levelNode(Queue<TreeNode> level, List<Integer> list) {
+        Queue<TreeNode> next = new LinkedList<>();
+        while (!level.isEmpty()) {
+            TreeNode node = level.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                next.offer(node.left);
+            }
+            if (node.right != null) {
+                next.offer(node.right);
+            }
+        }
+        return next;
+    }
+
+    /**
+     * 将有序数组转换为二叉搜索树
+     * <p>
+     * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+     * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xninbt/
+     * <p>
+     * eg: [-10,-3,0,5,9] 5
+     * <p>
+     * 思路：
+     * 1 将 mid(1/2位置)上的值放到 root
+     * 2 将 left ~ mid-1 放到左子树， 将 mid+1 ~ right 放到右子树
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode sortedArrayToBST(int[] nums, int left, int right) {
+        if (right < left) {
+            return null;
+        }
+        int index = left + (right - left) / 2;
+        TreeNode root = new TreeNode(nums[index]);
+        root.left = sortedArrayToBST(nums, left, index - 1);
+        root.right = sortedArrayToBST(nums, index + 1, right);
+        return root;
+    }
+
+    /**
+     * 对称二叉树
+     * 给定一个二叉树，检查它是否是镜像对称的。
+     * <p>
+     * <p>
+     * 思路：
+     * 方法一：
+     * 1 需要从子节点开始比较，两个子节点的值必须相同，
+     * 2 并且左子节点的右子节点（如果有）必须等于右子节点的左子节点，左子节点的左子节点必须等于右子节点的右子节点
+     * <p>
+     * 方法二：
+     * 1 翻转二叉树
+     * 2 判断前后两颗二叉树是否一致
+     */
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isSymmetric(root.left, root.right);
+    }
+
+    public boolean isSymmetric(TreeNode left, TreeNode right) {
+        // 叶子节点
+        if (left == null && right == null) {
+            return true;
+        }
+        // 节点不对称 or 值不同
+        if (left == null || right == null || left.val != right.val) {
+            return false;
+        }
+        // 左.右 == 右.左 && zuo.zuo == you.you
+        return isSymmetric(left.right, right.left) && isSymmetric(left.left, right.right);
+    }
+
+    /**
+     * 合并两个有序数组
+     * <p>
+     * 给你两个有序整数数组nums1 和 nums2，请你将 nums2 合并到nums1中，使 nums1 成为一个有序数组。
+     * 初始化nums1 和 nums2 的元素数量分别为m 和 n 。你可以假设nums1 的空间大小等于m + n，这样它就有足够的空间保存来自 nums2 的元素。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnumcr/
+     * <p>
+     * 思路：
+     * 1、 把 nums1 ,nums2 和并到 nums3 中
+     * 2、 将 nums3 覆盖到 nums1 中
+     * <p>
+     * 思路2：
+     * 1、从后往前写
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n - 1, writeIdx = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            nums1[writeIdx--] = nums1[i] > nums2[j] ? nums1[i--] : nums2[j--];
+        }
+        while (j >= 0) {
+            nums1[writeIdx--] = nums2[j--];
+        }
+    }
+
+    /**
+     * 第一个错误的版本
+     * 你是产品经理，目前正在带领一个团队开发新的产品。不幸的是，你的产品的最新版本没有通过质量检测。由于每个版本都是基于之前的版本开发的，所以错误的版本之后的所有版本都是错的。
+     * 假设你有 n 个版本 [1, 2, ..., n]，你想找出导致之后所有版本出错的第一个错误的版本。
+     * 你可以通过调用bool isBadVersion(version)接口来判断版本号 version 是否在单元测试中出错。实现一个函数来查找第一个错误的版本。你应该尽量减少对调用 API 的次数。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnto1s/
+     * <p>
+     * 思路： 二分
+     * 第一个错误版本，在最后一个false的下一个
+     */
+    public int firstBadVersion(int n) {
+        int i = 1;
+        int j = n;
+        while (j > i) {
+            int mid = i + (j - i) / 2;
+            if (isBadVersion(mid)) {
+                j = mid;
+            } else {
+                i = mid + 1;
+            }
+        }
+        return i;
+    }
+
+    boolean isBadVersion(int version) {
+        return version >= 4;
+    }
+
+    public int countPrimes1(int n) {
+        boolean[] isPrime = new boolean[n];
+        for (int i = 2; i < n; i++) {
+            isPrime[i] = true;
+        }
+        for (int i = 2; i * i < n; i++) {
+            if (!isPrime[i]) continue;
+            for (int j = i * i; j < n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+        int ans = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i]) ans++;
+        }
+        return ans;
+    }
+
+    /**
+     * MCMXCIV
+     * M = 1000, CM = 900, XC = 90, IV = 4.
+     * <p>
+     * 1000 < 100 ?     res=1000
+     * 100  < 1000 ?    res = 900
+     * 1000 < 10 ?      res = 1900
+     * 10 < 100 ?       res = 1890
+     * 100 < 1 ？       res = 1990
+     * 1 < 5 ?         res = 1989
+     * 5               res = 1994
+     */
+    public int romanToInt1(String s) {
+        char[] chars = s.toCharArray();
+        int res = 0;
+
+        int preNum = getValue(chars[0]);
+        for (int i = 1; i < chars.length; i++) {
+            int curNum = getValue(chars[i]);
+            if (preNum < curNum) {
+                res -= preNum;
+            } else {
+                res += preNum;
+            }
+            preNum = curNum;
+        }
+        return res + preNum;
+    }
+
+    public int getValue(char ch) {
+        switch (ch) {
+            case 'I':
+                return 1;
+            case 'V':
+                return 5;
+            case 'X':
+                return 10;
+            case 'L':
+                return 50;
+            case 'C':
+                return 100;
+            case 'D':
+                return 500;
+            case 'M':
+                return 1000;
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * 位1的个数
+     * 编写一个函数，输入是一个无符号整数（以二进制串的形式），返回其二进制表达式中数字位数为 '1' 的个数（也被称为汉明重量）。
+     */
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int i) {
+        i = (i & 0x55555555) + ((i >> 1) & 0x55555555);
+        i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+        i = (i & 0x0F0F0F0F) + ((i >> 4) & 0x0F0F0F0F);
+        i = (i * (0x01010101) >> 24);
+        return i;
+    }
+
+    // you need to treat n as an unsigned value
+    public int hammingWeight1(int n) {
+        int count = 0;
+        while (n != 0) {
+            count += n & 1;
+            n = n >>> 1;
+        }
+        return count;
+    }
+
+    public int hammingWeight2(int i) {
+        return Integer.bitCount(i);
+    }
+
+    /**
+     * 汉明距离
+     * 两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。
+     * 给你两个整数 x 和 y，计算并返回它们之间的汉明距离。
+     * <p>
+     * 输入：x = 1, y = 4
+     * 输出：2
+     * 解释：
+     * 1   (0 0 0 1)
+     * 4   (0 1 0 0)
+     * ↑   ↑
+     * 上面的箭头指出了对应二进制位不同的位置。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnyode/
+     * <p>
+     * 思路：
+     * 1、 异或运算
+     * 2、 计算 二进制形式 1 的个数
+     */
+    public int hammingDistance(int x, int y) {
+        int c = x ^ y;
+        return Integer.bitCount(c);
     }
 }
 
