@@ -2,6 +2,7 @@ package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -537,7 +538,7 @@ public class Temp {
      * 输出: 00111001011110000010100101000000
      * 解释: 输入的二进制串 00000010100101000001111010011100 表示无符号整数 43261596，
      * 因此返回 964176192，其二进制表示形式为 00111001011110000010100101000000。
-     *
+     * <p>
      * 思路：
      * 1、 n循环右移一位，将 n 的最后一位放入res
      * 2、 res左移一位
@@ -553,10 +554,50 @@ public class Temp {
         return res;
     }
 
+    /**
+     * 杨辉三角
+     * <p>
+     * 给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     * <p>
+     * 思路：
+     * 1、 初始化前两层
+     * 2、 第三层开始， n[i] = m[i-1]+m[i]  (m为n的上一层)， 此外 在每次循环的时，最前一次添加元素 1， 最后一次加元素 1
+     */
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+
+        res.add(Arrays.asList(1));
+        if (numRows == 1) {
+            return res;
+        }
+        res.add(Arrays.asList(1, 1));
+        if (numRows == 2) {
+            return res;
+        }
+
+        for (int i = 2; i < numRows; i++) {
+            List<Integer> integers = res.get(i - 1);
+            List<Integer> r = new ArrayList<>();
+            r.add(1);
+            for (int i1 = 1; i1 < integers.size(); i1++) {
+                r.add(integers.get(i1) + integers.get(i1 - 1));
+            }
+            r.add(1);
+            res.add(r);
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         int[] x = {2, 7, 9, 3, 1};
 
-        System.out.println(reverseBits(43261596));
+        List<List<Integer>> generate = generate(5);
+        for (List<Integer> integers : generate) {
+            System.err.println(integers);
+        }
+
+//        System.out.println(reverseBits(43261596));
 
 //        hammingWeight(8);
 
