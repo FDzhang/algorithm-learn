@@ -589,6 +589,64 @@ public class Temp {
         return res;
     }
 
+    /**
+     * 有效的括号
+     * <p>
+     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+     * <p>
+     * 有效字符串需满足：
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnbcaj/
+     *
+     * 思路：
+     * 1、左括号 放入站， 右括号则与栈定的左括号进行批评，匹配不成功则返回false
+     * 2、最后 检测是否栈空， 应对可能全是左括号的情况
+     * 3、取栈定元素时，判断栈顶是否为空，应对 先出现右括号的情况
+     */
+    public boolean isValid(String s) {
+        if (s.length() % 2 != 0) {
+            return false;
+        }
+
+        Stack<Character> stack = new Stack<>();
+        char[] cs = s.toCharArray();
+
+        for (char c : cs) {
+            if (isLeft(c)) {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                Character b = stack.pop();
+                if (!isCheck(c, b)) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    public boolean isLeft(char b) {
+        return b == '(' || b == '{' || b == '[';
+    }
+
+    public boolean isCheck(char a, char b) {
+        switch (a) {
+            case ')':
+                return b == '(';
+            case '}':
+                return b == '{';
+            case ']':
+                return b == '[';
+            default:
+                return false;
+        }
+    }
+
+
     public static void main(String[] args) {
         int[] x = {2, 7, 9, 3, 1};
 
