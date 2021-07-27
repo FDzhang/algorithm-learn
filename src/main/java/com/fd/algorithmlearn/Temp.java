@@ -589,64 +589,6 @@ public class Temp {
         return res;
     }
 
-    /**
-     * 有效的括号
-     * <p>
-     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
-     * <p>
-     * 有效字符串需满足：
-     * 左括号必须用相同类型的右括号闭合。
-     * 左括号必须以正确的顺序闭合。
-     * <p>
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnbcaj/
-     *
-     * 思路：
-     * 1、左括号 放入站， 右括号则与栈定的左括号进行批评，匹配不成功则返回false
-     * 2、最后 检测是否栈空， 应对可能全是左括号的情况
-     * 3、取栈定元素时，判断栈顶是否为空，应对 先出现右括号的情况
-     */
-    public boolean isValid(String s) {
-        if (s.length() % 2 != 0) {
-            return false;
-        }
-
-        Stack<Character> stack = new Stack<>();
-        char[] cs = s.toCharArray();
-
-        for (char c : cs) {
-            if (isLeft(c)) {
-                stack.push(c);
-            } else {
-                if (stack.isEmpty()) {
-                    return false;
-                }
-                Character b = stack.pop();
-                if (!isCheck(c, b)) {
-                    return false;
-                }
-            }
-        }
-        return stack.isEmpty();
-    }
-
-    public boolean isLeft(char b) {
-        return b == '(' || b == '{' || b == '[';
-    }
-
-    public boolean isCheck(char a, char b) {
-        switch (a) {
-            case ')':
-                return b == '(';
-            case '}':
-                return b == '{';
-            case ']':
-                return b == '[';
-            default:
-                return false;
-        }
-    }
-
-
     public static void main(String[] args) {
         int[] x = {0, 1};
 
@@ -790,6 +732,97 @@ public class Temp {
 //        System.out.println(isValidSudoku(yyy));
 
 
+    }
+
+    /**
+     * 有效的括号
+     * <p>
+     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+     * <p>
+     * 有效字符串需满足：
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnbcaj/
+     * <p>
+     * 思路：
+     * 1、左括号 放入站， 右括号则与栈定的左括号进行批评，匹配不成功则返回false
+     * 2、最后 检测是否栈空， 应对可能全是左括号的情况
+     * 3、取栈定元素时，判断栈顶是否为空，应对 先出现右括号的情况
+     */
+    public boolean isValid(String s) {
+        if (s.length() % 2 != 0) {
+            return false;
+        }
+
+        Stack<Character> stack = new Stack<>();
+        char[] cs = s.toCharArray();
+
+        for (char c : cs) {
+            if (isLeft(c)) {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                Character b = stack.pop();
+                if (!isCheck(c, b)) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    public boolean isLeft(char b) {
+        return b == '(' || b == '{' || b == '[';
+    }
+
+    public boolean isCheck(char a, char b) {
+        switch (a) {
+            case ')':
+                return b == '(';
+            case '}':
+                return b == '{';
+            case ']':
+                return b == '[';
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * 缺失数字
+     * 给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
+     */
+    public int missingNumber(int[] nums) {
+        Arrays.sort(nums);
+
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (i != nums[i]) {
+                return i;
+            }
+        }
+
+        return len;
+    }
+
+    public int missingNumber1(int[] nums) {
+        int sum = 0;
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            sum += nums[i];
+        }
+        return (len + 1) * len / 2 - sum;
+    }
+
+    public int missingNumber2(int[] nums) {
+        int reduce = 0;
+        for (int i = 0; i < nums.length; i++) {
+            reduce = reduce ^ nums[i] ^ i;
+        }
+        return reduce ^ nums.length;
     }
 
     /**
