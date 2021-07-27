@@ -537,7 +537,7 @@ public class Temp {
      * 输出: 00111001011110000010100101000000
      * 解释: 输入的二进制串 00000010100101000001111010011100 表示无符号整数 43261596，
      * 因此返回 964176192，其二进制表示形式为 00111001011110000010100101000000。
-     *
+     * <p>
      * 思路：
      * 1、 n循环右移一位，将 n 的最后一位放入res
      * 2、 res左移一位
@@ -554,9 +554,11 @@ public class Temp {
     }
 
     public static void main(String[] args) {
-        int[] x = {2, 7, 9, 3, 1};
+        int[] x = {0, 1};
 
-        System.out.println(reverseBits(43261596));
+//        System.out.println(missingNumber(x));
+
+//        System.out.println(reverseBits(43261596));
 
 //        hammingWeight(8);
 
@@ -688,6 +690,39 @@ public class Temp {
 //        System.out.println(isValidSudoku(yyy));
 
 
+    }
+
+    /**
+     * 缺失数字
+     * 给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
+     */
+    public int missingNumber(int[] nums) {
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i != nums[i]) {
+                return i;
+            }
+        }
+        return nums.length;
+    }
+    // 数学
+    public int missingNumber1(int[] nums) {
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+        }
+        int len = nums.length;
+        return len * (len + 1) / 2 - sum;
+    }
+    // 异或运算，相异为真，相同为假，所以 a^a = 0 ;0^a = a
+    // 因为异或运算 满足交换律 a^b^a = a^a^b = b 所以数组经过异或运算，单独的值就剩下了
+    public int missingNumber2(int[] nums) {
+        int reduce = 0;
+        for (int i = 0; i < nums.length; i++) {
+            reduce = reduce ^ nums[i] ^ i;
+        }
+        return reduce ^ nums.length;
     }
 
     /**
