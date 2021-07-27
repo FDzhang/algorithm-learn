@@ -2,6 +2,7 @@ package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -553,9 +554,108 @@ public class Temp {
         return res;
     }
 
+    /**
+     * 杨辉三角
+     * <p>
+     * 给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     * <p>
+     * 思路：
+     * 1、 初始化前两层
+     * 2、 第三层开始， n[i] = m[i-1]+m[i]  (m为n的上一层)， 此外 在每次循环的时，最前一次添加元素 1， 最后一次加元素 1
+     */
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+
+        res.add(Arrays.asList(1));
+        if (numRows == 1) {
+            return res;
+        }
+        res.add(Arrays.asList(1, 1));
+        if (numRows == 2) {
+            return res;
+        }
+
+        for (int i = 2; i < numRows; i++) {
+            List<Integer> integers = res.get(i - 1);
+            List<Integer> r = new ArrayList<>();
+            r.add(1);
+            for (int i1 = 1; i1 < integers.size(); i1++) {
+                r.add(integers.get(i1) + integers.get(i1 - 1));
+            }
+            r.add(1);
+            res.add(r);
+        }
+        return res;
+    }
+
+    /**
+     * 有效的括号
+     * <p>
+     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+     * <p>
+     * 有效字符串需满足：
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnbcaj/
+     *
+     * 思路：
+     * 1、左括号 放入站， 右括号则与栈定的左括号进行批评，匹配不成功则返回false
+     * 2、最后 检测是否栈空， 应对可能全是左括号的情况
+     * 3、取栈定元素时，判断栈顶是否为空，应对 先出现右括号的情况
+     */
+    public boolean isValid(String s) {
+        if (s.length() % 2 != 0) {
+            return false;
+        }
+
+        Stack<Character> stack = new Stack<>();
+        char[] cs = s.toCharArray();
+
+        for (char c : cs) {
+            if (isLeft(c)) {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                Character b = stack.pop();
+                if (!isCheck(c, b)) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    public boolean isLeft(char b) {
+        return b == '(' || b == '{' || b == '[';
+    }
+
+    public boolean isCheck(char a, char b) {
+        switch (a) {
+            case ')':
+                return b == '(';
+            case '}':
+                return b == '{';
+            case ']':
+                return b == '[';
+            default:
+                return false;
+        }
+    }
+
+
     public static void main(String[] args) {
         int[] x = {0, 1};
 
+        List<List<Integer>> generate = generate(5);
+        for (List<Integer> integers : generate) {
+            System.err.println(integers);
+        }
+
+//        System.out.println(reverseBits(43261596));
 //        System.out.println(missingNumber(x));
 
 //        System.out.println(reverseBits(43261596));
@@ -690,39 +790,6 @@ public class Temp {
 //        System.out.println(isValidSudoku(yyy));
 
 
-    }
-
-    /**
-     * 缺失数字
-     * 给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
-     */
-    public int missingNumber(int[] nums) {
-        Arrays.sort(nums);
-
-        for (int i = 0; i < nums.length; i++) {
-            if (i != nums[i]) {
-                return i;
-            }
-        }
-        return nums.length;
-    }
-    // 数学
-    public int missingNumber1(int[] nums) {
-        int sum = 0;
-        for (int i = 0; i < nums.length; i++) {
-            sum += nums[i];
-        }
-        int len = nums.length;
-        return len * (len + 1) / 2 - sum;
-    }
-    // 异或运算，相异为真，相同为假，所以 a^a = 0 ;0^a = a
-    // 因为异或运算 满足交换律 a^b^a = a^a^b = b 所以数组经过异或运算，单独的值就剩下了
-    public int missingNumber2(int[] nums) {
-        int reduce = 0;
-        for (int i = 0; i < nums.length; i++) {
-            reduce = reduce ^ nums[i] ^ i;
-        }
-        return reduce ^ nums.length;
     }
 
     /**
