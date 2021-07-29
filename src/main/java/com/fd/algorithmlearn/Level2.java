@@ -17,7 +17,7 @@ public class Level2 {
 
 
     public static void main(String[] args) {
-        int[] x = {1,-1,-1,0};
+        int[] x = {1, -1, -1, 0};
         System.out.println(threeSum(x));
     }
 
@@ -31,13 +31,19 @@ public class Level2 {
      * 思路：
      * 1、 排序
      * 2、 三个数字，保证第一个数字不重复。调用twoSum()
-     * 3、 twoSum(nums, lo, target) : 返回两个值的list， 每个list中的两个值加起来=target (循环范围：从lo到数组结尾)
+     * 3、 twoSum(nums, lo, target) : 返回两个值的list， 每个list中的两个值加起来=target (需要注意while循环放置的位置)
+     *
+     * 4、小优化，当nums[i]>0时，则没必要继续调用twoSum
      */
     public static List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> res = new ArrayList<>();
 
         for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                break;
+            }
+
             List<List<Integer>> list = twoSum(nums, i + 1, -nums[i]);
 
             if (!list.isEmpty()) {
@@ -72,14 +78,12 @@ public class Level2 {
                 list.add(nums[hi]);
 
                 res.add(list);
-                lo++;
-                hi--;
-            }
-            while (nums[lo] == left && lo < hi) {
-                lo++;
-            }
-            while (nums[hi] == right && lo < hi) {
-                hi--;
+                while (nums[lo] == left && lo < hi) {
+                    lo++;
+                }
+                while (nums[hi] == right && lo < hi) {
+                    hi--;
+                }
             }
         }
         return res;
