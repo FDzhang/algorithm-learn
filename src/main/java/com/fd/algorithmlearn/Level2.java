@@ -21,6 +21,41 @@ public class Level2 {
     }
 
     /**
+     * 字母异位词分组
+     * 给定一个字符串数组，将字母异位词组合在一起。可以按任意顺序返回结果列表。
+     * <p>
+     * 字母异位词指字母相同，但排列不同的字符串。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+     * 输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvaszc/
+     * <p>
+     * 思路：
+     * 1、拆散成 char， 排序，再组合
+     * 2、排序再组合后一样的放入一组
+     */
+    public static List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+
+        for (String str : strs) {
+            char[] cs = str.toCharArray();
+            Arrays.sort(cs);
+            String sortStr = new String(cs);
+//            String sortStr = Arrays.toString(cs);
+
+            if (!map.containsKey(sortStr)) {
+                map.put(sortStr, new ArrayList<>());
+            }
+
+            map.get(sortStr).add(str);
+        }
+        return new ArrayList<>(map.values());
+    }
+
+    /**
      * 三数之和
      * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
      * 注意：答案中不可以包含重复的三元组。
@@ -134,41 +169,5 @@ public class Level2 {
             }
         }
     }
-
-
-    /**
-     * 字母异位词分组
-     * 给定一个字符串数组，将字母异位词组合在一起。可以按任意顺序返回结果列表。
-     * <p>
-     * 字母异位词指字母相同，但排列不同的字符串。
-     * <p>
-     * 示例 1:
-     * <p>
-     * 输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
-     * 输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
-     * <p>
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvaszc/
-     * <p>
-     * 思路：
-     * 1、拆散成 char， 排序，再组合
-     * 2、排序再组合后一样的放入一组
-     */
-    public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String, List<String>> map = new HashMap<>();
-
-        for (String str : strs) {
-            char[] cs = str.toCharArray();
-            Arrays.sort(cs);
-            String sortStr = Arrays.toString(cs);
-
-            if (!map.containsKey(sortStr)) {
-                map.put(sortStr, new ArrayList<>());
-            }
-
-            map.get(sortStr).add(str);
-        }
-        return new ArrayList<>(map.values());
-    }
-
 
 }
