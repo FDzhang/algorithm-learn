@@ -1,7 +1,7 @@
 package com.fd.algorithmlearn;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * https://leetcode-cn.com/leetbook/detail/top-interview-questions-medium/
@@ -16,9 +16,78 @@ public class Level2 {
 
 
     public static void main(String[] args) {
-        int[] x = {1, -1, -1, 0};
-        System.out.println(threeSum(x));
+//        int[] x = {1, -1, -1, 0};
+//        System.out.println(threeSum(x));
+
+        System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
     }
+
+    /**
+     * 无重复字符的最长子串
+     * <p>
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: s = "abcabcbb"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     * <p>
+     * 思路： 滑动窗口
+     * 1、 创建一个队列和一个计数max，从左往右遍历字符串，不同则入队, 令max = max和队列长度中的最大值
+     * 2、 相同，则从出队 直到队列中不包含相同元素为止
+     * <p>
+     * 思路2： 滑动窗口
+     * 1、 维持两个指针和最大长度max，右指针一直向右，判断左指针是否需要收缩
+     * 2、 需要 则收缩左指针
+     * 3、 更新 最大长度max
+     *
+     * 思路3： 动态规划
+     * 确定状态，更新状态。
+     * 用dp[i],表示以i结尾的字符串的最大长度。
+     * 如果出现重复，从重复的位置重新计算长度。
+     */
+
+    public static int lengthOfLongestSubstring(String s) {
+        Queue<Character> queue = new LinkedBlockingQueue<>();
+        char[] cs = s.toCharArray();
+        int max = 0;
+        for (char c : cs) {
+            if (!queue.contains(c)) {
+                queue.offer(c);
+                max = Math.max(max, queue.size());
+            } else {
+                while (!queue.isEmpty() && queue.contains(c)) {
+                    queue.poll();
+                }
+                queue.offer(c);
+            }
+        }
+        return max;
+    }
+
+    public static int lengthOfLongestSubstring1(String s) {
+        Map<Character, Integer> map = new HashMap<>(128);
+        int left = 0;
+        int right = 0;
+        int max = 0;
+
+        char[] cs = s.toCharArray();
+        while (right < cs.length) {
+            char cr = cs[right++];
+            map.put(cr, map.getOrDefault(cr, 0) + 1);
+
+            while (map.get(cr) > 1) {
+                char cl = cs[left++];
+                map.put(cl, map.get(cl) - 1);
+            }
+
+            max = Math.max(max, right - left);
+        }
+        return max;
+    }
+
+
 
     /**
      * 字母异位词分组
