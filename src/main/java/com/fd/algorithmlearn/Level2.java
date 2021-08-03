@@ -23,6 +23,51 @@ public class Level2 {
     }
 
     /**
+     * 最长回文子串
+     * 给你一个字符串 s，找到 s 中最长的回文子串。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：s = "babad"
+     * 输出："bab"
+     * 解释："aba" 同样是符合题意的答案。
+     * <p>
+     * 思路：
+     * 1、遍历 字符串s , 每次都都向两边判断
+     * 1、遍历字符串
+     */
+    public String longestPalindrome(String s) {
+        if (s == null || s.equals("")) {
+            return "";
+        }
+
+        char[] cs = s.toCharArray();
+        int[] dp = new int[cs.length];
+        dp[0] = 1;
+
+        for (int i = 1; i < cs.length; i++) {
+            if (isPalindrome(cs, i)) {
+                dp[i] = i;
+            }
+        }
+        return null;
+    }
+
+    public boolean isPalindrome(char[] cs, int r) {
+        int i = 0;
+        int j = r;
+        while (i < j) {
+            if (cs[i] != cs[j]) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+
+    /**
      * 无重复字符的最长子串
      * <p>
      * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
@@ -41,7 +86,7 @@ public class Level2 {
      * 1、 维持两个指针和最大长度max，右指针一直向右，判断左指针是否需要收缩
      * 2、 需要 则收缩左指针
      * 3、 更新 最大长度max
-     *
+     * <p>
      * 思路3： 动态规划
      * 确定状态，更新状态。
      * 用dp[i],表示以i结尾的字符串的最大长度。
@@ -86,7 +131,6 @@ public class Level2 {
         }
         return max;
     }
-
 
 
     /**
