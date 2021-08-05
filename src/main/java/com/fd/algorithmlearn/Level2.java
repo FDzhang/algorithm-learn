@@ -33,37 +33,30 @@ public class Level2 {
      * 解释："aba" 同样是符合题意的答案。
      * <p>
      * 思路：
-     * 1、遍历 字符串s , 每次都都向两边判断
-     * 1、遍历字符串
+     * 1、遍历 字符串s, 每次都都向两边判断
+     * 2、判断最长奇数情况的回文串
+     * 3、判断最长偶数情况的回文串
      */
     public String longestPalindrome(String s) {
-        if (s == null || s.equals("")) {
-            return "";
+        String res = "";
+
+        for (int i = 0; i < s.length(); i++) {
+            String s1 = isPalindrome(s, i, i);
+            String s2 = isPalindrome(s, i, i + 1);
+
+            res = res.length() > s1.length() ? res : s1;
+            res = res.length() > s2.length() ? res : s2;
         }
 
-        char[] cs = s.toCharArray();
-        int[] dp = new int[cs.length];
-        dp[0] = 1;
-
-        for (int i = 1; i < cs.length; i++) {
-            if (isPalindrome(cs, i)) {
-                dp[i] = i;
-            }
-        }
-        return null;
+        return res;
     }
 
-    public boolean isPalindrome(char[] cs, int r) {
-        int i = 0;
-        int j = r;
-        while (i < j) {
-            if (cs[i] != cs[j]) {
-                return false;
-            }
-            i++;
-            j--;
+    public String isPalindrome(String s, int l, int r) {
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
         }
-        return true;
+        return s.substring(l + 1, r);
     }
 
 
