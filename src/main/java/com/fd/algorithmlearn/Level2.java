@@ -23,6 +23,49 @@ public class Level2 {
     }
 
     /**
+     * 递增的三元子序列
+     * 给你一个整数数组 nums ，判断这个数组中是否存在长度为 3 的递增子序列。
+     * <p>
+     * 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k ，使得 nums[i] < nums[j] < nums[k] ，返回 true ；否则，返回 false 。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvvuqg/
+     * <p>
+     * 思路： 贪心
+     * 1、遍历数组，记录两个值 m1,m2 (m1最小值， m2>m1)
+     * 2、将每个值与 两个个值比较，记录到对应位置
+     *
+     * （为什么不用管先后顺序？ ）
+     *
+     * 2,1,5,0,4,6
+     * 1、x=2,  m1 = 2, m2 =maxValue
+     * 2、x=1,  m1 = 1, m2 =maxValue
+     * 3、x=5,  m1 = 1, m2 = 5
+     * 4、x=0,  m1 = 0, m2 = 5
+     * 5、x=4,  m1 = 0, m2 = 4
+     * 6、x=6,  m1 = 0, m2 = 4, x > m2 结束；
+     *
+     * 假设没有4， 则会以 m1=0, m2=5, x=6 结束（没有满足i<j<K）；实际存在 1, 5, 6 这个组合满足条件；
+     * 也就是说： 无论在哪个位置 x > m2, 都会存在一个 m1 它的位置在 m2 之前，因为先有 m1, 再有m2
+     */
+    public boolean increasingTriplet(int[] nums) {
+
+        int m1 = Integer.MAX_VALUE;
+        int m2 = Integer.MAX_VALUE;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > m2) {
+                return true;
+            } else if (nums[i] > m1) {
+                m2 = nums[i];
+            } else {
+                m1 = nums[i];
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * 最长回文子串
      * 给你一个字符串 s，找到 s 中最长的回文子串。
      * <p>
