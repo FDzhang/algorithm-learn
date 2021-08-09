@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.linked.ListNode;
+
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -23,6 +25,105 @@ public class Level2 {
     }
 
     /**
+     * 两数相加
+     * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+     * <p>
+     * 请你将两个数相加，并以相同形式返回一个表示和的链表。
+     * <p>
+     * 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvw73v/
+     * <p>
+     * 思路：
+     * 1、遍历 l1、l2，两者相加 >= 10, 进位
+     * 2、若 l1 比 l2 长， 继续遍历l1； 若 l2 长， 继续遍历 l2
+     * <p>
+     * 思路2：（递归） 参考leetcode的1ms的答案
+     * 1、l1的节点，l2的节点，进位标识 t；
+     * 2、l1不为空 t += l1.val、 l1=l1.next, l2不为空 t += l2.val、 l2=l2.next;
+     * 3、t%10作为新节点的值， t/10作为新节点的 t;
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+
+        ListNode res = new ListNode();
+        ListNode pre = res;
+        // 进位标识
+        int t = 0;
+        while (l1 != null && l2 != null) {
+            int val = l1.val + l2.val + t;
+
+            t = 0;
+            if (val >= 10) {
+                t = 1;
+                val -= 10;
+            }
+            ListNode next = new ListNode();
+            next.val = val;
+            pre.next = next;
+            pre = pre.next;
+
+            l1 = l1.next;
+            l2 = l2.next;
+        }
+        while (l1 != null) {
+            int val = l1.val + t;
+
+            t = 0;
+            if (val >= 10) {
+                t = 1;
+                val -= 10;
+            }
+            ListNode next = new ListNode();
+            next.val = val;
+            pre.next = next;
+            pre = pre.next;
+
+            l1 = l1.next;
+        }
+        while (l2 != null) {
+            int val = l2.val + t;
+
+            t = 0;
+            if (val >= 10) {
+                t = 1;
+                val -= 10;
+            }
+            ListNode next = new ListNode();
+            next.val = val;
+            pre.next = next;
+            pre = pre.next;
+
+            l2 = l2.next;
+        }
+        if (t != 0) {
+            ListNode next = new ListNode();
+            next.val = t;
+            pre.next = next;
+            pre = pre.next;
+        }
+        return res.next;
+    }
+
+    public ListNode addTwoNumbers1(ListNode l1, ListNode l2) {
+        return this.addTwoNumbers2(l1, l2, 0);
+    }
+
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2, int a) {
+        if (l1 == null && l2 == null) {
+            return a == 0 ? null : new ListNode(a);
+        }
+        if (l1 != null) {
+            a += l1.val;
+            l1 = l1.next;
+        }
+        if (l2 != null) {
+            a += l2.val;
+            l2 = l2.next;
+        }
+        return new ListNode(a % 10, addTwoNumbers2(l1, l2, a / 10));
+    }
+
+    /**
      * 递增的三元子序列
      * 给你一个整数数组 nums ，判断这个数组中是否存在长度为 3 的递增子序列。
      * <p>
@@ -33,9 +134,9 @@ public class Level2 {
      * 思路： 贪心
      * 1、遍历数组，记录两个值 m1,m2 (m1最小值， m2>m1)
      * 2、将每个值与 两个个值比较，记录到对应位置
-     *
+     * <p>
      * （为什么不用管先后顺序？ ）
-     *
+     * <p>
      * 2,1,5,0,4,6
      * 1、x=2,  m1 = 2, m2 =maxValue
      * 2、x=1,  m1 = 1, m2 =maxValue
@@ -43,7 +144,7 @@ public class Level2 {
      * 4、x=0,  m1 = 0, m2 = 5
      * 5、x=4,  m1 = 0, m2 = 4
      * 6、x=6,  m1 = 0, m2 = 4, x > m2 结束；
-     *
+     * <p>
      * 假设没有4， 则会以 m1=0, m2=5, x=6 结束（没有满足i<j<K）；实际存在 1, 5, 6 这个组合满足条件；
      * 也就是说： 无论在哪个位置 x > m2, 都会存在一个 m1 它的位置在 m2 之前，因为先有 m1, 再有m2
      */
