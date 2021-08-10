@@ -25,6 +25,48 @@ public class Level2 {
     }
 
     /**
+     * 奇偶链表
+     * <p>
+     * 给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+     * <p>
+     * 请尝试使用原地算法完成。你的算法的空间复杂度应为 O(1)，时间复杂度应为 O(nodes)，nodes 为节点总数。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvdwtj/
+     * <p>
+     * 思路：
+     * 1、 两个一组往后遍历，奇数节点接在odd， 偶数节点接在even
+     *
+     * <p>
+     * <p>
+     * eg: 1->2->3->4->5->NULL
+     * eg: 1->2->3->4->NULL
+     * <p>
+     * 1 3 5 2 4
+     * <p>
+     * odd 1 3 5
+     * even 2 4
+     */
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode odd = head;
+        ListNode even = head.next;
+
+        ListNode o = odd;
+        ListNode e = even;
+
+        while (e != null && e.next != null) {
+            o.next = e.next;
+            o = o.next;
+            e.next = o.next;
+            e = e.next;
+        }
+        o.next = even;
+        return head;
+    }
+
+    /**
      * 两数相加
      * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
      * <p>
