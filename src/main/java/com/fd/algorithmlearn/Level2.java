@@ -25,6 +25,34 @@ public class Level2 {
     }
 
     /**
+     * 相交链表
+     * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。
+     * <p>
+     * 图示两个链表在节点 c1 开始相交：
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xv02ut/
+     * <p>
+     * 思路：
+     * 1、长 + 短 = 短 + 长
+     *  --   --
+     *    --   --
+     * ---  ---
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+
+        ListNode a = headA;
+        ListNode b = headB;
+        while (a != b) {
+            a = a == null ? headB : a.next;
+            b = b == null ? headA : b.next;
+        }
+        return a;
+    }
+
+    /**
      * 奇偶链表
      * <p>
      * 给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
