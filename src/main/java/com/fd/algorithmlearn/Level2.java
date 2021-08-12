@@ -25,6 +25,31 @@ public class Level2 {
     }
 
     /**
+     * 二叉树的中序遍历
+     * 给定一个二叉树的根节点 root ，返回它的 中序 遍历。
+     *
+     * 思路：
+     * 1、中序遍历 ： 左、根、右
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        midFor(root, list);
+        return list;
+    }
+
+    private void midFor(TreeNode root, List<Integer> list) {
+        if (root==null){
+            return;
+        }
+        midFor(root.left, list);
+
+        list.add(root.val);
+
+        midFor(root.right, list);
+    }
+
+
+    /**
      * 相交链表
      * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。
      * <p>
