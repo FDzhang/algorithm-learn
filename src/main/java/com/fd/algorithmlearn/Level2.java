@@ -25,6 +25,59 @@ public class Level2 {
     }
 
     /**
+     * 二叉树的锯齿形层次遍历
+     * 给定一个二叉树，返回其节点值的锯齿形层序遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+     *
+     * 例如：
+     * 给定二叉树 [3,9,20,null,null,15,7],
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvle7s/
+     *
+     * 思路：
+     * 1、二叉树的层序遍历
+     * 2、将遍历的结果翻转 （偶数层）
+     */
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if (root == null){
+            return new ArrayList<>();
+        }
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        Queue<TreeNode> level = new LinkedList<>();
+        level.offer(root);
+
+        int odd = 1;
+        while (!level.isEmpty()){
+            List<Integer> l = new ArrayList<>();
+            level = levelNode(level, l);
+            if (odd % 2 == 0){
+                Collections.reverse(l);
+            }
+            res.add(l);
+            odd++;
+        }
+        return res;
+    }
+    /**
+     * 填充当前层的 val
+     * 返回下一层的nodes
+     */
+    public Queue<TreeNode> levelNode(Queue<TreeNode> level, List<Integer> list) {
+        Queue<TreeNode> next = new LinkedList<>();
+        while (!level.isEmpty()) {
+            TreeNode node = level.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                next.offer(node.left);
+            }
+            if (node.right != null) {
+                next.offer(node.right);
+            }
+        }
+        return next;
+    }
+    /**
      * 二叉树的中序遍历
      * 给定一个二叉树的根节点 root ，返回它的 中序 遍历。
      *
