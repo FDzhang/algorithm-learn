@@ -25,20 +25,60 @@ public class Level2 {
     }
 
     /**
+     * 从前序与中序遍历序列构造二叉树
+     * Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+     * Output: [3,9,20,null,null,15,7]
+     *
+     *
+     * <p>
+     * 思路：
+     * 1、辅助函数  build(pre, lo1, hi1, in, lo2, hi2);  pre: 前序遍历数组， in: 后序遍历的数组
+     * 2、根据 pre的第一个值构造根节点 root， 根据root的val，在in的lo2~hi2中，找到rootVal的位置
+     * 3、递归调用构建左右子树, 分别传递左右子树的 前序、中序遍历范围，
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvix0d/
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return build(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    public TreeNode build(int[] preorder, int lo1, int hi1, int[] inorder, int lo2, int hi2) {
+        if (lo1 > hi1 || lo2 > hi2) {
+            return null;
+        }
+        int rootVal = preorder[lo1];
+        int mid = lo2;
+        for (int i = lo2; i <= hi2; i++) {
+            if (inorder[i] == rootVal) {
+                mid = i;
+                break;
+            }
+        }
+        int leftSize = mid - lo2;
+
+        TreeNode root = new TreeNode(rootVal);
+        root.left = build(preorder, lo1 + 1, lo1 + leftSize,
+                inorder, lo2, mid - 1);
+        root.right = build(preorder, lo1 + leftSize + 1, hi1,
+                inorder, mid + 1, hi2);
+        return root;
+    }
+
+    /**
      * 二叉树的锯齿形层次遍历
      * 给定一个二叉树，返回其节点值的锯齿形层序遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
-     *
+     * <p>
      * 例如：
      * 给定二叉树 [3,9,20,null,null,15,7],
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvle7s/
-     *
+     * <p>
      * 思路：
      * 1、二叉树的层序遍历
      * 2、将遍历的结果翻转 （偶数层）
      */
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        if (root == null){
+        if (root == null) {
             return new ArrayList<>();
         }
 
@@ -48,10 +88,10 @@ public class Level2 {
         level.offer(root);
 
         int odd = 1;
-        while (!level.isEmpty()){
+        while (!level.isEmpty()) {
             List<Integer> l = new ArrayList<>();
             level = levelNode(level, l);
-            if (odd % 2 == 0){
+            if (odd % 2 == 0) {
                 Collections.reverse(l);
             }
             res.add(l);
@@ -59,6 +99,7 @@ public class Level2 {
         }
         return res;
     }
+
     /**
      * 填充当前层的 val
      * 返回下一层的nodes
@@ -77,10 +118,11 @@ public class Level2 {
         }
         return next;
     }
+
     /**
      * 二叉树的中序遍历
      * 给定一个二叉树的根节点 root ，返回它的 中序 遍历。
-     *
+     * <p>
      * 思路：
      * 1、中序遍历 ： 左、根、右
      */
@@ -91,7 +133,7 @@ public class Level2 {
     }
 
     private void midFor(TreeNode root, List<Integer> list) {
-        if (root==null){
+        if (root == null) {
             return;
         }
         midFor(root.left, list);
@@ -112,8 +154,8 @@ public class Level2 {
      * <p>
      * 思路：
      * 1、长 + 短 = 短 + 长
-     *  --   --
-     *    --   --
+     * --   --
+     * --   --
      * ---  ---
      */
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
