@@ -29,38 +29,41 @@ public class Level2 {
      * Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
      * Output: [3,9,20,null,null,15,7]
      *
-     *
      * <p>
      * 思路：
      * 1、辅助函数  build(pre, lo1, hi1, in, lo2, hi2);  pre: 前序遍历数组， in: 后序遍历的数组
      * 2、根据 pre的第一个值构造根节点 root， 根据root的val，在in的lo2~hi2中，找到rootVal的位置
      * 3、递归调用构建左右子树, 分别传递左右子树的 前序、中序遍历范围，
+     *
+     * 优化点：在递归中，每次都需要部分遍历 inorder 数组，来找到 rootVal 的位置 mid
+     * 思路： (空间换时间，O(1)时间复杂度获取 mid)
+     * 构建一个hashmap，放入 key=inorder[i], val=i。这样 mid = map.get(rootVal)。
+     *
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvix0d/
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return build(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return build(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1, map);
     }
 
-    public TreeNode build(int[] preorder, int lo1, int hi1, int[] inorder, int lo2, int hi2) {
+    public TreeNode build(int[] preorder, int lo1, int hi1, int[] inorder, int lo2, int hi2, Map<Integer, Integer> map) {
         if (lo1 > hi1 || lo2 > hi2) {
             return null;
         }
         int rootVal = preorder[lo1];
-        int mid = lo2;
-        for (int i = lo2; i <= hi2; i++) {
-            if (inorder[i] == rootVal) {
-                mid = i;
-                break;
-            }
-        }
+        int mid = map.get(rootVal);
+
         int leftSize = mid - lo2;
 
         TreeNode root = new TreeNode(rootVal);
         root.left = build(preorder, lo1 + 1, lo1 + leftSize,
-                inorder, lo2, mid - 1);
+                inorder, lo2, mid - 1, map);
         root.right = build(preorder, lo1 + leftSize + 1, hi1,
-                inorder, mid + 1, hi2);
+                inorder, mid + 1, hi2, map);
         return root;
     }
 
