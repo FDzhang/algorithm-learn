@@ -1,6 +1,7 @@
 package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
+import com.fd.algorithmlearn.tree.Node;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -22,6 +23,75 @@ public class Level2 {
 //        System.out.println(threeSum(x));
 
         System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
+    }
+
+
+    /**
+     * 填充每个节点的下一个右侧节点指针
+     *
+     * 给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+     * 填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+     * 初始状态下，所有 next 指针都被设置为 NULL。
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvijdh/
+     *
+     * 思路：
+     * 1、二叉树的层序遍历
+     *
+     * 思路2：
+     * 1、链接每个节点的 左右子节点
+     * 2、若当前节点的next不为空，则将 当前节点（node）的右子节点的next 指向 node.next 的左子节点
+     */
+    public Node connect(Node root) {
+        if (root == null) {
+            return null;
+        }
+        Queue<Node> level = new LinkedList<>();
+        level.offer(root);
+
+        while (!level.isEmpty()) {
+            level = levelNode1(level);
+        }
+        return root;
+    }
+
+    /**
+     * 处理当前层
+     * 返回下一层的nodes
+     */
+    public Queue<Node> levelNode1(Queue<Node> level) {
+        Queue<Node> next = new LinkedList<>();
+
+        Node pre = null;
+        while (!level.isEmpty() ) {
+            Node node = level.poll();
+            if (pre == null){
+                pre = node;
+            } else {
+                pre.next = node;
+                pre = node;
+            }
+
+            if (node.left != null) {
+                next.offer(node.left);
+            }
+            if (node.right != null) {
+                next.offer(node.right);
+            }
+        }
+        return next;
+    }
+
+    public Node connect2(Node root) {
+        if(null == root || root.left == null) return root;
+
+        root.left.next = root.right;
+        if(root.next != null){
+            root.right.next = root.next.left;
+        }
+        connect2(root.left);
+        connect2(root.right);
+        return root;
     }
 
     /**
