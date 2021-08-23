@@ -25,6 +25,31 @@ public class Level2 {
         System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
     }
 
+    /**
+     * 二叉搜索树中第K小的元素
+     */
+    private int rank=0;
+    private int val;
+    public int kthSmallest(TreeNode root, int k) {
+        kth(root, k);
+        return val;
+    }
+
+    public void kth(TreeNode root, int k){
+        if (root == null){
+            return;
+        }
+
+        kth(root.left, k);
+        rank++;
+        if (rank == k){
+            val = root.val;
+            return;
+        }
+
+        kth(root.right, k);
+    }
+
 
     /**
      * 填充每个节点的下一个右侧节点指针
