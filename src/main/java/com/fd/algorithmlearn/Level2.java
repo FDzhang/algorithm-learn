@@ -5,6 +5,7 @@ import com.fd.algorithmlearn.tree.Node;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 /**
  * https://leetcode-cn.com/leetbook/detail/top-interview-questions-medium/
@@ -26,23 +27,78 @@ public class Level2 {
     }
 
     /**
+     * 电话号码的字母组合
+     * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+     * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xv8ka1/
+     * <p>
+     * 思路：(回溯：路径， 选择列表，结束条件)
+     * 1、路径：已经选过的字母
+     * 2、选择列表：当前数字对应可以选择的字母
+     * 3、结束条件：字母数组长度 等于 号码长度
+     */
+    public List<String> letterCombinations(String digits) {
+        if (digits == null || digits.length() == 0) {
+            return new ArrayList<>();
+        }
+        List<String> res = new ArrayList<>();
+        Map<Character, char[]> keys = new HashMap<>();
+        keys.put('2', new char[]{'a', 'b', 'c'});
+        keys.put('3', new char[]{'d', 'e', 'f'});
+        keys.put('4', new char[]{'g', 'h', 'i'});
+        keys.put('5', new char[]{'j', 'k', 'l'});
+        keys.put('6', new char[]{'m', 'n', 'o'});
+        keys.put('7', new char[]{'p', 'q', 'r', 's'});
+        keys.put('8', new char[]{'t', 'u', 'v'});
+        keys.put('9', new char[]{'w', 'x', 'y', 'z'});
+
+        char[] digitChars = digits.toCharArray();
+        StringBuilder path = new StringBuilder();
+        letterBackTrack(path, digitChars, 0, keys, res);
+        return res;
+    }
+
+    private void letterBackTrack(StringBuilder path, char[] digitChars, int index, Map<Character, char[]> keys, List<String> res) {
+        if (path.length() == digitChars.length) {
+            res.add(path.toString());
+            return;
+        }
+
+        char[] chars = keys.get(digitChars[index]);
+        for (char c : chars) {
+            path.append(c);
+            letterBackTrack(path, digitChars, index + 1, keys, res);
+            path.deleteCharAt(index);
+        }
+    }
+
+    private String letterBuild(List<Character> path) {
+        if (path == null || path.isEmpty()) {
+            return "";
+        }
+        return path.stream().map(String::valueOf).collect(Collectors.joining());
+    }
+
+    /**
      * 二叉搜索树中第K小的元素
      */
-    private int rank=0;
+    private int rank = 0;
     private int val;
+
     public int kthSmallest(TreeNode root, int k) {
         kth(root, k);
         return val;
     }
 
-    public void kth(TreeNode root, int k){
-        if (root == null){
+    public void kth(TreeNode root, int k) {
+        if (root == null) {
             return;
         }
 
         kth(root.left, k);
         rank++;
-        if (rank == k){
+        if (rank == k) {
             val = root.val;
             return;
         }
@@ -53,16 +109,16 @@ public class Level2 {
 
     /**
      * 填充每个节点的下一个右侧节点指针
-     *
+     * <p>
      * 给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
      * 填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
      * 初始状态下，所有 next 指针都被设置为 NULL。
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvijdh/
-     *
+     * <p>
      * 思路：
      * 1、二叉树的层序遍历
-     *
+     * <p>
      * 思路2：
      * 1、链接每个节点的 左右子节点
      * 2、若当前节点的next不为空，则将 当前节点（node）的右子节点的next 指向 node.next 的左子节点
@@ -88,9 +144,9 @@ public class Level2 {
         Queue<Node> next = new LinkedList<>();
 
         Node pre = null;
-        while (!level.isEmpty() ) {
+        while (!level.isEmpty()) {
             Node node = level.poll();
-            if (pre == null){
+            if (pre == null) {
                 pre = node;
             } else {
                 pre.next = node;
@@ -108,10 +164,10 @@ public class Level2 {
     }
 
     public Node connect2(Node root) {
-        if(null == root || root.left == null) return root;
+        if (null == root || root.left == null) return root;
 
         root.left.next = root.right;
-        if(root.next != null){
+        if (root.next != null) {
             root.right.next = root.next.left;
         }
         connect2(root.left);
@@ -129,7 +185,7 @@ public class Level2 {
      * 1、辅助函数  build(pre, lo1, hi1, in, lo2, hi2);  pre: 前序遍历数组， in: 后序遍历的数组
      * 2、根据 pre的第一个值构造根节点 root， 根据root的val，在in的lo2~hi2中，找到rootVal的位置
      * 3、递归调用构建左右子树, 分别传递左右子树的 前序、中序遍历范围，
-     *
+     * <p>
      * 优化点：在递归中，每次都需要部分遍历 inorder 数组，来找到 rootVal 的位置 mid
      * 思路： (空间换时间，O(1)时间复杂度获取 mid)
      * 构建一个hashmap，放入 key=inorder[i], val=i。这样 mid = map.get(rootVal)。

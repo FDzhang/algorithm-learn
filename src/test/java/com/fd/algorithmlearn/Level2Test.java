@@ -2,6 +2,8 @@ package com.fd.algorithmlearn;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -17,5 +19,13 @@ class Level2Test {
         int[] a = {1, 2};
         int[] b = {2, 1};
         test.buildTree(a, b);
+    }
+
+
+    @Test
+    void letterCombinationsTest() {
+        List<String> strings = test.letterCombinations("");
+
+        System.err.println(strings);
     }
 }
