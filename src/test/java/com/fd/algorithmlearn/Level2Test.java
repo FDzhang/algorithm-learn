@@ -28,4 +28,11 @@ class Level2Test {
 
         System.err.println(strings);
     }
+
+    @Test
+    void generateParenthesisTest() {
+        List<String> strings = test.generateParenthesis(3);
+
+        System.err.println(strings);
+    }
 }

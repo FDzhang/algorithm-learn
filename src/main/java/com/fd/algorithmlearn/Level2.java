@@ -27,6 +27,114 @@ public class Level2 {
     }
 
     /**
+     * 括号生成
+     * 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+     * 有效括号组合需满足：左括号必须以正确的顺序闭合。
+     * <p>
+     * 思路：回溯 （路径， 选择列表， 结束条件）
+     * 1、路径：已经选择过的括号
+     * 2、选择列表： 剩下的括号 （判定条件：1、右括号的数量不能大于左括号的数量；2、左右括号的数量不能超过n）
+     * 3、结束条件： 括号长度 等于 n*2
+     *
+     *
+     * 思路2： 回溯
+     */
+    // 写法1------------------------------
+    public List<String> generateParenthesis(int n) {
+        char[] cs = new char[]{'(', ')'};
+        StringBuilder sb = new StringBuilder();
+
+        List<String> res = new ArrayList<>();
+        genBacktrack(sb, cs, n, res);
+        return res;
+    }
+
+    private void genBacktrack(StringBuilder sb, char[] cs, int n, List<String> res) {
+        if (sb.length() == n * 2) {
+            if (valid(sb, n)){
+                res.add(sb.toString());
+            }
+            return;
+        }
+
+        for (char c : cs) {
+            if (!valid(sb, n)) {
+                continue;
+            }
+
+            sb.append(c);
+            genBacktrack(sb, cs, n, res);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+    public boolean valid(StringBuilder sb, int n) {
+        if (sb.length() == 0) {
+            return true;
+        }
+        // 第一个不能是 右括号
+        if (sb.charAt(0) == ')') {
+            return false;
+        }
+        char[] chars = sb.toString().toCharArray();
+        int ml = 0;
+        int mr = 0;
+        for (char c : chars) {
+            if (c == '(') {
+                ml++;
+            } else if (c == ')') {
+                mr++;
+            }
+        }
+        // 左，右括号的数量 都不能大于 n
+        if (ml > n) {
+            return false;
+        } else if (mr > n) {
+            return false;
+        }
+        // 右括号的数量不能大于左括号
+        return mr <= ml;
+    }
+    // 写法1------------------------------
+
+    // 写法2----------------------------------
+    public List<String> generateParenthesis1(int n) {
+        List<String> res = new ArrayList<>();
+        if (n == 0) {
+            return res;
+        }
+
+        StringBuilder path = new StringBuilder();
+        dfs(path, n, n, res);
+        return res;
+    }
+
+    private void dfs(StringBuilder path, int left, int right, List<String> res) {
+        if (left == 0 && right == 0) {
+            res.add(path.toString());
+            return;
+        }
+
+        // 有效括号的判定
+        if (left > right) {
+            return;
+        }
+
+        if (left > 0) {
+            path.append("(");
+            dfs(path, left - 1, right, res);
+            path.deleteCharAt(path.length() - 1);
+        }
+
+        if (right > 0) {
+            path.append(")");
+            dfs(path, left, right - 1, res);
+            path.deleteCharAt(path.length() - 1);
+        }
+    }
+    // 写法2----------------------------------
+
+    /**
      * 电话号码的字母组合
      * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
      * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
