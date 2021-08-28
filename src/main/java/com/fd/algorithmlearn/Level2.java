@@ -27,6 +27,45 @@ public class Level2 {
     }
 
     /**
+     * 全排列
+     * 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
+     * <p>
+     * 思路：（回溯）
+     * 1、路径：已经选择过的数字
+     * 2、选择列表：可以选择的数字
+     * 3、结束条件：已选择数字的长度等于 数组的长度
+     */
+    public List<List<Integer>> permute(int[] nums) {
+
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+
+        boolean[] valid = new boolean[nums.length];
+        permuteBackTrack(path, nums, valid, res);
+
+        return res;
+    }
+
+    public void permuteBackTrack(List<Integer> path, int[] nums, boolean[] valid, List<List<Integer>> res) {
+        if (path.size() == nums.length) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (valid[i]) {
+                continue;
+            }
+
+            path.add(nums[i]);
+            valid[i] = true;
+            permuteBackTrack(path, nums, valid, res);
+            valid[i] = false;
+            path.remove(path.size() - 1);
+        }
+    }
+
+    /**
      * 括号生成
      * 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
      * 有效括号组合需满足：左括号必须以正确的顺序闭合。
@@ -35,8 +74,8 @@ public class Level2 {
      * 1、路径：已经选择过的括号
      * 2、选择列表： 剩下的括号 （判定条件：1、右括号的数量不能大于左括号的数量；2、左右括号的数量不能超过n）
      * 3、结束条件： 括号长度 等于 n*2
-     *
-     *
+     * <p>
+     * <p>
      * 思路2： 回溯
      */
     // 写法1------------------------------
@@ -51,7 +90,7 @@ public class Level2 {
 
     private void genBacktrack(StringBuilder sb, char[] cs, int n, List<String> res) {
         if (sb.length() == n * 2) {
-            if (valid(sb, n)){
+            if (valid(sb, n)) {
                 res.add(sb.toString());
             }
             return;
