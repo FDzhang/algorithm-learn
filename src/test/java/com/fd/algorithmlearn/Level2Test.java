@@ -35,4 +35,12 @@ class Level2Test {
 
         System.err.println(strings);
     }
+
+    @Test
+    void subsetsTest(){
+        int[] b = {1, 2,3};
+        List<List<Integer>> subsets = test.subsets(b);
+
+        System.err.println(subsets);
+    }
 }

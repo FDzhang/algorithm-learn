@@ -27,6 +27,43 @@ public class Level2 {
     }
 
     /**
+     * 子集
+     * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+     * 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+     * <p>
+     * 思路：回溯
+     * 1、路径：已经选择过的数字
+     * 2、选择列表： 可以选择的数字
+     * 3、结束条件： 无
+     * <p>
+     * 123
+     * 1
+     * 1 2
+     * 1 2 3
+     * 1 3
+     * 2
+     * 2 3
+     * 3
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+
+        subsetsBacktrack(path, nums, 0, res);
+        return res;
+    }
+
+    private void subsetsBacktrack(List<Integer> path, int[] nums, int index, List<List<Integer>> res) {
+        res.add(new ArrayList<>(path));
+
+        for (int i = index; i < nums.length; i++) {
+            path.add(nums[i]);
+            subsetsBacktrack(path, nums, i + 1, res);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    /**
      * 全排列
      * 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
      * <p>
