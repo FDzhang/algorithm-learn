@@ -27,6 +27,64 @@ public class Level2 {
     }
 
     /**
+     * 单词搜索
+     * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvkwe2/
+     * <p>
+     * 思路：回溯
+     * 1、路径：走过的路径
+     * 2、选择列表： 相邻的且没被选过的字符
+     * 3、结束条件： 单词完全被匹配 | 无法继续匹配
+     */
+    public boolean exist(char[][] board, String word) {
+
+        boolean[][] valid = new boolean[board.length][board[0].length];
+        char[] ws = word.toCharArray();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (existBacktrack(board, i, j, ws, 0, valid)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean existBacktrack(char[][] board, int i, int j, char[] ws, int index, boolean[][] valid) {
+        // 单词完全被匹配
+        if (index == ws.length) {
+            return true;
+        }
+        // 不能超过边界
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length) {
+            return false;
+        }
+        // 已选的不能再选
+        if (valid[i][j]){
+            return false;
+        }
+        // 无法继续匹配
+        if (ws[index] != board[i][j]) {
+            return false;
+        }
+
+        valid[i][j] = true;
+        boolean a = existBacktrack(board, i + 1, j, ws, index+1, valid);
+        boolean b = existBacktrack(board, i - 1, j, ws, index+1, valid);
+        boolean c = existBacktrack(board, i, j + 1, ws, index+1, valid);
+        boolean d = existBacktrack(board, i, j - 1, ws, index+1, valid);
+        valid[i][j] = false;
+
+        return a || b || c || d;
+    }
+
+    /**
      * 子集
      * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
      * 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
