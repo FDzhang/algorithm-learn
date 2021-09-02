@@ -27,19 +27,51 @@ public class Level2 {
     }
 
     /**
+     * 前 K 个高频元素
+     * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
+     * <p>
+     * 思路：
+     * 1、计数: 数字 x 对应的频率 xF
+     * 2、将 {x, xF} 放入最大堆
+     * 3、从最大堆中取出前k个元素
+     */
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> xxF = new HashMap<>();
+        for (int num : nums) {
+            if (!xxF.containsKey(num)) {
+                xxF.put(num, 0);
+            }
+            xxF.put(num, xxF.get(num) + 1);
+        }
+
+        PriorityQueue<int[]> priority = new PriorityQueue<>((a, b) -> Integer.compare(b[1], a[1]));
+        for (Map.Entry<Integer, Integer> item : xxF.entrySet()) {
+            priority.offer(new int[]{item.getKey(), item.getValue()});
+        }
+
+        int[] res = new int[k];
+        for (int i = 0; i < res.length; i++) {
+            if (!priority.isEmpty()) {
+                res[i] = priority.poll()[0];
+            }
+        }
+        return res;
+    }
+
+    /**
      * 颜色分类
      * 给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
      * 此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvg25c/
-     *
-     *
+     * <p>
+     * <p>
      * 思路1：
      * 1、java自带排序函数
-     *
+     * <p>
      * 思路2：
      * 1、使用一个 int[] cnt = new int[3] 进行计数
-     *
+     * <p>
      * 思路3：
      * 1、双指针
      * 2、左指针指0, 右指针指2, 遍历循环, 指针向中间靠拢 （注意换2的时候不要漏算）
@@ -88,7 +120,7 @@ public class Level2 {
             return false;
         }
         // 已选的不能再选
-        if (valid[i][j]){
+        if (valid[i][j]) {
             return false;
         }
         // 无法继续匹配
@@ -97,10 +129,10 @@ public class Level2 {
         }
 
         valid[i][j] = true;
-        boolean a = existBacktrack(board, i + 1, j, ws, index+1, valid);
-        boolean b = existBacktrack(board, i - 1, j, ws, index+1, valid);
-        boolean c = existBacktrack(board, i, j + 1, ws, index+1, valid);
-        boolean d = existBacktrack(board, i, j - 1, ws, index+1, valid);
+        boolean a = existBacktrack(board, i + 1, j, ws, index + 1, valid);
+        boolean b = existBacktrack(board, i - 1, j, ws, index + 1, valid);
+        boolean c = existBacktrack(board, i, j + 1, ws, index + 1, valid);
+        boolean d = existBacktrack(board, i, j - 1, ws, index + 1, valid);
         valid[i][j] = false;
 
         return a || b || c || d;
