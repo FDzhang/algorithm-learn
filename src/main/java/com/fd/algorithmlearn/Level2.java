@@ -27,6 +27,23 @@ public class Level2 {
     }
 
     /**
+     * 数组中的第K个最大元素
+     * <p>
+     * 给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
+     * 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     *
+     * 思路：
+     * 1、排序后，倒数第k个元素
+     * ps!!!: 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     */
+    public int findKthLargest(int[] nums, int k) {
+        Arrays.sort(nums);
+
+        return nums[nums.length - k];
+    }
+
+
+    /**
      * 前 K 个高频元素
      * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
      * <p>
@@ -48,6 +65,27 @@ public class Level2 {
         for (Map.Entry<Integer, Integer> item : xxF.entrySet()) {
             priority.offer(new int[]{item.getKey(), item.getValue()});
         }
+
+        int[] res = new int[k];
+        for (int i = 0; i < res.length; i++) {
+            if (!priority.isEmpty()) {
+                res[i] = priority.poll()[0];
+            }
+        }
+        return res;
+    }
+
+    public int[] topKFrequent1(int[] nums, int k) {
+        HashMap<Integer, Integer> xxF = new HashMap<>();
+
+        Arrays.stream(nums).forEach(x -> {
+            xxF.merge(x, 1, Integer::sum);
+        });
+
+        PriorityQueue<int[]> priority = new PriorityQueue<>((a, b) -> Integer.compare(b[1], a[1]));
+        xxF.forEach((x, xF) -> {
+            priority.offer(new int[]{x, xF});
+        });
 
         int[] res = new int[k];
         for (int i = 0; i < res.length; i++) {

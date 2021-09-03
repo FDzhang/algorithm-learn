@@ -43,4 +43,13 @@ class Level2Test {
 
         System.err.println(subsets);
     }
+
+    @Test
+    void findKthLargestTest(){
+        int[] b = {3,2,3,1,2,4,5,5,6};
+        int res = test.findKthLargest(b, 4);
+
+        System.err.println(res);
+    }
+
 }
