@@ -27,11 +27,41 @@ public class Level2 {
     }
 
     /**
+     * 寻找峰值
+     * 峰值元素是指其值大于左右相邻值的元素。
+     * 给你一个输入数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
+     * 你可以假设 nums[-1] = nums[n] = -∞ 。
+     *
+     *
+     * 思路：
+     * 1、nums长度为1, 峰值在首位, 峰值在尾部, 三种特殊情况
+     * 2、从 1 ~ (nums.len-2) 循环查找
+     */
+    public int findPeakElement(int[] nums) {
+        if (nums.length == 1) {
+            return 0;
+        }
+        if (nums[0] > nums[1]) {
+            return 0;
+        }
+        if (nums[nums.length - 1] > nums[nums.length - 2]) {
+            return nums.length - 1;
+        }
+
+        for (int i = 1; i < nums.length - 1; i++) {
+            if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * 数组中的第K个最大元素
      * <p>
      * 给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
      * 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
-     *
+     * <p>
      * 思路：
      * 1、排序后，倒数第k个元素
      * ps!!!: 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
