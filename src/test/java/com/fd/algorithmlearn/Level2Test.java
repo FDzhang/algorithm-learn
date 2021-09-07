@@ -2,6 +2,7 @@ package com.fd.algorithmlearn;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,5 +52,14 @@ class Level2Test {
 
         System.err.println(res);
     }
+
+    @Test
+    void searchRangeTest(){
+        int[] b = {1,1,2};
+        int[] res = test.searchRange(b, 1);
+
+        System.err.println(Arrays.toString(res));
+    }
+
 
 }

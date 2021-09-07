@@ -27,12 +27,54 @@ public class Level2 {
     }
 
     /**
+     * 在排序数组中查找元素的第一个和最后一个位置
+     * <p>
+     * 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+     * 如果数组中不存在目标值 target，返回 [-1, -1]。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xv4bbv/
+     * <p>
+     * 思路：
+     * 1、利用二分查找，找到目标
+     * 2、双指针 分别向左 向右, 寻找开始和结束的位置
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int lo = 0;
+        int hi = nums.length - 1;
+        int index = -1;
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (nums[mid] == target) {
+                index = mid;
+                break;
+            } else if (nums[mid] < target) {
+                lo = mid + 1;
+            } else if (nums[mid] > target) {
+                hi = mid - 1;
+            }
+        }
+
+        int start = index;
+        int end = index;
+        if (index >= 0) {
+            while (start - 1 >= 0 && nums[start] == nums[start - 1]) {
+                start--;
+            }
+            while (end + 1 < nums.length && nums[end] == nums[end + 1]) {
+                end++;
+            }
+        }
+        return new int[]{start, end};
+    }
+
+
+    /**
      * 寻找峰值
      * 峰值元素是指其值大于左右相邻值的元素。
      * 给你一个输入数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
      * 你可以假设 nums[-1] = nums[n] = -∞ 。
-     *
-     *
+     * <p>
+     * <p>
      * 思路：
      * 1、nums长度为1, 峰值在首位, 峰值在尾部, 三种特殊情况
      * 2、从 1 ~ (nums.len-2) 循环查找
