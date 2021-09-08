@@ -61,5 +61,14 @@ class Level2Test {
         System.err.println(Arrays.toString(res));
     }
 
+    @Test
+    void mergeTest(){
+        int[][] b = {{1,4},{2,3}};
+        int[][] merge = test.merge(b);
+
+        for (int[] ints : merge) {
+            System.err.println(Arrays.toString(ints));
+        }
+    }
 
 }
