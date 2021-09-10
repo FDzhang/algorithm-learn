@@ -27,6 +27,35 @@ public class Level2 {
     }
 
     /**
+     * 搜索二维矩阵 II
+     * 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+     * 每行的元素从左到右升序排列。
+     * 每列的元素从上到下升序排列。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvc64r/
+     * <p>
+     * 思路：
+     * 1、从右上角开始搜索 （从左上角的话 向右和向下都是变大，而从右上角 向左是变小， 向下是变大，天然二分）
+     * 2、m[i][j] > target 向左， m[i][j] < target 向下
+     * 3、结束条件： m[i][j] == target 或者 到了最左边和最下面 为止
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int i = 0;
+        int j = matrix[0].length - 1;
+        while (i < matrix.length && j >= 0) {
+            if (matrix[i][j] > target) {
+                j--;
+            } else if (matrix[i][j] < target) {
+                i++;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * 搜索旋转排序数组
      * 整数数组 nums 按升序排列，数组中的值 互不相同 。
      * 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
