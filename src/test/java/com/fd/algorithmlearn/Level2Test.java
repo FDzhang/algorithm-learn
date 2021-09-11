@@ -22,6 +22,13 @@ class Level2Test {
         test.buildTree(a, b);
     }
 
+    @Test
+    void canJumpTest(){
+        int[] x = {2,3,1,1,4};
+        boolean b = test.canJump(x);
+        System.err.println(b);
+    }
+
 
     @Test
     void letterCombinationsTest() {

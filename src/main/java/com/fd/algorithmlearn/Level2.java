@@ -27,6 +27,71 @@ public class Level2 {
     }
 
     /**
+     * 跳跃游戏
+     * 给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。
+     * 数组中的每个元素代表你在该位置可以跳跃的最大长度。
+     * 判断你是否能够到达最后一个下标。
+     * <p>
+     * 输入：nums = [2,3,1,1,4]
+     * 输出：true
+     * 解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
+     * 思路： （动态规划）
+     * 1、dp[i] ：从i开始最多可以往后跳几步
+     * 2、dp[i]=max(dp[i-1] - 1, nums[i])
+     * 3、结束条件： dp[i] + i + 1 >= nums.len 或者 dp[i]==0
+     * <p>
+     * 思路2：
+     * 1、从后往前走，标记结尾为end
+     * 2、如果nums[i]能走到end, 则将end置为i, 最后判断end是否为0
+     * <p>
+     * 思路3：（贪心）
+     * 1、从前往后走，标记 能到达的最远距离 为 maxFar, maxFar初始化为nums[0]
+     * 2、如果 maxFar >= i, 表示位置 i 能达到, 则更新 maxFar = max( maxFar, nums[i] + i)
+     * 3、返回 maxFar 是否 大于等于 (nums.length - 1);
+     */
+    public boolean canJump(int[] nums) {
+        if (nums.length == 1) {
+            return true;
+        }
+        if (nums[0] == 0) {
+            return false;
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1] - 1, nums[i]);
+            if (dp[i] + i + 1 >= nums.length) {
+                return true;
+            } else if (dp[i] == 0) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean canJump1(int[] nums) {
+        int len = nums.length;
+        int end = len - 1;
+        for (int i = len - 2; i >= 0; i--) {
+            if (nums[i] >= end - i) {
+                end = i;
+            }
+        }
+        return end == 0;
+    }
+
+    public boolean canJump2(int[] nums) {
+        int maxFar = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (i <= maxFar) {
+                maxFar = Math.max(maxFar, nums[i] + i);
+            }
+        }
+        return maxFar >= nums.length - 1;
+    }
+
+
+    /**
      * 搜索二维矩阵 II
      * 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
      * 每行的元素从左到右升序排列。
