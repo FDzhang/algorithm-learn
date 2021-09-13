@@ -27,6 +27,55 @@ public class Level2 {
     }
 
     /**
+     * 不同路径
+     * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+     * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+     * 问总共有多少条不同的路径？
+     *
+     *
+     * 3 3
+     *
+     * 1 1 1
+     * 1 2 3
+     * 1 3 6
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvjigd/
+     * <p>
+     * 思路：
+     * 1、到达前网格的不同路径数（dp[i][j]） = 到达左边网格的不同路径数(dp[i][j-1]) + 到达上边网格的不同路径数(dp[i-1][j])
+     * 2、返回dp[m-1][n-1]
+     */
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                    continue;
+                }
+
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+
+    public int uniquePaths1(int m, int n) {
+        int[] dp = new int[n];
+
+        Arrays.fill(dp, 1);
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[j] = dp[j - 1] + dp[j];
+            }
+        }
+        return dp[n - 1];
+    }
+
+    /**
      * 跳跃游戏
      * 给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。
      * 数组中的每个元素代表你在该位置可以跳跃的最大长度。

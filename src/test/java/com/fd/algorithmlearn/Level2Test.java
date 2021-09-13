@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author zhangxinqiang
  * @create 2021/8/16 13:52
@@ -23,8 +21,24 @@ class Level2Test {
     }
 
     @Test
-    void canJumpTest(){
-        int[] x = {2,3,1,1,4};
+    void uniquePathsTest() {
+        int m = 7;
+        int n = 3;
+
+        int m1 = 1;
+        int n1 = 1;
+
+        int m2 = 3;
+        int n2 = 3;
+
+        int res = test.uniquePaths1(m, n);
+        System.err.println(res);
+    }
+
+
+    @Test
+    void canJumpTest() {
+        int[] x = {2, 3, 1, 1, 4};
         boolean b = test.canJump(x);
         System.err.println(b);
     }
@@ -45,32 +59,32 @@ class Level2Test {
     }
 
     @Test
-    void subsetsTest(){
-        int[] b = {1, 2,3};
+    void subsetsTest() {
+        int[] b = {1, 2, 3};
         List<List<Integer>> subsets = test.subsets(b);
 
         System.err.println(subsets);
     }
 
     @Test
-    void findKthLargestTest(){
-        int[] b = {3,2,3,1,2,4,5,5,6};
+    void findKthLargestTest() {
+        int[] b = {3, 2, 3, 1, 2, 4, 5, 5, 6};
         int res = test.findKthLargest(b, 4);
 
         System.err.println(res);
     }
 
     @Test
-    void searchRangeTest(){
-        int[] b = {1,1,2};
+    void searchRangeTest() {
+        int[] b = {1, 1, 2};
         int[] res = test.searchRange(b, 1);
 
         System.err.println(Arrays.toString(res));
     }
 
     @Test
-    void mergeTest(){
-        int[][] b = {{1,4},{2,3}};
+    void mergeTest() {
+        int[][] b = {{1, 4}, {2, 3}};
         int[][] merge = test.merge(b);
 
         for (int[] ints : merge) {
