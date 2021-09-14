@@ -27,14 +27,73 @@ public class Level2 {
     }
 
     /**
+     * 零钱兑换
+     * 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
+     * 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
+     * 你可以认为每种硬币的数量是无限的。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvf0kh/
+     * <p>
+     * 思路：
+     * 1、dp[i]: 到达当前值的最小硬币数
+     * 2、初始化： dp[c[i]] = 1
+     * 3、循环： 若dp[i]！=0, 则 dp[i+c[i]] = dp[i+c[i]]==0? dp[i]+1: Min(dp[i]+1, dp[i+c[i]])
+     * 4、结束条件： i >= amount
+     */
+    public int coinChange(int[] coins, int amount) {
+        Arrays.sort(coins);
+        int[] dp = new int[amount + 1];
+
+        for (int i = 1; i < amount + 1; i++) {
+            int min = Integer.MAX_VALUE - 1;
+
+            for (int j = 0; j < coins.length && i >= coins[j]; j++) {
+                min = Math.min(min, dp[i - coins[j]]);
+            }
+
+            dp[i] = min + 1;
+        }
+
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+    }
+
+    public int coinChange1(int[] coins, int amount) {
+        if (amount == 0) {
+            return 0;
+        }
+        Arrays.sort(coins);
+        if (coins[0] > amount) {
+            return -1;
+        }
+
+        int[] dp = new int[amount + 1];
+        for (int coin : coins) {
+            if (coin <= amount) {
+                dp[coin] = 1;
+            }
+        }
+
+        for (int i = 0; i <= amount; i++) {
+            if (dp[i] != 0) {
+                for (int coin : coins) {
+                    if (i + coin <= amount && i + coin > 0) {
+                        dp[i + coin] = dp[i + coin] == 0 ? dp[i] + 1 : Math.min(dp[i] + 1, dp[i + coin]);
+                    }
+                }
+            }
+        }
+        return dp[amount] == 0 ? -1 : dp[amount];
+    }
+
+    /**
      * 不同路径
      * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
      * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
      * 问总共有多少条不同的路径？
-     *
-     *
+     * <p>
+     * <p>
      * 3 3
-     *
+     * <p>
      * 1 1 1
      * 1 2 3
      * 1 3 6

@@ -21,6 +21,22 @@ class Level2Test {
     }
 
     @Test
+    void coinChangeTest() {
+        int[] coins = {1, 2, 5};
+        int amount = 11;
+
+        int[] coins1 = {2};
+        int amount1 = 3;
+
+        int[] coins2 = {1, 2147483647};
+        int amount2 = 2;
+
+        int res = test.coinChange1(coins2, amount2);
+
+        System.err.println(res);
+    }
+
+    @Test
     void uniquePathsTest() {
         int m = 7;
         int n = 3;
