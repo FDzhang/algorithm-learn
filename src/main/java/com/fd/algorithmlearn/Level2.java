@@ -27,6 +27,37 @@ public class Level2 {
     }
 
     /**
+     * 最长上升子序列
+     * 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
+     * 子序列是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwhvq3/
+     * <p>
+     思路：
+     1、dp[i]: 到当前为止的 最长上升子序列的长度
+     2、状态转移： 若 nums[j] < nums[i], 则 dp[i] = Max(dp[i], dp[j]+1)
+     *
+     */
+    public int lengthOfLIS(int[] nums) {
+        int max = 0;
+        int[] dp = new int[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            if (dp[i] > max) {
+                max = dp[i];
+            }
+        }
+
+        return max;
+    }
+
+    /**
      * 零钱兑换
      * 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
      * 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
