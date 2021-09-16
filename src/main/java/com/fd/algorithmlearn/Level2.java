@@ -22,9 +22,67 @@ public class Level2 {
     public static void main(String[] args) {
 //        int[] x = {1, -1, -1, 0};
 //        System.out.println(threeSum(x));
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(1, "123");
 
-        System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
+        System.err.println(map.get(null));
+//        System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
     }
+
+    /**
+     * 二叉树的序列化与反序列化
+     * 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
+     * 请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwxa3m/
+     *
+     * 思路：（前序 or 后序 or 层序； 中序不可行）
+     * 1、二叉树的前序遍历
+     */
+    private final String NULL= "#";
+    private final String SEP= ",";
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.toString();
+    }
+
+    private void serialize(TreeNode root, StringBuilder sb) {
+        if (root == null){
+            sb.append(NULL).append(SEP);
+            return;
+        }
+        sb.append(root.val).append(SEP);
+
+        serialize(root.left, sb);
+        serialize(root.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        LinkedList<String> nodes = new LinkedList<>();
+        Collections.addAll(nodes, data.split(SEP));
+
+        return deserialize(nodes);
+    }
+
+    private TreeNode deserialize(LinkedList<String> nodes) {
+        if (nodes.isEmpty()){
+            return null;
+        }
+        String val = nodes.removeFirst();
+        if (NULL.equals(val)){
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(val));
+
+        root.left = deserialize(nodes);
+        root.right = deserialize(nodes);
+
+        return root;
+    }
+
 
     /**
      * 最长上升子序列
@@ -33,10 +91,9 @@ public class Level2 {
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwhvq3/
      * <p>
-     思路：
-     1、dp[i]: 到当前为止的 最长上升子序列的长度
-     2、状态转移： 若 nums[j] < nums[i], 则 dp[i] = Max(dp[i], dp[j]+1)
-     *
+     * 思路：
+     * 1、dp[i]: 到当前为止的 最长上升子序列的长度
+     * 2、状态转移： 若 nums[j] < nums[i], 则 dp[i] = Max(dp[i], dp[j]+1)
      */
     public int lengthOfLIS(int[] nums) {
         int max = 0;
