@@ -29,18 +29,102 @@ public class Level2 {
 //        System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
     }
 
+
+    /**
+     * 常数时间插入、删除和获取随机元素
+     * 实现RandomizedSet 类：
+     * <p>
+     * RandomizedSet() 初始化 RandomizedSet 对象
+     * bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。
+     * bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。
+     * int getRandom() 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。
+     * 你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 O(1) 。
+     * <p>
+     * 思路：
+     * 1、Map : 值，索引， List: 值； Random : 随机数
+     * 2、添加：存在，则返回； 不存在，list.add、map.put
+     * 3、删除：不存在，则返回，
+     * 存在，
+     * map.get(值) -> 索引、
+     * list.get(len-1) -> last
+     * <p>
+     * list.set(索引, last)、
+     * map.set(last, 索引)、
+     * <p>
+     * list.remove(len-1)、
+     * map.remove(值)
+     * 4、随机获取； list.get(random.next(len))
+     */
+    class RandomizedSet {
+
+        private HashMap<Integer, Integer> map;
+        private ArrayList<Integer> list;
+        private Random random;
+
+        /**
+         * Initialize your data structure here.
+         */
+        public RandomizedSet() {
+            map = new HashMap<>();
+            list = new ArrayList<>();
+            random = new Random();
+        }
+
+        /**
+         * Inserts a value to the set. Returns true if the set did not already contain the specified element.
+         */
+        public boolean insert(int val) {
+            if (map.containsKey(val)) {
+                return false;
+            }
+
+            list.add(val);
+            map.put(val, list.size() - 1);
+
+            return true;
+        }
+
+        /**
+         * Removes a value from the set. Returns true if the set contained the specified element.
+         */
+        public boolean remove(int val) {
+            if (!map.containsKey(val)) {
+                return false;
+            }
+            // 获取
+            Integer index = map.get(val);
+            Integer last = list.get(list.size() - 1);
+            // 更新
+            list.set(index, last);
+            map.put(last, index);
+            // 失效
+            list.remove(list.size() - 1);
+            map.remove(val);
+            return true;
+        }
+
+        /**
+         * Get a random element from the set.
+         */
+        public int getRandom() {
+            return list.get(random.nextInt(list.size()));
+        }
+    }
+
+
     /**
      * 二叉树的序列化与反序列化
      * 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
      * 请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwxa3m/
-     *
+     * <p>
      * 思路：（前序 or 后序 or 层序； 中序不可行）
      * 1、二叉树的前序遍历
      */
-    private final String NULL= "#";
-    private final String SEP= ",";
+    private final String NULL = "#";
+    private final String SEP = ",";
+
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
@@ -49,7 +133,7 @@ public class Level2 {
     }
 
     private void serialize(TreeNode root, StringBuilder sb) {
-        if (root == null){
+        if (root == null) {
             sb.append(NULL).append(SEP);
             return;
         }
@@ -68,11 +152,11 @@ public class Level2 {
     }
 
     private TreeNode deserialize(LinkedList<String> nodes) {
-        if (nodes.isEmpty()){
+        if (nodes.isEmpty()) {
             return null;
         }
         String val = nodes.removeFirst();
-        if (NULL.equals(val)){
+        if (NULL.equals(val)) {
             return null;
         }
         TreeNode root = new TreeNode(Integer.parseInt(val));
