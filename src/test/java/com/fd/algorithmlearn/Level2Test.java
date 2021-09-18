@@ -21,6 +21,12 @@ class Level2Test {
     }
 
     @Test
+    void isHappyTest(){
+        boolean happy = test.isHappy(19);
+        System.err.println(happy);
+    }
+
+    @Test
     void coinChangeTest() {
         int[] coins = {1, 2, 5};
         int amount = 11;
