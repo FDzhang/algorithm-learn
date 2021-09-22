@@ -30,6 +30,25 @@ public class Level2 {
     }
 
     /**
+     * 阶乘后的零
+     * 给定一个整数 n ，返回 n! 结果中尾随零的数量。
+     * <p>
+     * 进阶：你可以设计并实现对数时间复杂度的算法来解决此问题吗？
+     *
+     * 思路：（来源 讨论中的分析）
+     * 1、计算5的个数
+     */
+    public int trailingZeroes(int n) {
+        int cnt = 0;
+        while (n >= 5) {
+            cnt += n / 5;
+            n /= 5;
+        }
+        return cnt;
+    }
+
+
+    /**
      * 快乐数
      * 编写一个算法来判断一个数 n 是不是快乐数。
      * 「快乐数」定义为：
@@ -39,7 +58,7 @@ public class Level2 {
      * 如果 n 是快乐数就返回 true ；不是，则返回 false 。
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xw99u7/
-     *
+     * <p>
      * 思路：
      * 1、使用set去重， 如果出现重复， 就会进入死循环， 返回false
      * 2、可以变为  1， 返回true
