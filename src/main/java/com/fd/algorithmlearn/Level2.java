@@ -22,11 +22,35 @@ public class Level2 {
     public static void main(String[] args) {
 //        int[] x = {1, -1, -1, 0};
 //        System.out.println(threeSum(x));
-        HashMap<Integer, String> map = new HashMap<>();
-        map.put(1, "123");
-
-        System.err.println(map.get(null));
+//        HashMap<Integer, String> map = new HashMap<>();
+//        map.put(1, "123");
+        System.err.println('A' - 64);
+        System.err.println('Z' - 64);
+//        System.err.println(map.get(null));
 //        System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
+    }
+
+
+    /**
+     * Excel表列序号
+     * 给你一个字符串 columnTitle ，表示 Excel 表格中的列名称。返回该列名称对应的列序号。
+     * <p>
+     * 思路：进制转换
+     * 1、1~26 映射 A~Z
+     * 2、字符串从右往左读, 每往左一位 多乘一个 26
+     */
+    public int titleToNumber(String columnTitle) {
+
+        char[] cs = columnTitle.toCharArray();
+        int res = 0;
+        int cnt = 1;
+
+        for (int i = cs.length - 1; i >= 0; i--) {
+            res += (cs[i] - 64) * cnt;
+            cnt *= 26;
+        }
+
+        return res;
     }
 
     /**
@@ -34,7 +58,7 @@ public class Level2 {
      * 给定一个整数 n ，返回 n! 结果中尾随零的数量。
      * <p>
      * 进阶：你可以设计并实现对数时间复杂度的算法来解决此问题吗？
-     *
+     * <p>
      * 思路：（来源 讨论中的分析）
      * 1、计算5的个数
      */

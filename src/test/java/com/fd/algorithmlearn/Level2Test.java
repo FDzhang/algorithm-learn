@@ -21,6 +21,13 @@ class Level2Test {
     }
 
     @Test
+    void  titleToNumberTest(){
+        int res = test.titleToNumber("AB");
+        System.err.println(res);
+    }
+
+
+    @Test
     void isHappyTest(){
         boolean happy = test.isHappy(19);
         System.err.println(happy);
