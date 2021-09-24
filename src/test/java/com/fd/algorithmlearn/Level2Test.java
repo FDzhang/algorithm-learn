@@ -26,6 +26,12 @@ class Level2Test {
         System.err.println(res);
     }
 
+    @Test
+    void myPowTest(){
+        double res = test.myPow(2, 1);
+        System.err.println(res);
+    }
+
 
     @Test
     void isHappyTest(){

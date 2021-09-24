@@ -30,6 +30,56 @@ public class Level2 {
 //        System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
     }
 
+    /**
+     * Pow(x, n)
+     * 实现 pow(x, n) ，即计算 x 的 n 次幂函数（即，xn）。
+     * <p>
+     * 2 8
+     * 2*2 4
+     * 4*4 2
+     * 16*16 1
+     * 1*16*16
+     * <p>
+     * 2 9
+     * 2*2 4 2
+     * <p>
+     * <p>
+     * 思路： 折半计算
+     * 1、2^8 == (2*2)^4
+     * 2、n为奇数时， res需要多乘一个x
+     * 3、n>=0,返回res; n<0返回 1/res
+     * <p>
+     * 思路2：递归
+     * 1、幂 - 百度百科
+     */
+    public double myPow(double x, int n) {
+        double res = 1.0;
+
+        int m = n;
+        while (m != 0) {
+            if (m % 2 != 0) {
+                res *= x;
+            }
+            x *= x;
+            m /= 2;
+        }
+        return n >= 0 ? res : 1 / res;
+    }
+
+    public double myPow2(double x, int n) {
+        double res = myPowH(x, n);
+        return n >= 0 ? res : 1 / res;
+    }
+
+    public double myPowH(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        if ((n & 1) == 1) {
+            return x * myPowH(x * x, n / 2);
+        }
+        return myPowH(x * x, n / 2);
+    }
 
     /**
      * Excel表列序号
