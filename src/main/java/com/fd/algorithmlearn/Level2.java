@@ -31,6 +31,47 @@ public class Level2 {
     }
 
     /**
+     * x 的平方根
+     * <p>
+     * 给你一个非负整数 x ，计算并返回 x 的 平方根 。
+     * 由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+     * 注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwrzwc/
+     * <p>
+     * 思路：
+     * 1、mid = (lo + hi)/2
+     * 2、
+     * midmid = x , return mid
+     * midmid > x , hi = mid-1;
+     * mid*mid < x , lo = mid+1; (注意 结果只保留整数部分)
+     */
+    public int mySqrt(int x) {
+        int lo = 0;
+        int hi = x;
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            // 防溢出
+            long y = (long) mid * mid;
+            if (y == x) {
+                return mid;
+            } else if (y > x) {
+                hi = mid - 1;
+            } else {
+                // 结果只保留 整数部分
+                y = (long) (mid + 1) * (mid + 1);
+                if (y > x) {
+                    return mid;
+                }
+
+                lo = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
      * Pow(x, n)
      * 实现 pow(x, n) ，即计算 x 的 n 次幂函数（即，xn）。
      * <p>
