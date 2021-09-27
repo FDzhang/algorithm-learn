@@ -31,6 +31,51 @@ public class Level2 {
     }
 
     /**
+     * 两数相除
+     * 给定两个整数，被除数 dividend 和除数 divisor。将两数相除，要求不使用乘法、除法和 mod 运算符。
+     * 返回被除数 dividend 除以除数 divisor 得到的商。
+     * 整数除法的结果应当截去（truncate）其小数部分，例如：truncate(8.345) = 8 以及 truncate(-2.7335) = -2
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwp6vi/
+     * <p>
+     * 思路：
+     * 1、处理边界，
+     * 2、 return a/b
+     * <p>
+     * <p>
+     * 思路二：二分，减法
+     * 1、处理边界，
+     * 2、dividend每次减去2^n个divisor（尽可能多），同时reslut每次加2^n
+     */
+    public int divide(int dividend, int divisor) {
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+        return dividend / divisor;
+    }
+
+    public int divide2(int dividend, int divisor) {
+        if (dividend == Integer.MIN_VALUE && divisor == -1)
+            return Integer.MAX_VALUE;
+
+        boolean k = (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0);
+        int result = 0;
+        dividend = -Math.abs(dividend);
+        divisor = -Math.abs(divisor);
+        while (dividend <= divisor) {
+            int temp = divisor;
+            int c = 1;
+            while (dividend - temp <= temp) {
+                temp = temp << 1;
+                c = c << 1;
+            }
+            dividend -= temp;
+            result += c;
+        }
+        return k ? result : -result;
+    }
+
+    /**
      * x 的平方根
      * <p>
      * 给你一个非负整数 x ，计算并返回 x 的 平方根 。
