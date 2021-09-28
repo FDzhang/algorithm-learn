@@ -21,6 +21,22 @@ class Level2Test {
     }
 
     @Test
+    void test(){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("123");
+        sb.insert(3,"x");
+
+        System.err.println(sb.toString());
+    }
+
+    @Test
+    void fractionToDecimalTest(){
+        String res = test.fractionToDecimal(0, -5);
+        System.err.println(res);
+    }
+
+    @Test
     void  titleToNumberTest(){
         int res = test.titleToNumber("AB");
         System.err.println(res);
