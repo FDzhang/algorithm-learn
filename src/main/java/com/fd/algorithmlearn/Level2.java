@@ -31,6 +31,29 @@ public class Level2 {
     }
 
     /**
+     * 两整数之和
+     * 给你两个整数 a 和 b ，不使用 运算符 + 和 - ​​​​​​​，计算并返回两整数之和。
+     *
+     * 思路：通过位运算得到结果。
+     * ^是“半加”，“不进位加”，使用异或得到除去进位的那部分结果
+     * 只有1&1=1，其余都为0，所以可以使用&表示进位的那部分结果
+     * 因为&的结果表示的是进位，所以将&的结果向左移1位
+     * 若&结果不为null，继续上面操作直至&结果为null（即没有进位）
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwaiag/?discussion=MiPBIh
+     *
+     思路： from 讨论
+     1、^运算，获得 不进位的部分
+     2、&运算，获得 进位的部分, 因为进位所以 左移一位
+     3、重复上述操作，直到没有进位为止
+     */
+    public int getSum(int a, int b) {
+        if (a == 0) return b;
+        return getSum((a & b) << 1, a ^ b);
+    }
+
+
+    /**
      * 分数到小数
      * 给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以 字符串形式返回小数 。
      * 如果小数部分为循环小数，则将循环的部分括在括号内。
