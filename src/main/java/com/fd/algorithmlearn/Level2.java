@@ -31,21 +31,74 @@ public class Level2 {
     }
 
     /**
+     * 逆波兰表达式求值
+     * 根据 逆波兰表示法，求表达式的值。
+     * 有效的算符包括 +、-、*、/ 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。
+     * <p>
+     * 说明：
+     * 整数除法只保留整数部分。
+     * 给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。
+     * <p>
+     * 示例 1：
+     * 输入：tokens = ["2","1","+","3","*"]
+     * 输出：9
+     * 解释：该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9
+     * <p>
+     * 思路：
+     * 1、遇到数字则入栈
+     * 2、遇到 运算符 则出栈两个数字进行运算，并将结果入栈
+     * 3、返回栈顶元素
+     */
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+        for (String token : tokens) {
+            if (noDigit(token)) {
+                Integer b = stack.pop();
+                Integer a = stack.pop();
+                stack.push(calc(a, b, token));
+                continue;
+            }
+            stack.push(Integer.parseInt(token));
+        }
+        return stack.peek();
+    }
+
+    private boolean noDigit(String s) {
+        return "+".equals(s) || "-".equals(s) || "*".equals(s) || "/".equals(s);
+    }
+
+    private int calc(int a, int b, String c) {
+        switch (c) {
+            case "+":
+                return a + b;
+            case "-":
+                return a - b;
+            case "*":
+                return a * b;
+            case "/":
+                return a / b;
+            default:
+                return 0;
+        }
+    }
+
+
+    /**
      * 两整数之和
      * 给你两个整数 a 和 b ，不使用 运算符 + 和 - ​​​​​​​，计算并返回两整数之和。
-     *
+     * <p>
      * 思路：通过位运算得到结果。
      * ^是“半加”，“不进位加”，使用异或得到除去进位的那部分结果
      * 只有1&1=1，其余都为0，所以可以使用&表示进位的那部分结果
      * 因为&的结果表示的是进位，所以将&的结果向左移1位
      * 若&结果不为null，继续上面操作直至&结果为null（即没有进位）
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwaiag/?discussion=MiPBIh
-     *
-     思路： from 讨论
-     1、^运算，获得 不进位的部分
-     2、&运算，获得 进位的部分, 因为进位所以 左移一位
-     3、重复上述操作，直到没有进位为止
+     * <p>
+     * 思路： from 讨论
+     * 1、^运算，获得 不进位的部分
+     * 2、&运算，获得 进位的部分, 因为进位所以 左移一位
+     * 3、重复上述操作，直到没有进位为止
      */
     public int getSum(int a, int b) {
         if (a == 0) return b;
