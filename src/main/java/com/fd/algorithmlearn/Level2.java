@@ -31,6 +31,50 @@ public class Level2 {
     }
 
     /**
+     * 多数元素
+     * 给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+     * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwnvrj/
+     */
+    public int majorityElement(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = Integer.MIN_VALUE;
+        int maxCnt = 0;
+
+        for (int num : nums) {
+            map.merge(num, 1, Integer::sum);
+
+            if (map.get(num) > maxCnt) {
+                max = num;
+                maxCnt = map.get(num);
+            }
+        }
+        return max;
+    }
+
+    public int majorityElement1(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+
+    public int majorityElement2(int[] nums) {
+        int res = nums[0];
+        int cnt = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (res == nums[i]) {
+                cnt++;
+            } else {
+                cnt--;
+                if (cnt == 0) {
+                    res = nums[i + 1];
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      * 逆波兰表达式求值
      * 根据 逆波兰表示法，求表达式的值。
      * 有效的算符包括 +、-、*、/ 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。
