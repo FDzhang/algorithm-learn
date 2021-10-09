@@ -35,27 +35,49 @@ public class Level2 {
      * 给你一个用字符数组 tasks 表示的 CPU 需要执行的任务列表。其中每个字母表示一种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。在任何一个单位时间，CPU 可以完成一个任务，或者处于待命状态。
      * 然而，两个 相同种类 的任务之间必须有长度为整数 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。
      * 你需要计算完成所有任务所需要的 最短时间 。
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwvaot/
-     *
+     * <p>
      * 解题思路： https://blog.csdn.net/luckytsw/article/details/88958644
-     *
+     * <p>
      * 思路：从讨论区和搜素学习
      * 1、int[26] 记录每个字符出现的次数
      * 2、字符的最大出现次数 记为 maxCnt, maxCnt 对应的字符有几个 记为cnt (例如：【A,A,B,B,C】 maxCnt=2, cnt=2; A,B 都出现了两次)
      * 3、使用公式 (maxCnt-1)*(n+1)+cnt
-     *
+     * <p>
      * 公式理解：
      * eg: 输入：tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2
      * 一种可能的解决方案是：A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> (待命) -> (待命) -> A -> (待命) -> (待命) -> A
-     *
+     * <p>
      * 由于任务是交替执行的，数量最多的任务必然应该安排到每个n的节点上以求达到最短时间，如下（其中“#”代表除A以外的其他字符）：
      * A -> # -> # -> A -> # -> # -> A -> # -> # -> A -> # -> # -> A -> # -> # -> A
      * 这时可以看到ans至少等于（A的数量-1）*（n + 1）+ 1，其它数量小于等于A的字符就可以被安插在“#”的位置。
      * 这时数量等于A的字符必然会占到最后一个A后面“#”的位置，这时ans的数量就要加一
+     * <p>
+     * 特殊情況： ["A","A","A","B","B","B"] 0
+     * 此时公式计算的结果 < tasks.length
      */
     public int leastInterval(char[] tasks, int n) {
-        return 0;
+        int[] taskCnt = new int[26];
+
+        int maxCnt = 0;
+        for (char t : tasks) {
+            taskCnt[t - 'A']++;
+            if (taskCnt[t - 'A'] > maxCnt) {
+                maxCnt = taskCnt[t - 'A'];
+            }
+        }
+
+        int cnt = 0;
+        for (int c : taskCnt) {
+            if (c == maxCnt) {
+                cnt++;
+            }
+        }
+
+        int len = tasks.length;
+        int res = (maxCnt - 1) * (n + 1) + cnt;
+        return Math.max(res, len);
     }
 
 

@@ -31,6 +31,13 @@ class Level2Test {
     }
 
     @Test
+    void leastIntervalTest(){
+       char[] tasks =  {'A','A','A','B','B','B'};
+        int res = test.leastInterval(tasks, 0);
+        System.err.println(res);
+    }
+
+    @Test
     void fractionToDecimalTest(){
         String res = test.fractionToDecimal(0, -5);
         System.err.println(res);
