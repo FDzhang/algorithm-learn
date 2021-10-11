@@ -31,6 +31,55 @@ public class Level2 {
     }
 
     /**
+     * 岛屿数量
+     *
+     * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+     * 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+     * 此外，你可以假设该网格的四条边均被水包围。
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvtsnm/
+     *
+     * 思路： 回溯
+     * 路径：走过的岛屿
+     * 选择列表：没有走过的且为 ‘1’ 的路径
+     * 结束条件：除了走过的 只剩下 '0'
+     *
+     * 空间优化：可以使用grid本身进行标记, 走过的岛屿 置为 '0'
+     */
+    public int numIslands(char[][] grid) {
+        boolean[][] tags = new boolean[grid.length][grid[0].length];
+
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1' && !tags[i][j]) {
+                    landsBackTrack(grid, i, j, tags);
+                    res++;
+                }
+            }
+        }
+
+        return res;
+    }
+
+    private void landsBackTrack(char[][] grid, int p, int q, boolean[][] tags) {
+        if (p >= grid.length || p < 0 || q >= grid[0].length || q < 0) {
+            return;
+        }
+        if (tags[p][q] || grid[p][q] == '0') {
+            return;
+        }
+
+        tags[p][q] = true;
+        landsBackTrack(grid, p + 1, q, tags);
+        landsBackTrack(grid, p - 1, q, tags);
+        landsBackTrack(grid, p, q + 1, tags);
+        landsBackTrack(grid, p, q - 1, tags);
+    }
+
+
+
+    /**
      * 任务调度器
      * 给你一个用字符数组 tasks 表示的 CPU 需要执行的任务列表。其中每个字母表示一种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。在任何一个单位时间，CPU 可以完成一个任务，或者处于待命状态。
      * 然而，两个 相同种类 的任务之间必须有长度为整数 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。
