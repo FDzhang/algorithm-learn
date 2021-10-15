@@ -1,7 +1,9 @@
 package com.fd.algorithmlearn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 高级算法
@@ -13,6 +15,41 @@ import java.util.List;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+
+    /**
+     * 四数相加 II
+     * 给你四个整数数组 nums1、nums2、nums3 和 nums4 ，数组长度都是 n ，请你计算有多少个元组 (i, j, k, l) 能满足：
+     * 0 <= i, j, k, l < n
+     * nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xwqm6c/
+     * <p>
+     * 思路：
+     * 1、A[i]+B[j]=-(C[k]+D[l])
+     * <p>
+     * ps:
+     * 几数之和的总结
+     * 1、如果是问几数之和各个数的组合数，如之前的三数之和那题，一般是用到二分或者双指针这种能够得到具体数字情况的方法来降低循环的层数。
+     * 2、如果是问几数之和中符合情况的个数，一般都是用hash表降低循环层数，此时我们只需要关注答案的次数即可。
+     */
+    public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int cnt = 0;
+
+        for (int i : nums1) {
+            for (int j : nums2) {
+                map.merge(i + j, 1, Integer::sum);
+            }
+        }
+
+        for (int i : nums3) {
+            for (int j : nums4) {
+                cnt += map.getOrDefault(-(i + j), 0);
+            }
+        }
+
+        return cnt;
+    }
 
 
     /**
