@@ -2,6 +2,7 @@ package com.fd.algorithmlearn;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +20,23 @@ class Level3Test {
         List<Integer> list = test.spiralOrder(matrix);
 
         list.forEach(System.err::println);
+    }
+
+    @Test
+    void gameOfLifeTest(){
+        int[][] b = {{0,1,0},{0,0,1},{1,1,1},{0,0,0}};
+        int[][] b1= {{1,1},{1,0}};
+        int[][] b3= {{0,1,0,0,1,1,0},
+                     {1,1,1,1,1,1,1},
+                     {1,1,0,0,0,0,1},
+                     {1,1,0,0,1,0,0}};
+        test.gameOfLife(b3);
+
+        for (int[] ints : b3) {
+            System.err.println(Arrays.toString(ints));
+        }
+
+
     }
 
 }

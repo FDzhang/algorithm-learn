@@ -16,6 +16,94 @@ import java.util.Map;
  */
 public class Level3 {
 
+    /**
+     * 生命游戏
+     * 根据 百度百科 ，生命游戏，简称为生命，是英国数学家约翰·何顿·康威在 1970 年发明的细胞自动机。
+     * <p>
+     * 给定一个包含 m × n 个格子的面板，每一个格子都可以看成是一个细胞。每个细胞都具有一个初始状态：1 即为活细胞（live），或 0 即为死细胞（dead）。每个细胞与其八个相邻位置（水平，垂直，对角线）的细胞都遵循以下四条生存定律：
+     * <p>
+     * 如果活细胞周围八个位置的活细胞数少于两个，则该位置活细胞死亡；
+     * 如果活细胞周围八个位置有两个或三个活细胞，则该位置活细胞仍然存活；
+     * 如果活细胞周围八个位置有超过三个活细胞，则该位置活细胞死亡；
+     * 如果死细胞周围正好有三个活细胞，则该位置死细胞复活；
+     * 下一个状态是通过将上述规则同时应用于当前状态下的每个细胞所形成的，其中细胞的出生和死亡是同时发生的。给你 m x n 网格面板 board 的当前状态，返回下一个状态。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xwk53e/
+     * <p>
+     * 思路：
+     * 1、new一个新的矩阵res
+     * 2、遍历board，根据board[i][j]和其周围的8个细胞的状态，决定res[i][j]处，细胞的状态
+     * <p>
+     * 优化1（代码长度）：用 两个int数组 遍历周围8个格子
+     * 优化2（空间优化）: from 讨论区
+     * 原地操作怎么实现呢？这是根据这道生命游戏的特点来的，由于生命游戏只存在0和1，那么我们可以人为再制造两个状态来表示它变化之前的状态，
+     * 比如用2表示0变成1后的状态，在它被用于计算又多少个1时被当作0处理，而最后的修正环节它就被当作1处理，同理1变为0也是类似的操作。
+     */
+    public void gameOfLife(int[][] board) {
+        int m = board.length;
+        int n = board[0].length;
+
+        int[][] res = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                res[i][j] = lifeOrDead(board, i, j);
+            }
+        }
+        System.arraycopy(res, 0, board, 0, m);
+    }
+
+    private int lifeOrDead(int[][] board, int i, int j) {
+        int m = board.length;
+        int n = board[0].length;
+        int cnt = 0;
+        // i-1 j-1
+        if (i - 1 >= 0 && j - 1 >= 0 && board[i - 1][j - 1] == 1) {
+            cnt++;
+        }
+        // i-1 j
+        if (i - 1 >= 0 && board[i - 1][j] == 1) {
+            cnt++;
+        }
+        // i-1 j+1
+        if (i - 1 >= 0 && j + 1 < n && board[i - 1][j + 1] == 1) {
+            cnt++;
+        }
+        // i j+1
+        if (j + 1 < n && board[i][j + 1] == 1) {
+            cnt++;
+        }
+        // i+1 j+1
+        if (i + 1 < m && j + 1 < n && board[i + 1][j + 1] == 1) {
+            cnt++;
+        }
+        // i+1 j
+        if (i + 1 < m && board[i + 1][j] == 1) {
+            cnt++;
+        }
+        // i+1 j-1
+        if (i + 1 < m && j - 1 >= 0 && board[i + 1][j - 1] == 1) {
+            cnt++;
+        }
+        // i j-1
+        if (j - 1 >= 0 && board[i][j - 1] == 1) {
+            cnt++;
+        }
+
+        if (board[i][j] == 1) {
+            if (cnt < 2 || cnt > 3) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            if (cnt == 3) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
 
     /**
      * 盛最多水的容器
