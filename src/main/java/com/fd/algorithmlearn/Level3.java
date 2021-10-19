@@ -57,52 +57,28 @@ public class Level3 {
         int m = board.length;
         int n = board[0].length;
         int cnt = 0;
-        // i-1 j-1
-        if (i - 1 >= 0 && j - 1 >= 0 && board[i - 1][j - 1] == 1) {
-            cnt++;
-        }
-        // i-1 j
-        if (i - 1 >= 0 && board[i - 1][j] == 1) {
-            cnt++;
-        }
-        // i-1 j+1
-        if (i - 1 >= 0 && j + 1 < n && board[i - 1][j + 1] == 1) {
-            cnt++;
-        }
-        // i j+1
-        if (j + 1 < n && board[i][j + 1] == 1) {
-            cnt++;
-        }
-        // i+1 j+1
-        if (i + 1 < m && j + 1 < n && board[i + 1][j + 1] == 1) {
-            cnt++;
-        }
-        // i+1 j
-        if (i + 1 < m && board[i + 1][j] == 1) {
-            cnt++;
-        }
-        // i+1 j-1
-        if (i + 1 < m && j - 1 >= 0 && board[i + 1][j - 1] == 1) {
-            cnt++;
-        }
-        // i j-1
-        if (j - 1 >= 0 && board[i][j - 1] == 1) {
-            cnt++;
+
+        int[] dx = {-1, 1, 0, 0, -1, -1, 1, 1};
+        int[] dy = {0, 0, -1, 1, -1, 1, -1, 1};
+
+        for (int k = 0; k < 8; k++) {
+            int x = i + dx[k];
+            int y = j + dy[k];
+            if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 1) {
+                cnt++;
+            }
         }
 
         if (board[i][j] == 1) {
-            if (cnt < 2 || cnt > 3) {
-                return 0;
-            } else {
+            if (cnt == 2 || cnt == 3) {
                 return 1;
             }
         } else {
             if (cnt == 3) {
                 return 1;
-            } else {
-                return 0;
             }
         }
+        return 0;
     }
 
     /**
