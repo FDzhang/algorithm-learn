@@ -31,6 +31,13 @@ class Level2Test {
     }
 
     @Test
+    void majorityElement2Test() {
+        int[] nums = {3, 3, 3, 3, 1, 1, 1, 2, 2, 2};
+        int res = test.majorityElement2(nums);
+        System.err.println(res);
+    }
+
+    @Test
     void leastIntervalTest(){
        char[] tasks =  {'A','A','A','B','B','B'};
         int res = test.leastInterval(tasks, 0);
