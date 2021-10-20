@@ -25,54 +25,110 @@ public class Level2 {
 //        HashMap<Integer, String> map = new HashMap<>();
 //        map.put(1, "123");
         System.err.println('A' - 64);
-        System.err.println('Z' - 64);
+        System.err.println('z' - 64);
 //        System.err.println(map.get(null));
 //        System.out.println(lengthOfLongestSubstring1("tmmzuxt"));
     }
 
     /**
-     * 多数元素
-     * 给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
-     * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
-     * <p>
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwnvrj/
+     * 岛屿数量
+     *
+     * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+     * 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+     * 此外，你可以假设该网格的四条边均被水包围。
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvtsnm/
+     *
+     * 思路： 回溯
+     * 路径：走过的岛屿
+     * 选择列表：没有走过的且为 ‘1’ 的路径
+     * 结束条件：除了走过的 只剩下 '0'
+     *
+     * 空间优化：可以使用grid本身进行标记, 走过的岛屿 置为 '0'
      */
-    public int majorityElement(int[] nums) {
-        Map<Integer, Integer> map = new HashMap<>();
-        int max = Integer.MIN_VALUE;
-        int maxCnt = 0;
+    public int numIslands(char[][] grid) {
+        boolean[][] tags = new boolean[grid.length][grid[0].length];
 
-        for (int num : nums) {
-            map.merge(num, 1, Integer::sum);
-
-            if (map.get(num) > maxCnt) {
-                max = num;
-                maxCnt = map.get(num);
-            }
-        }
-        return max;
-    }
-
-    public int majorityElement1(int[] nums) {
-        Arrays.sort(nums);
-        return nums[nums.length / 2];
-    }
-
-    public int majorityElement2(int[] nums) {
-        int res = nums[0];
-        int cnt = 1;
-        for (int i = 1; i < nums.length; i++) {
-            if (res == nums[i]) {
-                cnt++;
-            } else {
-                cnt--;
-                if (cnt == 0) {
-                    res = nums[i + 1];
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1' && !tags[i][j]) {
+                    landsBackTrack(grid, i, j, tags);
+                    res++;
                 }
             }
         }
+
         return res;
     }
+
+    private void landsBackTrack(char[][] grid, int p, int q, boolean[][] tags) {
+        if (p >= grid.length || p < 0 || q >= grid[0].length || q < 0) {
+            return;
+        }
+        if (tags[p][q] || grid[p][q] == '0') {
+            return;
+        }
+
+        tags[p][q] = true;
+        landsBackTrack(grid, p + 1, q, tags);
+        landsBackTrack(grid, p - 1, q, tags);
+        landsBackTrack(grid, p, q + 1, tags);
+        landsBackTrack(grid, p, q - 1, tags);
+    }
+
+
+
+    /**
+     * 任务调度器
+     * 给你一个用字符数组 tasks 表示的 CPU 需要执行的任务列表。其中每个字母表示一种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。在任何一个单位时间，CPU 可以完成一个任务，或者处于待命状态。
+     * 然而，两个 相同种类 的任务之间必须有长度为整数 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。
+     * 你需要计算完成所有任务所需要的 最短时间 。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xwvaot/
+     * <p>
+     * 解题思路： https://blog.csdn.net/luckytsw/article/details/88958644
+     * <p>
+     * 思路：从讨论区和搜素学习
+     * 1、int[26] 记录每个字符出现的次数
+     * 2、字符的最大出现次数 记为 maxCnt, maxCnt 对应的字符有几个 记为cnt (例如：【A,A,B,B,C】 maxCnt=2, cnt=2; A,B 都出现了两次)
+     * 3、使用公式 (maxCnt-1)*(n+1)+cnt
+     * <p>
+     * 公式理解：
+     * eg: 输入：tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2
+     * 一种可能的解决方案是：A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> (待命) -> (待命) -> A -> (待命) -> (待命) -> A
+     * <p>
+     * 由于任务是交替执行的，数量最多的任务必然应该安排到每个n的节点上以求达到最短时间，如下（其中“#”代表除A以外的其他字符）：
+     * A -> # -> # -> A -> # -> # -> A -> # -> # -> A -> # -> # -> A -> # -> # -> A
+     * 这时可以看到ans至少等于（A的数量-1）*（n + 1）+ 1，其它数量小于等于A的字符就可以被安插在“#”的位置。
+     * 这时数量等于A的字符必然会占到最后一个A后面“#”的位置，这时ans的数量就要加一
+     * <p>
+     * 特殊情況： ["A","A","A","B","B","B"] 0
+     * 此时公式计算的结果 < tasks.length
+     */
+    public int leastInterval(char[] tasks, int n) {
+        int[] taskCnt = new int[26];
+
+        int maxCnt = 0;
+        for (char t : tasks) {
+            taskCnt[t - 'A']++;
+            if (taskCnt[t - 'A'] > maxCnt) {
+                maxCnt = taskCnt[t - 'A'];
+            }
+        }
+
+        int cnt = 0;
+        for (int c : taskCnt) {
+            if (c == maxCnt) {
+                cnt++;
+            }
+        }
+
+        int len = tasks.length;
+        int res = (maxCnt - 1) * (n + 1) + cnt;
+        return Math.max(res, len);
+    }
+
 
     /**
      * 逆波兰表达式求值

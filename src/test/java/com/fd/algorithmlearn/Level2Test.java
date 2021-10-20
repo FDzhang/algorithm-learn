@@ -21,43 +21,43 @@ class Level2Test {
     }
 
     @Test
-    void test() {
+    void test(){
         StringBuilder sb = new StringBuilder();
 
         sb.append("123");
-        sb.insert(3, "x");
+        sb.insert(3,"x");
 
         System.err.println(sb.toString());
     }
 
     @Test
-    void majorityElement2Test() {
-        int[] nums = {3, 3, 3, 3, 1, 1, 1, 2, 2, 2};
-        int res = test.majorityElement2(nums);
+    void leastIntervalTest(){
+       char[] tasks =  {'A','A','A','B','B','B'};
+        int res = test.leastInterval(tasks, 0);
         System.err.println(res);
     }
 
     @Test
-    void fractionToDecimalTest() {
+    void fractionToDecimalTest(){
         String res = test.fractionToDecimal(0, -5);
         System.err.println(res);
     }
 
     @Test
-    void titleToNumberTest() {
+    void  titleToNumberTest(){
         int res = test.titleToNumber("AB");
         System.err.println(res);
     }
 
     @Test
-    void myPowTest() {
+    void myPowTest(){
         double res = test.myPow(2, 1);
         System.err.println(res);
     }
 
 
     @Test
-    void isHappyTest() {
+    void isHappyTest(){
         boolean happy = test.isHappy(19);
         System.err.println(happy);
     }
