@@ -1,9 +1,6 @@
 package com.fd.algorithmlearn;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 高级算法
@@ -15,6 +12,67 @@ import java.util.Map;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+
+
+    /**
+     * 缺失的第一个正数
+     * 给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
+     * 请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xwkftg/
+     * <p>
+     * 思路：from 讨论区
+     * 方法一：快速排序+正整数逐个记录校验法，效率一般：
+     * 方法四：置换法（每次置换有一个是被放到了正确的位置）
+     * <p>
+     * 我们可以把给定的数组当作一个hash表来用，怎么用呢？把nums[i]和下标i形成一组映射关系，也就是nums[0]=1,nums[1]=2...
+     * 搞清楚这个之前，得搞清楚题意，题意是要找出连续的正数中缺失的最小正数，那么我们就可以得出我们所要找的这个最小正数的最大值和最小值，
+     * 最小值毫无疑问是1，最大值明显和数组长度挂钩，也就是当数组中的所有值都是符合该映射，则缺失的正数值就是nums.size()+1.
+     * 通过交换实现映射关系，当然细节情况需要处理，那就是不能让数组下标访问越界，所以需要交换的元素一定小于等于nums.size()。
+     * 最后通过从左往右检查谁不和下标形成映射关系，谁就是缺失的正数。
+     * <p>
+     * 细节1：如果不用while直接用if肯定会由于直接大跨度的交换导致线性的重复和遗漏，所以需要while不断的判断新转移过来的 元素。
+     * 细节2：如果用判断条件换成nums[i]!=i+1会在有重复数据的时候扑街(由于如果出现相同元素，然而它检查的竟不是同一个位置，这导致死循环)，
+     * 而直接用nums[nums[i]-1]是否等于nums[i]它碰到同样的元素永远只会检查一个位置，所以那个位置正确了，则它就不会再移动了。
+     */
+    public int firstMissingPositive(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] > 0 && nums[i] <= nums.length && nums[nums[i] - 1] != nums[i]) {
+                swapAB(nums, i, nums[i] - 1);
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1) {
+                return i + 1;
+            }
+        }
+        return nums.length + 1;
+    }
+
+    private void swapAB(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    public int firstMissingPositive1(int[] nums) {
+        Arrays.sort(nums);
+
+        int min = 1;
+        for (int num : nums) {
+            if (num <= 0) {
+                continue;
+            }
+            if (num > min) {
+                return min;
+            }
+            if (num == min) {
+                min++;
+            }
+        }
+        return min;
+    }
+
 
     /**
      * 生命游戏
