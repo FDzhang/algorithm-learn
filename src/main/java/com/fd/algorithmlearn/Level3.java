@@ -13,6 +13,39 @@ import java.util.*;
  */
 public class Level3 {
 
+    /**
+     * 最长连续序列
+     * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+     * 请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
+     * <p>
+     * 思路1：
+     * 1、先排序，后计数
+     *
+     *
+     * 可参考链接： [\[LeetCode\] 128. 最长连续序列 - 威行天下 - 博客园](https://www.cnblogs.com/powercai/p/11181681.html)
+     */
+    public int longestConsecutive(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+
+        Arrays.sort(nums);
+        int cnt = 1;
+        int res = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i - 1]) {
+                continue;
+            }
+            if (nums[i] - 1 == nums[i - 1]) {
+                cnt++;
+            } else {
+                cnt = 1;
+            }
+            res = Math.max(res, cnt);
+        }
+        return res;
+    }
+
 
     /**
      * 缺失的第一个正数
