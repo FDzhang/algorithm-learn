@@ -14,14 +14,49 @@ import java.util.*;
 public class Level3 {
 
     /**
+     * 寻找重复数
+     * 定一个包含 n + 1 个整数的数组 nums ，其数字都在 1 到 n 之间（包括 1 和 n），可知至少存在一个重复的整数。
+     * <p>
+     * 假设 nums 只有 一个重复的整数 ，找出 这个重复的数 。
+     * <p>
+     * 你设计的解决方案必须不修改数组 nums 且只用常量级 O(1) 的额外空间。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xwz4lj/
+     *
+     * 思路： 成环法的应用
+     * ps: 理解为何 k 是环长度的整数倍, 以及如何找到环的起点（重复数）
+     *
+     * [双指针技巧总结 :: labuladong的算法小抄](https://labuladong.gitee.io/algo/2/19/50/)
+     * [287.寻找重复数 - 寻找重复数 - 力扣（LeetCode）](https://leetcode-cn.com/problems/find-the-duplicate-number/solution/287xun-zhao-zhong-fu-shu-by-kirsche/)
+     */
+    public int findDuplicate(int[] nums) {
+        int slow = 0;
+        int fast = 0;
+
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        }
+        slow = 0;
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return slow;
+    }
+
+
+    /**
      * 最长连续序列
      * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
      * 请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
      * <p>
      * 思路1：
      * 1、先排序，后计数
-     *
-     *
+     * <p>
+     * <p>
      * 可参考链接： [\[LeetCode\] 128. 最长连续序列 - 威行天下 - 博客园](https://www.cnblogs.com/powercai/p/11181681.html)
      */
     public int longestConsecutive(int[] nums) {
