@@ -14,6 +14,155 @@ import java.util.*;
 public class Level3 {
 
     /**
+     * 基本计算器 II
+     * 给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
+     * 整数除法仅保留整数部分。
+     * <p>
+     * 思路1：
+     * 1、中序表达式转后序表达式
+     * a. 遇到操作数。直接加入后序表达式
+     * b. 遇到界限符。遇到“（”直接入栈，遇到“）”则依次弹出 栈内运算符 并加入后序表达式，直到弹出”（“为止。”（“不加入后序表达式
+     * c. 遇到运算符。依次弹出 栈中优先级高于或者等于当前运算符的所有运算符，并加入后序表达式，若碰到“（”或者栈空则停止，之后再把当前运算符入栈
+     * d. 按上述方法处理完所有字符后，将栈中运算符依次弹出，并加入后缀表达式。
+     * 2、依据后序表达式计算结果
+     * <p>
+     * 思路2：
+     * 1、替换掉空格, 标记每个数字前的操作符为ops
+     * 2、遍历字符串，记每个数字为sum，恰当的将sum放到栈中，最后将栈中所有的sum求和
+     * a、+  push(sum)
+     * b、- push(-sum)
+     * c、* push(pop*sum)
+     * d、/ push(pop/sum)
+     */
+    public int calculate1(String s) {
+        s = s.replaceAll(" ", "");
+
+        Deque<Integer> stack = new LinkedList<>();
+        char ops = '+';
+        int sum = 0;
+        char[] cs = s.toCharArray();
+
+        for (char c : cs) {
+            if (digit(c)) {
+                sum = sum * 10 + (c - '0');
+            } else {
+                calcHelp(stack, ops, sum);
+                ops = c;
+                sum = 0;
+            }
+        }
+        calcHelp(stack, ops, sum);
+
+        int ans = 0;
+        while (!stack.isEmpty()) {
+            ans += stack.pop();
+        }
+
+        return ans;
+    }
+
+    private void calcHelp(Deque<Integer> stack, char ops, int sum) {
+        if (ops == '+') {
+            stack.push(sum);
+        } else if (ops == '-') {
+            stack.push(-sum);
+        } else if (ops == '*') {
+            stack.push(stack.pop() * sum);
+        } else if (ops == '/') {
+            stack.push(stack.pop() / sum);
+        }
+    }
+
+    private boolean digit(char c) {
+        return '0' <= c && c <= '9';
+    }
+
+    public int calculate(String s) {
+        s = s.replaceAll("\\s*", "");
+
+        String[] afterStr = midToAfter(s);
+
+        return evalRPN(afterStr);
+    }
+
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+        for (String token : tokens) {
+            if (noDigit(token)) {
+                Integer b = stack.pop();
+                Integer a = stack.pop();
+                stack.push(calc(a, b, token));
+                continue;
+            }
+            stack.push(Integer.parseInt(token));
+        }
+        return stack.peek();
+    }
+
+    public String[] midToAfter(String s) {
+        List<String> afterStr = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        Stack<String> oStack = new Stack<>();
+
+        char[] chars = s.toCharArray();
+
+        for (char c : chars) {
+            if (noDigit(c)) {
+                afterStr.add(sb.toString());
+                sb.setLength(0);
+
+                String operator = String.valueOf(c);
+                while (!oStack.isEmpty() && morePower(oStack.peek(), operator)) {
+                    afterStr.add(oStack.pop());
+                }
+                oStack.push(operator);
+                continue;
+            }
+            sb.append(c);
+        }
+        if (sb.length() > 0) {
+            afterStr.add(sb.toString());
+        }
+        while (!oStack.isEmpty()) {
+            afterStr.add(oStack.pop());
+        }
+        return afterStr.toArray(String[]::new);
+    }
+
+    // 判断 a运算符的优先级是否 >= b运算符的优先级 (*/ > +-)
+    private boolean morePower(String a, String b) {
+        if (a.equals("+") || a.equals("-")) {
+            if (b.equals("*") || b.equals("/")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean noDigit(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/';
+    }
+
+    private boolean noDigit(String s) {
+        return "+".equals(s) || "-".equals(s) || "*".equals(s) || "/".equals(s);
+    }
+
+    private int calc(int a, int b, String c) {
+        switch (c) {
+            case "+":
+                return a + b;
+            case "-":
+                return a - b;
+            case "*":
+                return a * b;
+            case "/":
+                return a / b;
+            default:
+                return 0;
+        }
+    }
+
+    /**
      * 寻找重复数
      * 定一个包含 n + 1 个整数的数组 nums ，其数字都在 1 到 n 之间（包括 1 和 n），可知至少存在一个重复的整数。
      * <p>
@@ -22,10 +171,10 @@ public class Level3 {
      * 你设计的解决方案必须不修改数组 nums 且只用常量级 O(1) 的额外空间。
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xwz4lj/
-     *
+     * <p>
      * 思路： 成环法的应用
      * ps: 理解为何 k 是环长度的整数倍, 以及如何找到环的起点（重复数）
-     *
+     * <p>
      * [双指针技巧总结 :: labuladong的算法小抄](https://labuladong.gitee.io/algo/2/19/50/)
      * [287.寻找重复数 - 寻找重复数 - 力扣（LeetCode）](https://leetcode-cn.com/problems/find-the-duplicate-number/solution/287xun-zhao-zhong-fu-shu-by-kirsche/)
      */
