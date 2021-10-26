@@ -77,6 +77,39 @@ public class Level3 {
         }
     }
 
+    public int[] maxSlidingWindow1(int[] nums, int k) {
+        if (k == 1) {
+            return nums;
+        }
+
+        int index = -1, n = nums.length, max = Integer.MIN_VALUE;
+        int[] ans = new int[n - k + 1];
+        for (int p = 0, q = k - 1; q < n; ++p, ++q) {
+            if (p <= index) {
+                if (nums[q] >= max) {
+                    max = nums[q];
+                    index = q;
+                }
+            } else if (nums[q] >= max - 1) {
+                max = nums[q];
+                index = q;
+            } else if (nums[p] >= max - 1) {
+                max = nums[p];
+                index = p;
+            } else {
+                max = Integer.MIN_VALUE;
+                for (int i = p; i <= q; ++i) {
+                    if (nums[i] >= max) {
+                        max = nums[i];
+                        index = i;
+                    }
+                }
+            }
+            ans[p] = max;
+        }
+        return ans;
+    }
+
     /**
      * 基本计算器 II
      * 给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
