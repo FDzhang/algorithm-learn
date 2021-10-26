@@ -14,6 +14,70 @@ import java.util.*;
 public class Level3 {
 
     /**
+     * 滑动窗口最大值
+     * 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+     * <p>
+     * 返回滑动窗口中的最大值。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xw4q0r/
+     * <p>
+     * [单调队列结构解决滑动窗口问题 :: labuladong的算法小抄](https://labuladong.gitee.io/algo/2/18/44/)
+     * <p>
+     * 思路：
+     * 1、构建一个单调队列
+     * 2、先放入k-1个元素，之后每次放入一个新元素，记录当前窗口的最大元素，剔除一个最先进入的元素
+     * <p>
+     * 思路2：
+     * 1、 k==1，返回nums
+     * 2、 记最大值的下标为index，最大值为max，滑动窗口左右指针p，q，结果集ans=int[nums.len-k+1]
+     * 3、 遍历nums
+     * a、if p<index, 若 num[q]>=max, 则max=num[q],index=q
+     * b、elseif num[q]>=max-1, 则max=num[q],index=q
+     * c、elseif num[p]>=max-1, 则max=num[p],index=p
+     * d、else 令max=Int.MIN, 遍历p到q,找到最大值nums[i], 令max=nums[i], index=i
+     * e、ans[p]=max
+     * 4、返回ans
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        MonotonicQueue queue = new MonotonicQueue();
+
+        int[] res = new int[nums.length - k + 1];
+        for (int i = 0, j = 0; i < nums.length; i++) {
+            if (i < k - 1) {
+                queue.push(nums[i]);
+            } else {
+                queue.push(nums[i]);
+                res[j++] = queue.max();
+                queue.pop(nums[i - k + 1]);
+            }
+        }
+        return res;
+    }
+
+    static class MonotonicQueue {
+        LinkedList<Integer> q = new LinkedList<>();
+
+        public void push(int n) {
+            // 将小于 n 的元素全部删除
+            while (!q.isEmpty() && q.getLast() < n) {
+                q.pollLast();
+            }
+            // 将小于 n 的元素全部删除
+            q.addLast(n);
+        }
+
+        public int max() {
+            return q.getFirst();
+        }
+
+        public void pop(int n) {
+            if (n == q.getFirst()) {
+                q.pollFirst();
+            }
+        }
+    }
+
+    /**
      * 基本计算器 II
      * 给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
      * 整数除法仅保留整数部分。
