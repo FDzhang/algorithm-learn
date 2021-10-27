@@ -13,6 +13,118 @@ import java.util.*;
  */
 public class Level3 {
 
+
+    /**
+     * 最小覆盖子串
+     * 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+     * <p>
+     * 思路：
+     * 滑动窗口算法的思路是这样：
+     * 1、我们在字符串 S 中使用双指针中的左右指针技巧，初始化 left = right = 0，把索引左闭右开区间 [left, right) 称为一个「窗口」。
+     * 2、我们先不断地增加 right 指针扩大窗口 [left, right)，直到窗口中的字符串符合要求（包含了 T 中的所有字符）。
+     * 3、此时，我们停止增加 right，转而不断增加 left 指针缩小窗口 [left, right)，直到窗口中的字符串不再符合要求（不包含 T 中的所有字符了）。
+     * 同时，每次增加 left，我们都要更新一轮结果。
+     * 4、重复第 2 和第 3 步，直到 right 到达字符串 S 的尽头。
+     */
+    public String minWindow1(String s, String t) {
+        int[] need = new int[128];
+        int[] window = new int[128];
+
+        char[] sc = s.toCharArray();
+        char[] tc = t.toCharArray();
+
+        int valid = 0;
+        for (char c : tc) {
+            need[c]++;
+            valid++;
+        }
+
+        int p = 0;
+        int q = 0;
+        int start = 0;
+        int len = Integer.MAX_VALUE;
+        while (q < sc.length) {
+            char c = sc[q];
+            q++;
+
+            if (need[c] > 0) {
+                window[c]++;
+                if (need[c] >= window[c]) {
+                    valid--;
+                }
+            }
+
+            // System.err.println("window: [" + p + ", " + q + "]" + " "+valid);
+
+            while (valid == 0) {
+                if (q - p < len) {
+                    start = p;
+                    len = q - p;
+                }
+
+                char d = sc[p];
+                p++;
+
+                if (need[d] > 0) {
+                    if (need[d] >= window[d]) {
+                        valid++;
+                    }
+                    window[d]--;
+                }
+            }
+        }
+        return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
+    }
+
+    public String minWindow(String s, String t) {
+        Map<Character, Integer> need = new HashMap<>();
+        Map<Character, Integer> window = new HashMap<>();
+
+        char[] sc = s.toCharArray();
+        char[] tc = t.toCharArray();
+
+        for (char c : tc) {
+            need.merge(c, 1, Integer::sum);
+        }
+
+        int p = 0;
+        int q = 0;
+        int valid = 0;
+        int start = 0;
+        int len = Integer.MAX_VALUE;
+        while (q < sc.length) {
+            char c = sc[q];
+            q++;
+
+            if (need.containsKey(c)) {
+                window.merge(c, 1, Integer::sum);
+                if (need.get(c).equals(window.get(c))) {
+                    valid++;
+                }
+            }
+
+            // System.err.println("window: [" + p + ", " + q + "]");
+
+            while (valid == need.size()) {
+                if (q - p < len) {
+                    start = p;
+                    len = q - p;
+                }
+
+                char d = sc[p];
+                p++;
+
+                if (need.containsKey(d)) {
+                    if (need.get(d).equals(window.get(d))) {
+                        valid--;
+                    }
+                    window.merge(d, -1, Integer::sum);
+                }
+            }
+        }
+        return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
+    }
+
     /**
      * 滑动窗口最大值
      * 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。

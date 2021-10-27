@@ -2,7 +2,6 @@ package com.fd.algorithmlearn;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +17,19 @@ class Level3Test {
     void calculateTest() {
         String s = "3+2*2";
         int res = test.calculate1(s);
+        System.err.println(res);
+    }
+
+    @Test
+    void minWindowTest() {
+
+        String s = "ADOBECODEBANC";
+        String t = "ABC";
+//        String s = "bba";
+//        String t = "ab";
+//        String s = "aa";
+//        String t = "aa";
+        String res = test.minWindow1(s, t);
         System.err.println(res);
     }
 
