@@ -1,5 +1,6 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.linked.ListNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -31,6 +32,38 @@ class Level3Test {
 //        String t = "aa";
         String res = test.minWindow1(s, t);
         System.err.println(res);
+    }
+
+    @Test
+    void mergeKListsTest() {
+        //[[-2,-1,-1,-1],[]]
+        ListNode[] listNodes = new ListNode[2];
+        listNodes[0] = bNode(new int[]{-2, -1, -1, -1});
+        listNodes[1] = bNode(new int[]{});
+
+        ListNode node = test.mergeKLists(listNodes);
+        nodePrint(node);
+
+    }
+
+    void nodePrint(ListNode head) {
+        while (head != null) {
+            System.err.print(head.val + " ");
+            head = head.next;
+        }
+    }
+
+    ListNode bNode(int[] values) {
+        ListNode res = new ListNode();
+        ListNode p = res;
+        for (int value : values) {
+            ListNode node = new ListNode();
+            node.val = value;
+
+            p.next = node;
+            p = p.next;
+        }
+        return res.next;
     }
 
     @Test

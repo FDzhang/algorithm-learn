@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.linked.ListNode;
+
 import java.util.*;
 
 /**
@@ -12,6 +14,78 @@ import java.util.*;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+
+
+    /**
+     * 合并K个排序链表
+     * 给你一个链表数组，每个链表都已经按升序排列。
+     * <p>
+     * 请你将所有链表合并到一个升序链表中，返回合并后的链表。
+     * <p>
+     * Definition for singly-linked list.
+     * public class ListNode {
+     * int val;
+     * ListNode next;
+     * ListNode() {}
+     * ListNode(int val) { this.val = val; }
+     * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     * <p>
+     * 思路：堆
+     * 1、遍历列表，构建堆
+     * 2、遍历堆，构建res
+     *
+     * 思路2：
+     * 1、根据lists的每个链表的头结点构建一个最小堆
+     * 2、取堆顶的节点node，接到结果集中，若node不是尾节点，则将node.next加入堆
+     * 3、重复步骤2，直至堆空为止
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xwylvd/?discussion=YWr4cB
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<ListNode> queue = new PriorityQueue<>(lists.length, (a, b) -> Integer.compare(a.val, b.val));
+        ListNode res = new ListNode();
+        ListNode p = res;
+
+        for (ListNode head : lists) {
+            if (head != null) {
+                queue.offer(head);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            ListNode node = queue.poll();
+
+            if (node.next != null) {
+                queue.offer(node.next);
+            }
+            p.next = node;
+            p = p.next;
+        }
+
+        return res.next;
+    }
+
+    public ListNode mergeKLists1(ListNode[] lists) {
+        PriorityQueue<ListNode> queue = new PriorityQueue<>((a, b) -> Integer.compare(a.val, b.val));
+        ListNode res = new ListNode();
+        ListNode p = res;
+
+        for (ListNode head : lists) {
+            while (head != null) {
+                queue.add(head);
+                head = head.next;
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            p.next = queue.poll();
+            p = p.next;
+        }
+        p.next = null;
+
+        return res.next;
+    }
 
 
     /**
