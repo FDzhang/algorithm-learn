@@ -1,6 +1,9 @@
 # algorithm-learn
 算法学习
 
+## 学习记录
+[FD_LeetCode - 力扣（LeetCode）](https://leetcode-cn.com/u/fd_leetcode/)
+
 ## 学习地址：
 
 初级算法
