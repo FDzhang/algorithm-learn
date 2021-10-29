@@ -15,6 +15,150 @@ import java.util.*;
  */
 public class Level3 {
 
+    /**
+     * 排序链表
+     * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+     * <p>
+     * 进阶：
+     * 你可以在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序吗？
+     * <p>
+     * 思路1：
+     * 1、借助小顶堆，先将链表依次放入小顶堆
+     * 2、再依次从堆顶取出，构成需返回的链表
+     * <p>
+     * 思路2：
+     * 1、转成int[], 在利用java的sort的方法进行排序
+     * 2、再遍历int[]，构成需返回的链表
+     * <p>
+     * 思路3：归并排序
+     * 1、自顶向下分割链表，直到单个有序
+     * 2、自底向上，不断的合并两个有序链表，最后返回整个有序链表
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        return sortListHelp(head, null);
+    }
+
+    private ListNode sortListHelp(ListNode head, ListNode tail) {
+        if (head.next == tail) {
+            head.next = null;
+            return head;
+        }
+
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != tail && fast.next != tail) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode a = sortListHelp(head, slow);
+        ListNode b = sortListHelp(slow, tail);
+        return mergeTwo(a, b);
+    }
+
+    private ListNode mergeTwo(ListNode a, ListNode b) {
+        ListNode head = new ListNode();
+        ListNode p = head;
+
+        ListNode p1 = a;
+        ListNode p2 = b;
+
+        while (p1 != null && p2 != null) {
+            if (p1.val < p2.val) {
+                p.next = p1;
+                p1 = p1.next;
+            } else {
+                p.next = p2;
+                p2 = p2.next;
+            }
+            p = p.next;
+        }
+        if (p1 != null) {
+            p.next = p1;
+        }
+        if (p2 != null) {
+            p.next = p2;
+        }
+
+        return head.next;
+    }
+
+    public ListNode sortList3(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode p = head;
+        int len = 0;
+
+        while (p != null) {
+            p = p.next;
+            len++;
+        }
+
+        int[] nums = new int[len];
+        p = head;
+        int i = 0;
+        while (p != null) {
+            nums[i++] = p.val;
+            p = p.next;
+        }
+
+        Arrays.sort(nums);
+
+        p = head;
+        for (int num : nums) {
+            p.next = new ListNode(num);
+            p = p.next;
+        }
+
+        return head.next;
+    }
+
+    public ListNode sortList1(ListNode head) {
+        List<Integer> list = new ArrayList<>();
+
+        while (head != null) {
+            list.add(head.val);
+            head = head.next;
+        }
+        ListNode p = new ListNode();
+        ListNode q = p;
+
+        list.sort(Integer::compareTo);
+
+        for (Integer v : list) {
+            q.next = new ListNode(v);
+            q = q.next;
+        }
+
+        return p.next;
+    }
+
+    public ListNode sortList2(ListNode head) {
+        PriorityQueue<ListNode> queue = new PriorityQueue<>((a, b) -> Integer.compare(a.val, b.val));
+        ListNode p = head;
+        while (p != null) {
+            queue.offer(p);
+            p = p.next;
+        }
+
+        if (!queue.isEmpty()) {
+            head = queue.poll();
+            p = head;
+        }
+        while (!queue.isEmpty()) {
+            p.next = queue.poll();
+            p = p.next;
+        }
+        if (p != null) {
+            p.next = null;
+        }
+        return head;
+    }
+
 
     /**
      * 合并K个排序链表
@@ -34,12 +178,12 @@ public class Level3 {
      * 思路：堆
      * 1、遍历列表，构建堆
      * 2、遍历堆，构建res
-     *
+     * <p>
      * 思路2：
      * 1、根据lists的每个链表的头结点构建一个最小堆
      * 2、取堆顶的节点node，接到结果集中，若node不是尾节点，则将node.next加入堆
      * 3、重复步骤2，直至堆空为止
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xwylvd/?discussion=YWr4cB
      */
     public ListNode mergeKLists(ListNode[] lists) {
