@@ -4,7 +4,9 @@ import com.fd.algorithmlearn.linked.ListNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangxinqiang
@@ -13,6 +15,14 @@ import java.util.List;
 class Level3Test {
 
     private Level3 test = new Level3();
+
+    @Test
+    void test() {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 1);
+        System.err.println(map.get(1));
+        System.err.println(map.get(null));
+    }
 
     @Test
     void calculateTest() {
