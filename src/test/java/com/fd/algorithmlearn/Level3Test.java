@@ -25,6 +25,15 @@ class Level3Test {
     }
 
     @Test
+    void ladderLengthTest(){
+        String begin =  "hit";
+        String end = "cog";
+        List<String> wordList = Arrays.asList("hot", "dot", "dog", "lot", "log");
+        int i = test.ladderLength(begin, end, wordList);
+        System.err.println(i);
+    }
+
+    @Test
     void calculateTest() {
         String s = "3+2*2";
         int res = test.calculate1(s);

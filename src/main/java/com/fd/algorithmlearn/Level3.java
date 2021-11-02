@@ -15,6 +15,117 @@ import java.util.*;
  */
 public class Level3 {
 
+    /**
+     * 单词接龙
+     * 字典 wordList 中从单词 beginWord 和 endWord 的 转换序列 是一个按下述规格形成的序列：
+     * 序列中第一个单词是 beginWord 。
+     * 序列中最后一个单词是 endWord 。
+     * 每次转换只能改变一个字母。
+     * 转换过程中的中间单词必须是字典 wordList 中的单词。
+     * 给你两个单词 beginWord 和 endWord 和一个字典 wordList ，找到从 beginWord 到 endWord 的 最短转换序列 中的 单词数目 。如果不存在这样的转换序列，返回 0。
+     * <p>
+     * 思路：bfs模板
+     * 1、创建 队列 q, Set visited, q用于记录每一层的节点，visited用于避免走回头路
+     * 2、将起点加入q, visited, 记录step=1
+     * 3、从队列里遍历当前层的节点 记为cur，依据当前层的节点进行如下操作
+     * a、若cur == endWord, 则返回step
+     * b、将cur 相邻的 且 没有访问过的 节点加入队列 （相邻：两个字符串只有一个字母不同）
+     * c、遍历完当前层节点后, step++, 若队列不为空, 则遍历下一层
+     * 4、没有找到，则返回0
+     *
+     * 思路2：双向bfs
+     *
+     */
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (!wordList.contains(endWord)){
+            return 0;
+        }
+
+        Set<String> q1 = new HashSet<>();
+        Set<String> q2 = new HashSet<>();
+        Set<String> dic = new HashSet<>(wordList);
+        Set<String> visited = new HashSet<>();
+
+        q1.add(beginWord);
+        q2.add(endWord);
+        int step = 1;
+
+        while (!q1.isEmpty() && !q2.isEmpty()) {
+            Set<String> tmp = new HashSet<>();
+            for (String cur : q1) {
+                if (q2.contains(cur)) {
+                    return step;
+                }
+                visited.add(cur);
+
+                for (String x : dic) {
+                    if (!visited.contains(x) && diffOne(x, cur)) {
+                        tmp.add(x);
+                    }
+                }
+            }
+            if (tmp.isEmpty()){
+                return 0;
+            }
+            step++;
+            dic.removeAll(q1);
+            q1 = q2;
+            q2 = tmp;
+            if (q1.size() > q2.size()) {
+                // 交换 q1 和 q2
+                tmp = q1;
+                q1 = q2;
+                q2 = tmp;
+            }
+        }
+        return 0;
+    }
+    public int ladderLength1(String beginWord, String endWord, List<String> wordList) {
+        Queue<String> q = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+
+        q.offer(beginWord);
+        visited.add(beginWord);
+        int step = 1;
+
+        while (!q.isEmpty()) {
+            int sz = q.size();
+            for (int i = 0; i < sz; i++) {
+                String cur = q.poll();
+                if (endWord.equals(cur)) {
+                    return step;
+                }
+                for (String x : wordList) {
+                    if (!visited.contains(x) && diffOne(x, cur)) {
+                        q.offer(x);
+                        visited.add(x);
+                    }
+                }
+            }
+            step++;
+        }
+        return 0;
+    }
+
+    private boolean diffOne(String x, String cur) {
+        if (x == null || cur == null) {
+            return false;
+        }
+        char[] xc = x.toCharArray();
+        char[] cc = cur.toCharArray();
+
+        int cnt = 0;
+        for (int i = 0; i < cc.length; i++) {
+            if (xc[i] != cc[i]) {
+                cnt++;
+            }
+            if (cnt > 1) {
+                return false;
+            }
+        }
+        return cnt == 1;
+    }
+
     static class Node {
         int val;
         Node next;
