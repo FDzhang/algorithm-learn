@@ -28,58 +28,81 @@ public class Level3 {
      * 1、创建 队列 q, Set visited, q用于记录每一层的节点，visited用于避免走回头路
      * 2、将起点加入q, visited, 记录step=1
      * 3、从队列里遍历当前层的节点 记为cur，依据当前层的节点进行如下操作
-     * a、若cur == endWord, 则返回step
-     * b、将cur 相邻的 且 没有访问过的 节点加入队列 （相邻：两个字符串只有一个字母不同）
-     * c、遍历完当前层节点后, step++, 若队列不为空, 则遍历下一层
+     * - a、若cur == endWord, 则返回step
+     * - b、将cur 相邻的 且 没有访问过的 节点加入队列 （相邻：两个字符串只有一个字母不同）
+     * - c、遍历完当前层节点后, step++, 若队列不为空, 则遍历下一层
      * 4、没有找到，则返回0
-     *
-     * 思路2：双向bfs
-     *
+     * <p>
+     * 思路2：双向bfs(加速权重 1%) ,优化2 改变diffOne逻辑 (加速权重 90%), 优化3 使用较小的集合进行扩散（加速权重 9%）
+     * 0、endWord 不在 wordList 中, 则直接返回 0
+     * 1、创建 起点Set start, 终点Set end, 字典Set dic
+     * 2、将第一个单词装入 start， 最后一个单词装入end， 初始化 step=1
+     * 3、遍历当前层的节点 记为cur
+     * - a、若 end.contains(cur), 则返回step
+     * - b、（diffOne） 将cur拆成char[], 并对每位字符轮换a~z（轮换一遍之后需要复原）, 构建新的 newCur,
+     * 在dic中寻找newCur, 若存在则判断end.contains(newCur), 是则返回 step+1, 反之加入下一层加点
+     * - c、step++。  从dic中去除掉start(已经访问过), 令 start等于节点较少的集合
+     * 4、没有找到，则返回0
      */
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        if (!wordList.contains(endWord)){
+        if (!wordList.contains(endWord)) {
             return 0;
         }
 
-        Set<String> q1 = new HashSet<>();
-        Set<String> q2 = new HashSet<>();
+        Set<String> start = new HashSet<>();
+        Set<String> end = new HashSet<>();
         Set<String> dic = new HashSet<>(wordList);
-        Set<String> visited = new HashSet<>();
 
-        q1.add(beginWord);
-        q2.add(endWord);
+        start.add(beginWord);
+        end.add(endWord);
         int step = 1;
 
-        while (!q1.isEmpty() && !q2.isEmpty()) {
+        while (!start.isEmpty() && !end.isEmpty()) {
             Set<String> tmp = new HashSet<>();
-            for (String cur : q1) {
-                if (q2.contains(cur)) {
+
+            for (String cur : start) {
+                if (end.contains(cur)) {
                     return step;
                 }
-                visited.add(cur);
 
-                for (String x : dic) {
-                    if (!visited.contains(x) && diffOne(x, cur)) {
-                        tmp.add(x);
+                char[] cs = cur.toCharArray();
+                // 优化2
+                for (int i = 0; i < cs.length; i++) {
+                    char temp = cs[i];
+                    // 变化
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        if (c == temp) {
+                            continue;
+                        }
+                        cs[i] = c;
+                        String nCur = new String(cs);
+                        if (dic.contains(nCur)) {
+                            if (end.contains(nCur)) {
+                                return step + 1;
+                            } else {
+                                tmp.add(nCur);
+                            }
+                        }
                     }
+                    // 复原
+                    cs[i] = temp;
                 }
             }
-            if (tmp.isEmpty()){
-                return 0;
-            }
             step++;
-            dic.removeAll(q1);
-            q1 = q2;
-            q2 = tmp;
-            if (q1.size() > q2.size()) {
-                // 交换 q1 和 q2
-                tmp = q1;
-                q1 = q2;
-                q2 = tmp;
+            dic.removeAll(start);
+            start = end;
+            end = tmp;
+
+            // 优化3
+            if (start.size() > end.size()) {
+                tmp = start;
+                start = end;
+                end = tmp;
             }
         }
         return 0;
     }
+
     public int ladderLength1(String beginWord, String endWord, List<String> wordList) {
         Queue<String> q = new LinkedList<>();
         Set<String> visited = new HashSet<>();
