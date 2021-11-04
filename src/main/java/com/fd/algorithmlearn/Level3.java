@@ -16,6 +16,70 @@ import java.util.*;
 public class Level3 {
 
     /**
+     * 被围绕的区域
+     * 给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+     * <p>
+     * 思路1：dfs
+     * 1、遍历矩阵的四条边，若是O,则进行dfs将相连的O都变成#
+     * - a、路径： 已经选择过的O
+     * - b、选择列表： 上下左右
+     * - c、结束条件： 出界or不是O
+     * 2、遍历矩阵, 将剩下的O变为X
+     * 3、遍历矩阵, 将#变回O
+     */
+    private void print(char[][] board) {
+        System.err.println("------------------------------");
+        for (char[] chars : board) {
+            System.err.println(Arrays.toString(chars));
+        }
+    }
+
+    public void solve(char[][] board) {
+        int m = board.length;
+        int n = board[0].length;
+
+        for (int i = 0; i < n; i++) {
+            solveBackTrack(0, i, board);
+            solveBackTrack(m - 1, i, board);
+        }
+
+        for (int i = 0; i < m; i++) {
+            solveBackTrack(i, 0, board);
+            solveBackTrack(i, n - 1, board);
+        }
+
+        // print(board);
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+                if (board[i][j] == '#') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    private void solveBackTrack(int i, int j, char[][] board) {
+        int m = board.length;
+        int n = board[0].length;
+
+        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != 'O') {
+            return;
+        }
+
+        board[i][j] = '#';
+
+        int[][] d = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        for (int[] ints : d) {
+            solveBackTrack(i + ints[0], j + ints[1], board);
+        }
+    }
+
+
+    /**
      * 单词接龙
      * 字典 wordList 中从单词 beginWord 和 endWord 的 转换序列 是一个按下述规格形成的序列：
      * 序列中第一个单词是 beginWord 。

@@ -24,9 +24,28 @@ class Level3Test {
         System.err.println(map.get(null));
     }
 
+
     @Test
-    void ladderLengthTest(){
-        String begin =  "hit";
+    void solveTest() {
+
+        char[][] board = {{'X', 'X', 'X', 'X'}, {'X', 'O', 'O', 'X'}, {'X', 'X', 'O', 'X'}, {'X', 'O', 'X', 'X'}};
+        print(board);
+
+        test.solve(board);
+
+        print(board);
+    }
+
+    private void print(char[][] board) {
+        System.err.println("------------------------------");
+        for (char[] chars : board) {
+            System.err.println(Arrays.toString(chars));
+        }
+    }
+
+    @Test
+    void ladderLengthTest() {
+        String begin = "hit";
         String end = "cog";
         List<String> wordList = Arrays.asList("hot", "dot", "dog", "lot", "log");
         int i = test.ladderLength(begin, end, wordList);
