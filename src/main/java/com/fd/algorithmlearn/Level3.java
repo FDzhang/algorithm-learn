@@ -16,6 +16,44 @@ import java.util.*;
 public class Level3 {
 
     /**
+     * 二叉树的最近公共祖先
+     * <p>
+     * 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+     * 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，
+     * 满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+     * <p>
+     * 思路：二叉树的后序遍历
+     * 0、base case, 若root == null, 返回null; 若 root==p || root==q, 返回root
+     * 1、递归的查询 left= (root.left, p, q)
+     * 2、递归的查询 right= (root.right, p ,q)
+     * 3、处理left和right, 分为三种情况
+     * - a、left!=null && right!=null, 返回root (依据base case, 此时right和left分别是p、q其中的一个)
+     * - b、left==null && right==null, 返回null
+     * - c、若left==null, 则返回right； 若right==null, 则返回left (说明最近公共祖先 在子树上已经找到过了)
+     * <p>
+     * ps: 为何对于步骤a 能保证root是最近的公共祖先，因为是后序遍历相当于从下往上找
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return null;
+        }
+        if (root == p || root == q) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) {
+            return root;
+        }
+        if (left == null && right == null) {
+            return null;
+        }
+        return left == null ? right : left;
+    }
+
+
+    /**
      * 被围绕的区域
      * 给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
      * <p>
