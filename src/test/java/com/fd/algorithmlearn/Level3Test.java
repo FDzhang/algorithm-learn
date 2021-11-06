@@ -24,6 +24,15 @@ class Level3Test {
         System.err.println(map.get(null));
     }
 
+    @Test
+    void maxPathSumTest() {
+        Integer[] vals = {-10, 9, 20, null, null, 15, 7};
+        Integer[] vals1 = {-2,-1};
+        TreeNode head = TreeNode.buildByArray(vals1);
+        int max = test.maxPathSum(head);
+        System.err.println(max);
+    }
+
 
     @Test
     void solveTest() {

@@ -2,7 +2,6 @@ package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -1580,6 +1579,31 @@ class TreeNode {
         this.val = val;
         this.left = left;
         this.right = right;
+    }
+
+    public static TreeNode buildByArray(Integer[] vals) {
+        TreeNode head = new TreeNode(vals[0]);
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(head);
+        for (int i = 1; i < vals.length; i += 2) {
+            if (queue.isEmpty()) {
+                break;
+            }
+            TreeNode node = queue.poll();
+            if (vals[i] != null) {
+                node.left = new TreeNode(vals[i]);
+                queue.offer(node.left);
+            }
+            if (i == vals.length - 1) {
+                break;
+            }
+            if (vals[i + 1] != null) {
+                node.right = new TreeNode(vals[i + 1]);
+                queue.offer(node.right);
+            }
+        }
+        return head;
     }
 }
 

@@ -14,6 +14,67 @@ import java.util.*;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+    /**
+     * 二叉树中的最大路径和
+     * <p>
+     * 路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。
+     * 该路径 至少包含一个 节点，且不一定经过根节点。
+     * 路径和 是路径中各节点值的总和。
+     * 给你一个二叉树的根节点 root ，返回其 最大路径和 。
+     * <p>
+     * 思路：二叉樹的后序遍历
+     * 0、base case 若root==null, 返回 `Int.MinValue/10` (除以10是为了防止溢出)
+     * 1、递归查询左子树的最大路径和
+     * 2、递归查询右子树的最大路径和
+     * 3、进行如下两步
+     * - a、比较 left+root, left+root, root, 返回三者中的最大值max
+     * - b、令 maxVal = (maxVal, left, right, left+right+root)四者中的最大值
+     * 4、返回 Math.max(max, maxVal)
+     * <p>
+     * 思考过程：
+     *
+     * -----root
+     * left     right
+     *
+     * 随便找一个 (root, left, right) 三角形进行分析,
+     * 1、每个节点只能走一次，所以三角形作为 子树 能向上 提供的最大值是(left+root, left+root, root)三者之一
+     * 2、可以从树中任意节点出发，所以最大值还有可能在（left, right, left+root+right）这三者中出现
+     * <p>
+     * <p>
+     * [-1,-2,10,-6,null,-3,-6]
+     * -1
+     * -2      10
+     * -6 null      -3 -6
+     * <p>
+     * [-2,-1]
+     * -2
+     * -1
+     */
+    public int maxPathSum(TreeNode root) {
+        TreeNode maxN = new TreeNode(Integer.MIN_VALUE);
+        int max = maxPathSumHelp(root, maxN);
+
+        return Math.max(max, maxN.val);
+    }
+
+    private int maxPathSumHelp(TreeNode root, TreeNode maxN) {
+        if (root == null) {
+            return Integer.MIN_VALUE / 10;
+        }
+
+        int left = maxPathSumHelp(root.left, maxN);
+        int right = maxPathSumHelp(root.right, maxN);
+        int val = root.val;
+
+        int max = Math.max(val, left + val);
+        max = Math.max(max, right + val);
+
+        maxN.val = Math.max(maxN.val, left + val + right);
+        maxN.val = Math.max(maxN.val, right);
+        maxN.val = Math.max(maxN.val, left);
+
+        return max;
+    }
 
     /**
      * 二叉树的最近公共祖先
