@@ -14,6 +14,134 @@ import java.util.*;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+
+
+    /**
+     * 朋友圈
+     * 有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。
+     * <p>
+     * 省份 是一组直接或间接相连的城市，组内不含其他没有相连的城市。
+     * <p>
+     * 给你一个 n x n 的矩阵 isConnected ，其中 isConnected[i][j] = 1 表示第 i 个城市和第 j 个城市直接相连，而 isConnected[i][j] = 0 表示二者不直接相连。
+     * <p>
+     * 返回矩阵中 省份 的数量。
+     * <p>
+     * 思路1： 并查集
+     * 1、实现并查集的三个主要api
+     * - a、void union(p,q)连接p,q
+     * - b、bool connected(p,q)判断p,q是否连通
+     * - c、int count() 图中连通分量的个数
+     * 2、若 isConnected[i][j]=1, 就连接i、j, 即union(i, j)
+     * 3、返回 count()
+     * <p>
+     * <p>
+     * [[1,0,0,1],
+     * [0,1,1,0],
+     * [0,1,1,1],
+     * [1,0,1,1]]
+     * a d
+     * b c
+     * c d
+     * a, b, c, d
+     * 思路2：dfs
+     * 1、路径：当前省份包含的城市 (当前行i)
+     * 2、选择列表：没有被归入过省份的城市 (下一行j)
+     * 3、结束：遍历了所有城市 (行尾)
+     */
+    public int findCircleNum(int[][] isConnected) {
+
+        int n = isConnected.length;
+        boolean[] visited = new boolean[n];
+        int cnt = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                dfsFindCircleNum(isConnected, i, visited);
+                cnt++;
+            }
+        }
+
+        return cnt;
+    }
+
+    private void dfsFindCircleNum(int[][] isConnected, int row, boolean[] visited) {
+        int m = isConnected[0].length;
+        for (int j = 0; j < m; j++) {
+            if (!visited[j]) {
+                if (isConnected[row][j] == 1) {
+                    visited[j] = true;
+                    dfsFindCircleNum(isConnected, j, visited);
+                }
+            }
+        }
+    }
+
+    public int findCircleNum1(int[][] isConnected) {
+        int m = isConnected.length;
+        int n = isConnected[0].length;
+        UF uf = new UF(m);
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (isConnected[i][j] == 1) {
+                    uf.union(i, j);
+                }
+            }
+        }
+
+        return uf.count();
+    }
+
+    static class UF {
+        private int cnt;
+        private int[] parent;
+        private int[] size;
+
+        public UF(int n) {
+            cnt = n;
+            parent = new int[n];
+            size = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        private int find(int x) {
+            // 路径压缩
+            while (parent[x] != x) {
+                parent[x] = parent[parent[x]];
+                x = parent[x];
+            }
+            return x;
+        }
+
+        public void union(int p, int q) {
+            int rootP = find(p);
+            int rootQ = find(q);
+            if (rootP == rootQ) {
+                return;
+            }
+            if (size[rootP] > size[rootQ]) {
+                parent[rootQ] = rootP;
+                size[rootP] += size[rootQ];
+            } else {
+                parent[rootP] = rootQ;
+                size[rootQ] += size[rootP];
+            }
+            cnt--;
+        }
+
+        public boolean connected(int p, int q) {
+            return find(p) == find(q);
+        }
+
+        public int count() {
+            return cnt;
+        }
+    }
+
+
     /**
      * 二叉树中的最大路径和
      * <p>
@@ -32,10 +160,10 @@ public class Level3 {
      * 4、返回 Math.max(max, maxVal)
      * <p>
      * 思考过程：
-     *
+     * <p>
      * -----root
      * left     right
-     *
+     * <p>
      * 随便找一个 (root, left, right) 三角形进行分析,
      * 1、每个节点只能走一次，所以三角形作为 子树 能向上 提供的最大值是(left+root, left+root, root)三者之一
      * 2、可以从树中任意节点出发，所以最大值还有可能在（left, right, left+root+right）这三者中出现

@@ -25,9 +25,21 @@ class Level3Test {
     }
 
     @Test
+    void findCircleNumTest() {
+      int[][] x =  {{1,0,0,1},
+                    {0,1,1,0},
+                    {0,1,1,1},
+                    {1,0,1,1}};
+
+        int res = test.findCircleNum(x);
+        System.err.println(res);
+    }
+
+
+    @Test
     void maxPathSumTest() {
         Integer[] vals = {-10, 9, 20, null, null, 15, 7};
-        Integer[] vals1 = {-2,-1};
+        Integer[] vals1 = {-2, -1};
         TreeNode head = TreeNode.buildByArray(vals1);
         int max = test.maxPathSum(head);
         System.err.println(max);
