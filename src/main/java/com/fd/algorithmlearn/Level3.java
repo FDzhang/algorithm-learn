@@ -15,6 +15,70 @@ import java.util.*;
  */
 public class Level3 {
 
+    // -------------------------- 树和图 ------------------------------
+
+    /**
+     * 课程表
+     * 你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。
+     * <p>
+     * 在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，
+     * 其中 prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学习课程  bi 。
+     * <p>
+     * 例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。
+     * 请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。
+     * <p>
+     * 思路：有向图的环检测
+     * 1、依据 numCourses 和 prerequisites[][], 构建一个图
+     * 2、使用dfs遍历图, 借助visited[]和onPath[]判断是否有环
+     * - a、onPath[]： 记录一次 dfs 递归经过的节点
+     * - b、visited[]： 记录遍历过的节点，防止走回头路
+     */
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List<Integer>[] graph = buildGraph(numCourses, prerequisites);
+
+        boolean[] visited = new boolean[numCourses];
+        // onPath[0] 存检测结果
+        boolean[] onPath = new boolean[numCourses + 1];
+
+        for (int i = 0; i < numCourses; i++) {
+            dfsCanFinish(graph, i, visited, onPath);
+        }
+
+        return !onPath[0];
+    }
+
+    private void dfsCanFinish(List<Integer>[] graph, int s, boolean[] visited, boolean[] onPath) {
+        if (onPath[s + 1]) {
+            onPath[0] = true;
+        }
+        if (visited[s] || onPath[0]) {
+            return;
+        }
+        visited[s] = true;
+
+        onPath[s + 1] = true;
+        for (int i : graph[s]) {
+            dfsCanFinish(graph, i, visited, onPath);
+        }
+        onPath[s + 1] = false;
+    }
+
+    public List<Integer>[] buildGraph(int numCourses, int[][] prerequisites) {
+        LinkedList<Integer>[] graph = new LinkedList[numCourses];
+
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new LinkedList<>();
+        }
+
+        for (int[] edge : prerequisites) {
+            int from = edge[1];
+            int to = edge[0];
+            graph[from].add(to);
+        }
+
+        return graph;
+    }
+
 
     /**
      * 朋友圈
@@ -451,6 +515,8 @@ public class Level3 {
             this.random = null;
         }
     }
+
+    // -------------------------- 树和图 ------------------------------
 
     /**
      * 复制带随机指针的链表
