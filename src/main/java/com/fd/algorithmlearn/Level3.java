@@ -21,14 +21,104 @@ public class Level3 {
      * 矩阵中的最长递增路径
      * 给定一个 m x n 整数矩阵 matrix ，找出其中 最长递增路径 的长度。
      * 对于每个单元格，你可以往上，下，左，右四个方向移动。 你 不能 在 对角线 方向上移动或移动到 边界外（即不允许环绕）。
-     *
-     * 思路:
+     * <p>
      * 思路：dfs
      * 1、遍历矩阵, 对每个节点进行dfs
-     *
+     * - a、visited[][]防止重复访问, pathMax[][] 记录当前节点的最长递增路径
+     * - b、向上下左右四个方向深搜
+     * - c、越界 or 不是递增 or 已经记录了最长递增路径的值, 则返回
+     * <p>
+     * 空间优化：去掉visited[][], pathMax[][]==0可以达到同样的效果
+     * <p>
+     * <p>
+     * [[7,7,5],
+     * [2,4,6],
+     * [8,2,0]]
      */
     public int longestIncreasingPath(int[][] matrix) {
-        return 0;
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int[][] pathMax = new int[m][n];
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (pathMax[i][j] == 0) {
+                    int longest = dfsLongest(matrix, -1, i, j, pathMax);
+                    max = Math.max(max, longest);
+                }
+            }
+        }
+        return max;
+    }
+
+    private int dfsLongest(int[][] matrix, int val, int i, int j, int[][] pathMax) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        if (i < 0 || i >= m || j < 0 || j >= n) {
+            return 0;
+        }
+        if (val >= matrix[i][j]) {
+            return 0;
+        }
+        if (pathMax[i][j] > 0) {
+            return pathMax[i][j];
+        }
+
+        int[][] d = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int maxP = 0;
+        for (int[] next : d) {
+            int longest = dfsLongest(matrix, matrix[i][j], i + next[0], j + next[1], pathMax) + 1;
+            maxP = Math.max(maxP, longest);
+        }
+        pathMax[i][j] = maxP;
+
+        return maxP;
+    }
+
+    public int longestIncreasingPath1(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        boolean[][] visited = new boolean[m][n];
+        int[][] pathMax = new int[m][n];
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int longest = dfsLongest1(matrix, -1, i, j, visited, pathMax);
+                max = Math.max(max, longest);
+            }
+        }
+        return max;
+    }
+
+    private int dfsLongest1(int[][] matrix, int val, int i, int j, boolean[][] visited, int[][] pathMax) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        if (i < 0 || i >= m || j < 0 || j >= n) {
+            return 0;
+        }
+        if (visited[i][j] || val >= matrix[i][j]) {
+            return 0;
+        }
+        if (pathMax[i][j] > 0) {
+            return pathMax[i][j];
+        }
+
+        int[][] d = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        visited[i][j] = true;
+        int maxP = 0;
+        for (int[] next : d) {
+            int longest = dfsLongest1(matrix, matrix[i][j], i + next[0], j + next[1], visited, pathMax) + 1;
+            maxP = Math.max(maxP, longest);
+        }
+        pathMax[i][j] = maxP;
+        visited[i][j] = false;
+
+        return maxP;
     }
 
     /**
@@ -1176,7 +1266,8 @@ public class Level3 {
         while (!oStack.isEmpty()) {
             afterStr.add(oStack.pop());
         }
-        return afterStr.toArray(String[]::new);
+//        return afterStr.toArray(String[]::new); //jdk1.8 不支持
+        return afterStr.stream().toArray(String[]::new);
     }
 
     // 判断 a运算符的优先级是否 >= b运算符的优先级 (*/ > +-)
