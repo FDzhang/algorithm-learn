@@ -3,10 +3,7 @@ package com.fd.algorithmlearn;
 import com.fd.algorithmlearn.linked.ListNode;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhangxinqiang
@@ -22,6 +19,38 @@ class Level3Test {
         map.put(1, 1);
         System.err.println(map.get(1));
         System.err.println(map.get(null));
+    }
+
+    @Test
+    void countSmaller(){
+        int[] nums = {5,2,6,1};
+        int[] nums1 = {26,78,27,100,33,67,90,23,66,5,38,7,35,23,52,22,83,51,98,69,81,32,78,28,94,13,2,97,3,76,99,51,9,21,84,66,65,36,100,41};
+
+        List<Integer> res = test.countSmaller(nums1);
+        print(res);
+    }
+    void print(int[] list){
+        System.err.println("------------------------------");
+        for (int i : list) {
+            System.err.print(i+"\t");
+        }
+        System.err.println();
+    }
+    void print(List<Integer> list){
+        System.err.println("------------------------------");
+        for (Integer i : list) {
+            System.err.print(i+" ");
+        }
+    }
+
+    @Test
+    void bFind(){
+        List<Integer> list = new ArrayList<>();
+        list.add(-1);
+        list.add(1, 2);
+
+        int res = test.bFind(list, -1);
+        System.err.println(list);
     }
 
     @Test

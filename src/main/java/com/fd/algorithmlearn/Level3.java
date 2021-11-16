@@ -3,6 +3,7 @@ package com.fd.algorithmlearn;
 import com.fd.algorithmlearn.linked.ListNode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 高级算法
@@ -18,14 +19,86 @@ public class Level3 {
     // -------------------------- 树和图 ------------------------------
 
     /**
+     * 计算右侧小于当前元素的个数
+     * 给你一个整数数组 nums ，按要求返回一个新数组 counts 。数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。
+     * <p>
+     *
+     *
+     * <p>
+     * 输入：nums = [5,2,6,1]
+     * 输出：[2,1,1,0]
+     * <p>
+     * [2,0,1]
+     * [2,0,0]
+     *
+     *
+     * [26,78,27,100,33,67,90,23,66,5,38,7,35,23,52,22,83,51,98,69,81,32,78,28,94,13,2,97,3,76,99,51,9,21,84,66,65,36,100,41]
+     *
+     * 思路1：二分查找+有序集合
+     * 1、从右往左遍历，
+     * - a、二分查找nums[i]在有序列表sortList中的排名index
+     * - b、index 就是 nums[i] 右侧小于当前元素的个数, 计入到res中
+     * - c、将nums[i]插入到sortList的index处
+     * 2、返回翻转后的res
+     *
+     */
+    public List<Integer> countSmaller(int[] nums) {
+        List<Integer> res = new ArrayList<>();
+        List<Integer> sortList = new ArrayList<>();
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            int index = bFind(sortList, nums[i]);
+            res.add(index);
+            sortList.add(index, nums[i]);
+        }
+        Collections.reverse(res);
+        return res;
+    }
+
+    public int bFind(List<Integer> nums, int target) {
+        if (nums.size() == 0){
+            return 0;
+        }
+        int left = 0, right = nums.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums.get(mid) < target) {
+                left = mid + 1;
+            } else if (nums.get(mid) > target) {
+                right = mid - 1;
+            } else if (nums.get(mid) == target) {
+                // 别返回，锁定左侧边界
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+
+    // 暴力超时
+    public List<Integer> countSmaller1(int[] nums) {
+
+        int[] counts = new int[nums.length];
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] > nums[j]) {
+                    counts[i]++;
+                }
+            }
+        }
+
+        return Arrays.stream(counts).boxed().collect(Collectors.toList());
+    }
+
+
+    /**
      * 矩阵中的最长递增路径
      * 给定一个 m x n 整数矩阵 matrix ，找出其中 最长递增路径 的长度。
      * 对于每个单元格，你可以往上，下，左，右四个方向移动。 你 不能 在 对角线 方向上移动或移动到 边界外（即不允许环绕）。
-     *
+     * <p>
      * 思路:
      * 思路：dfs
      * 1、遍历矩阵, 对每个节点进行dfs
-     *
      */
     public int longestIncreasingPath(int[][] matrix) {
         return 0;
