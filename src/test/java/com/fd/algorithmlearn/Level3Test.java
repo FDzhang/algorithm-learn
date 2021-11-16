@@ -52,7 +52,12 @@ class Level3Test {
         int res = test.bFind(list, -1);
         System.err.println(list);
     }
-
+    @Test
+    void longestIncreasingPathTest() {
+        int[][] matrix = {{7, 7, 5}, {2, 4, 6}, {8, 2, 0}};
+        int res = test.longestIncreasingPath(matrix);
+        System.err.println(res);
+    }
     @Test
     void findCircleNumTest() {
       int[][] x =  {{1,0,0,1},
