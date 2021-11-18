@@ -19,6 +19,101 @@ public class Level3 {
     // -------------------------- 树和图 ------------------------------
 
     /**
+     * 分割回文串
+     * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
+     * <p>
+     * 回文串 是正着读和反着读都一样的字符串。
+     * <p>
+     * [回溯算法、优化（使用动态规划预处理数组） - 分割回文串 - 力扣（LeetCode）](https://leetcode-cn.com/problems/palindrome-partitioning/solution/hui-su-you-hua-jia-liao-dong-tai-gui-hua-by-liweiw/)
+     * 思路：回溯
+     * 1、路径：从根节点到叶子节点的路径
+     * 2、选择列表：逐位截取 剩下的前缀
+     * 3、结束条件：空字符串 or 截取的字符串不是回文串
+     */
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        List<String> stack = new ArrayList<>();
+        char[] cs = s.toCharArray();
+
+        dfsPartition(cs, 0, cs.length, stack, res);
+        return res;
+    }
+
+    private void dfsPartition(char[] cs, int index, int len, List<String> stack, List<List<String>> res) {
+        if (index == len) {
+            res.add(new ArrayList<>(stack));
+            return;
+        }
+
+        for (int i = index; i < len; i++) {
+            if (!isPalindrome(cs, index, i)) {
+                continue;
+            }
+            stack.add(new String(cs, index, i - index + 1));
+            dfsPartition(cs, i + 1, len, stack, res);
+            stack.remove(stack.size() - 1);
+        }
+    }
+
+    public boolean isPalindrome(char[] cs, int start, int end) {
+        while (start < end) {
+            if (cs[start] != cs[end]) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+
+    public List<List<String>> partition1(String s) {
+        List<List<String>> res = new ArrayList<>();
+        Stack<String> stack = new Stack<>();
+
+        for (int i = 1; i <= s.length(); i++) {
+            String pre = s.substring(0, i);
+            String remain = s.substring(i);
+            dfsPartition1(pre, remain, stack, res);
+        }
+        return res;
+    }
+
+    public void dfsPartition1(String pre, String remain, Stack<String> stack, List<List<String>> res) {
+        if (!isPalindrome(pre)) {
+            return;
+        }
+
+        if (remain.length() == 0) {
+            stack.add(pre);
+            res.add(new ArrayList<>(stack));
+            stack.pop();
+        }
+
+        for (int i = 1; i <= remain.length(); i++) {
+            stack.push(pre);
+            String a = remain.substring(0, i);
+            String b = remain.substring(i);
+            dfsPartition1(a, b, stack, res);
+            stack.pop();
+        }
+    }
+
+    public static boolean isPalindrome(String s) {
+        char[] cs = s.toLowerCase().toCharArray();
+        int i = 0;
+        int j = cs.length - 1;
+
+        while (i < j) {
+            if (cs[i] != cs[j]) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    /**
      * 计算右侧小于当前元素的个数
      * 给你一个整数数组 nums ，按要求返回一个新数组 counts 。数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。
      * <p>
@@ -30,17 +125,16 @@ public class Level3 {
      * <p>
      * [2,0,1]
      * [2,0,0]
-     *
-     *
+     * <p>
+     * <p>
      * [26,78,27,100,33,67,90,23,66,5,38,7,35,23,52,22,83,51,98,69,81,32,78,28,94,13,2,97,3,76,99,51,9,21,84,66,65,36,100,41]
-     *
+     * <p>
      * 思路1：二分查找+有序集合
      * 1、从右往左遍历，
      * - a、二分查找nums[i]在有序列表sortList中的排名index
      * - b、index 就是 nums[i] 右侧小于当前元素的个数, 计入到res中
      * - c、将nums[i]插入到sortList的index处
      * 2、返回翻转后的res
-     *
      */
     public List<Integer> countSmaller(int[] nums) {
         List<Integer> res = new ArrayList<>();
@@ -56,7 +150,7 @@ public class Level3 {
     }
 
     public int bFind(List<Integer> nums, int target) {
-        if (nums.size() == 0){
+        if (nums.size() == 0) {
             return 0;
         }
         int left = 0, right = nums.size() - 1;

@@ -15,36 +15,49 @@ class Level3Test {
 
     @Test
     void test() {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(1, 1);
-        System.err.println(map.get(1));
-        System.err.println(map.get(null));
+//        Map<Integer, Integer> map = new HashMap<>();
+//        map.put(1, 1);
+//        System.err.println(map.get(1));
+//        System.err.println(map.get(null));
+
+        String s = "123";
+
+        System.err.println(s.substring(3));
+//
+//        Stack<String> stack = new Stack<>();
+//        stack.push("123");
+//        List<String> list = new ArrayList<>(stack);
+//        stack.push("321");
+
+//        print(list);
     }
 
     @Test
-    void countSmaller(){
-        int[] nums = {5,2,6,1};
-        int[] nums1 = {26,78,27,100,33,67,90,23,66,5,38,7,35,23,52,22,83,51,98,69,81,32,78,28,94,13,2,97,3,76,99,51,9,21,84,66,65,36,100,41};
+    void countSmaller() {
+        int[] nums = {5, 2, 6, 1};
+        int[] nums1 = {26, 78, 27, 100, 33, 67, 90, 23, 66, 5, 38, 7, 35, 23, 52, 22, 83, 51, 98, 69, 81, 32, 78, 28, 94, 13, 2, 97, 3, 76, 99, 51, 9, 21, 84, 66, 65, 36, 100, 41};
 
         List<Integer> res = test.countSmaller(nums1);
         print(res);
     }
-    void print(int[] list){
+
+    void print(int[] list) {
         System.err.println("------------------------------");
         for (int i : list) {
-            System.err.print(i+"\t");
+            System.err.print(i + "\t");
         }
         System.err.println();
     }
-    void print(List<Integer> list){
+
+    <T> void print(List<T> list) {
         System.err.println("------------------------------");
-        for (Integer i : list) {
-            System.err.print(i+" ");
+        for (T i : list) {
+            System.err.print(i + " ");
         }
     }
 
     @Test
-    void bFind(){
+    void bFind() {
         List<Integer> list = new ArrayList<>();
         list.add(-1);
         list.add(1, 2);
@@ -52,18 +65,20 @@ class Level3Test {
         int res = test.bFind(list, -1);
         System.err.println(list);
     }
+
     @Test
     void longestIncreasingPathTest() {
         int[][] matrix = {{7, 7, 5}, {2, 4, 6}, {8, 2, 0}};
         int res = test.longestIncreasingPath(matrix);
         System.err.println(res);
     }
+
     @Test
     void findCircleNumTest() {
-      int[][] x =  {{1,0,0,1},
-                    {0,1,1,0},
-                    {0,1,1,1},
-                    {1,0,1,1}};
+        int[][] x = {{1, 0, 0, 1},
+                {0, 1, 1, 0},
+                {0, 1, 1, 1},
+                {1, 0, 1, 1}};
 
         int res = test.findCircleNum(x);
         System.err.println(res);
