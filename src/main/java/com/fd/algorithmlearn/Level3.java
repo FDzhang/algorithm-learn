@@ -19,6 +19,77 @@ public class Level3 {
     // -------------------------- 树和图 ------------------------------
 
     /**
+     * 单词搜索 II
+     * 给定一个 m x n 二维字符网格 board 和一个单词（字符串）列表 words，找出所有同时在二维网格和字典中出现的单词。
+     * <p>
+     * 单词必须按照字母顺序，通过 相邻的单元格 内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母在一个单词中不允许被重复使用。
+     * <p>
+     * 输入：board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
+     * 输出：["eat","oath"]
+     * <p>
+     * 输入：board = [["a","b"],["c","d"]], words = ["abcb"]
+     * 输出：[]
+     * <p>
+     * <p>
+     * 思路1：借用 "单词搜索"（中级算法题集中的）
+     * 1、循环遍历words, 借助exist函数，若存在则将word加入结果集res
+     *
+     * 思路1：空间优化
+     * 1、去掉valid, 使用一个临时char变量即可
+     */
+    public List<String> findWords(char[][] board, String[] words) {
+        List<String> res = new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            if (exist(board, words[i])) {
+                res.add(words[i]);
+            }
+        }
+        return res;
+    }
+
+    public boolean exist(char[][] board, String word) {
+        char[] ws = word.toCharArray();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (existBacktrack(board, i, j, ws, 0)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean existBacktrack(char[][] board, int i, int j, char[] ws, int index) {
+        // 单词完全被匹配
+        if (index == ws.length) {
+            return true;
+        }
+        // 不能超过边界
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length) {
+            return false;
+        }
+        // 无法继续匹配
+        if (ws[index] != board[i][j]) {
+            return false;
+        }
+
+        char temp = board[i][j];
+        board[i][j] = 0;
+        boolean a = existBacktrack(board, i + 1, j, ws, index + 1);
+        boolean b = existBacktrack(board, i - 1, j, ws, index + 1);
+        boolean c = existBacktrack(board, i, j + 1, ws, index + 1);
+        boolean d = existBacktrack(board, i, j - 1, ws, index + 1);
+        board[i][j] = temp;
+
+        return a || b || c || d;
+    }
+
+
+    /**
      * 分割回文串
      * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
      * <p>
