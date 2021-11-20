@@ -15,8 +15,77 @@ import java.util.stream.Collectors;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+    // -------------------------- 回溯算法 ------------------------------
 
-    // -------------------------- 树和图 ------------------------------
+    /**
+     * 删除无效的括号
+     * 给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。
+     * <p>
+     * 返回所有可能的结果。答案可以按 任意顺序 返回。
+     *
+     * @Description:
+     * @Author: zxq
+     * @Date: 2021/11/20
+     */
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> res = new ArrayList<>();
+        int lr = 0;
+        int rr = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                lr++;
+            } else if (s.charAt(i) == ')') {
+                if (lr == 0) {
+                    rr++;
+                } else {
+                    lr--;
+                }
+            }
+        }
+        helper(s, 0, lr, rr, res);
+        return res;
+    }
+
+    private void helper(String str, int start, int lr, int rr, List<String> res) {
+        if (lr == 0 && rr == 0) {
+            if (isValidP(str)) {
+                res.add(str);
+            }
+            return;
+        }
+        for (int i = start; i < str.length(); i++) {
+            if (i != start && str.charAt(i) == str.charAt(i - 1)) {
+                continue;
+            }
+            if (lr + rr > str.length() - i) {
+                return;
+            }
+            String nStr = str.substring(0, i) + str.substring(i + 1);
+            if (lr > 0 && str.charAt(i) == '(') {
+                helper(nStr, i, lr - 1, rr, res);
+            }
+            if (rr > 0 && str.charAt(i) == ')') {
+                helper(nStr, i, lr, rr - 1, res);
+            }
+        }
+
+    }
+
+    private boolean isValidP(String str) {
+        int cnt = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '(') {
+                cnt++;
+            } else if (str.charAt(i) == ')') {
+                cnt--;
+                if (cnt < 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     /**
      * 单词搜索 II
@@ -33,7 +102,7 @@ public class Level3 {
      * <p>
      * 思路1：借用 "单词搜索"（中级算法题集中的）
      * 1、循环遍历words, 借助exist函数，若存在则将word加入结果集res
-     *
+     * <p>
      * 思路1：空间优化
      * 1、去掉valid, 使用一个临时char变量即可
      */
@@ -183,6 +252,12 @@ public class Level3 {
         }
         return true;
     }
+
+    // -------------------------- 回溯算法 ------------------------------ end
+
+
+    // -------------------------- 树和图 ------------------------------
+
 
     /**
      * 计算右侧小于当前元素的个数
