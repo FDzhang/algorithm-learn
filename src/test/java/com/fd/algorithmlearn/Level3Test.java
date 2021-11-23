@@ -3,7 +3,9 @@ package com.fd.algorithmlearn;
 import com.fd.algorithmlearn.linked.ListNode;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zhangxinqiang
@@ -30,6 +32,13 @@ class Level3Test {
 //        stack.push("321");
 
 //        print(list);
+    }
+
+    @Test
+    void isMatchTest() {
+        String s = "acdcb";
+        String p = "a*c?b";
+        System.err.println(test.isMatch(s, p));
     }
 
     @Test
