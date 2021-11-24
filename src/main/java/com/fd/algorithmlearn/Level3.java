@@ -27,6 +27,23 @@ public class Level3 {
      * <p>
      * 思路1：动态规划
      *
+     * 思路2：贪心
+     * 1、模式p可以看做： `*u1*u2*...*ux*` 的形式
+     * 例如：p=*abcd*efgh*i*, p可以匹配所有一次出现子串abcd、efgh、i的字符串
+     * 此时可以先暴力找到最早出现的abcd，然后从下一个位置开始暴力找到最早出现的efgh
+     * 最后找出i，就可以判断s是否可以与p匹配。
+     * 这样【贪心地】找到最早出现的子串是比较直管段，因为如果s中多次出现了某个子串，
+     * 那么我们选择最早出现的位置可以使得后续子串能被找到的机会更大。
+     * 在1的前提下，算法的本质是：如果字符串s中首先找到u1，在找到u2，u3...ux,那么s就可以与模式p匹配
+     * 2、若 模式p的结尾字符不是星号
+     * 则先不断的匹配s和p的结尾字符，直到p为空或p的结尾字符是星号为止。这个过程中，如果匹配失败，
+     * 或者最后p为空但是s不为空，则需要返回false。
+     * 例如：s= abcdef p= a*f 则先把f匹配掉，剩下s=abcde p=a*
+     * 3、若 模式p的开头字符不是星号
+     * 则可以与结尾不是星号的处理类似。也可以将sRecord和tsRecord初始置为-1,标识p的开头不是星号
+     * 并在匹配失败时进行判断，如果它们仍未-1，说明没有【反悔】重新匹配的机会。
+     *
+     *
      * @Description:
      * @Param: [s, p]
      * @return: boolean
@@ -34,6 +51,56 @@ public class Level3 {
      * @Date: 2021/11/22
      */
     public boolean isMatch(String s, String p) {
+        int sRight = s.length(), pRight = p.length();
+        while (sRight > 0 && pRight > 0 && p.charAt(pRight - 1) != '*') {
+            if (charMatch(s.charAt(sRight - 1), p.charAt(pRight - 1))) {
+                --sRight;
+                --pRight;
+            } else {
+                return false;
+            }
+        }
+
+        if (pRight == 0) {
+            return sRight == 0;
+        }
+        int sIndex = 0, pIndex = 0;
+        int sRecord = -1, pRecord = -1;
+
+        while (sIndex < sRight && pIndex < pRight) {
+            if (p.charAt(pIndex) == '*') {
+                ++pIndex;
+                sRecord = sIndex;
+                pRecord = pIndex;
+            } else if (charMatch(s.charAt(sIndex), p.charAt(pIndex))) {
+                ++sIndex;
+                ++pIndex;
+            } else if (sRecord != -1 && sRecord + 1 < sRight) {
+                ++sRecord;
+                sIndex = sRecord;
+                pIndex = pRecord;
+            } else {
+                return false;
+            }
+        }
+
+        return allStars(p, pIndex, pRight);
+    }
+
+    private boolean allStars(String str, int left, int right) {
+        for (int i = left; i < right; i++) {
+            if (str.charAt(i) != '*') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean charMatch(char u, char v) {
+        return u == v || v == '?';
+    }
+
+    public boolean isMatch1(String s, String p) {
         int m = s.length();
         int n = p.length();
         boolean[][] dp = new boolean[m + 1][n + 1];
