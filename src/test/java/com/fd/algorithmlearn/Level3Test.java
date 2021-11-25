@@ -35,6 +35,13 @@ class Level3Test {
     }
 
     @Test
+    void isMatch2(){
+        String s = "abbbbc";
+        String p = "ab*d*c";
+        System.err.println(test.isMatch2(s, p));
+    }
+
+    @Test
     void isMatchTest() {
         String s = "acdcb";
         String p = "a*c?b";

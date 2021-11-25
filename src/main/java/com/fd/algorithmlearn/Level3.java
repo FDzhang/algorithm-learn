@@ -18,6 +18,72 @@ public class Level3 {
     // -------------------------- 回溯算法 ------------------------------
 
     /**
+     * 正则表达式匹配
+     * 给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
+     * <p>
+     * '.' 匹配任意单个字符
+     * '*' 匹配零个或多个前面的那一个元素
+     * 所谓匹配，是要涵盖 整个 字符串 s的，而不是部分字符串。
+     * <p>
+     * 输入：s = "aab" p = "c*a*b"
+     * 输出：true
+     * <p>
+     * 思路：
+     * dp[][] = new int[4][6]
+     * c * a * b
+     * a
+     * a
+     * b
+     * <p>
+     * <p>
+     * dp[1][0] = false
+     * dp[0][1] = false
+     * dp[0][2] = false
+     */
+    public boolean isMatch2(String s, String p) {
+        int m = s.length();
+        int n = p.length();
+
+        boolean[][] f = new boolean[m + 1][n + 1];
+        f[0][0] = true;
+        for (int i = 0; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (p.charAt(j - 1) == '*') {
+                    f[i][j] = f[i][j - 2];
+                    if (matches(s, p, i, j - 1)) {
+                        f[i][j] = f[i][j] || f[i - 1][j];
+                    }
+                } else {
+                    if (matches(s, p, i, j)) {
+                        f[i][j] = f[i - 1][j - 1];
+                    }
+                }
+            }
+        }
+        print(f);
+        return f[m][n];
+    }
+
+    void print(boolean[][] f) {
+        for (boolean[] booleans : f) {
+            for (boolean aBoolean : booleans) {
+                System.err.print(aBoolean ? "✔ " : "✘ ");
+            }
+            System.err.println();
+        }
+    }
+
+    private boolean matches(String s, String p, int i, int j) {
+        if (i == 0) {
+            return false;
+        }
+        if (p.charAt(j - 1) == '.') {
+            return true;
+        }
+        return s.charAt(i - 1) == p.charAt(j - 1);
+    }
+
+    /**
      * 通配符匹配
      * 给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
      * <p>
@@ -26,7 +92,7 @@ public class Level3 {
      * 两个字符串完全匹配才算匹配成功。
      * <p>
      * 思路1：动态规划
-     *
+     * <p>
      * 思路2：贪心
      * 1、模式p可以看做： `*u1*u2*...*ux*` 的形式
      * 例如：p=*abcd*efgh*i*, p可以匹配所有一次出现子串abcd、efgh、i的字符串
@@ -42,7 +108,6 @@ public class Level3 {
      * 3、若 模式p的开头字符不是星号
      * 则可以与结尾不是星号的处理类似。也可以将sRecord和tsRecord初始置为-1,标识p的开头不是星号
      * 并在匹配失败时进行判断，如果它们仍未-1，说明没有【反悔】重新匹配的机会。
-     *
      *
      * @Description:
      * @Param: [s, p]
