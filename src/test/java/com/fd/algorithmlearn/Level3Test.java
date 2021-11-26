@@ -35,6 +35,13 @@ class Level3Test {
     }
 
     @Test
+    void wiggleSortTest(){
+        int[] x = {1,5,1,1,6,4};
+        test.wiggleSort(x);
+        print(x);
+    }
+
+    @Test
     void isMatch2(){
         String s = "abbbbc";
         String p = "ab*d*c";

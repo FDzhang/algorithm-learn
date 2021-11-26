@@ -15,6 +15,99 @@ import java.util.stream.Collectors;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+    // -------------------------- 排序和搜索 ------------------------------
+
+    /**
+     * 摆动排序 II
+     * 给你一个整数数组 nums，将它重新排列成 nums[0] < nums[1] > nums[2] < nums[3]... 的顺序。
+     * <p>
+     * 你可以假设所有输入数组都可以得到满足题目要求的结果。
+     * <p>
+     * 输入：nums = [1,5,1,1,6,4]
+     * 输出：[1,6,1,5,1,4]
+     * 解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。
+     * <p>
+     * 思路1：
+     * 1、排序nums
+     * 2、令pre = nums的前一半, post = nums的后一半， 且 pre.len>=post.len
+     * 3、翻转pre和post
+     * 4、交替将pre和post放入nums
+     * <p>
+     * 思路2：桶排序
+     * 1、因为0 <= nums[i] <= 5000, 所以定义一个 bucket = new int[5001]
+     * 2、若nums.len为奇数，则最后一个值为小，反之最后一个值为大 （例如：小大小大， 小大小大小）
+     * 3、遍历nums 先放大值，再放小值 （先大后小是为了保证中位数隔开）
+     *
+     * @Date: 2021/11/26
+     */
+    public void wiggleSort(int[] nums) {
+        // 0 <= nums[i] <= 5000
+        int[] bucket = new int[5001];
+        for (int num : nums) {
+            bucket[num]++;
+        }
+        int len = nums.length;
+        int big = (len & 1) == 1 ? len - 2 : len - 1;
+        int small = (len & 1) == 1 ? len - 1 : len - 2;
+        // 奇数，[小 大 小 大 小] 最后一个数为小数
+        // 偶数，[小 大 小 大] 最后一个数为大数
+
+
+        int index = 5000;
+        for (int i = 1; i <= big; i += 2) { // 不变的是，大数插在偶数位
+            while (bucket[index] == 0) index--;
+            nums[i] = index;
+            bucket[index]--;
+        }
+        for (int i = 0; i <= small; i += 2) {  // 不变的是，小数插在奇数位
+            while (bucket[index] == 0) index--;
+            nums[i] = index;
+            bucket[index]--;
+        }
+    }
+
+    public void wiggleSort2(int[] nums) {
+        int len = nums.length;
+        int[] copy = new int[len];
+        System.arraycopy(nums, 0, copy, 0, len);
+        Arrays.sort(copy);
+
+        int N = len;
+        //比如123456
+        for (int i = 1; i < len; i += 2) {
+            nums[i] = copy[--N]; //遍历完成后 x 6 x 5 x 4
+        }
+        for (int i = 0; i < len; i += 2) {
+            nums[i] = copy[--N]; //遍历完成后 3 6 2 5 1 4
+        }
+    }
+
+    public void wiggleSort1(int[] nums) {
+        int len = nums.length;
+        int mid = len / 2;
+        if (len % 2 != 0) {
+            ++mid;
+        }
+
+        Arrays.sort(nums);
+
+        int[] pre = new int[mid];
+        int[] post = new int[len - mid];
+        System.arraycopy(nums, 0, pre, 0, mid);
+        System.arraycopy(nums, mid, post, 0, len - mid);
+        int k = 0;
+        for (int i = pre.length - 1; i >= 0; i--) {
+            nums[(k++) * 2] = pre[i];
+        }
+        k = 0;
+        for (int i = post.length - 1; i >= 0; i--) {
+            nums[(k++) * 2 + 1] = post[i];
+        }
+    }
+
+
+    // -------------------------- 排序和搜索 ------------------------------ end
+
     // -------------------------- 回溯算法 ------------------------------
 
     /**
