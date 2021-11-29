@@ -18,6 +18,32 @@ public class Level3 {
     // -------------------------- 排序和搜索 ------------------------------
 
     /**
+     * 有序矩阵中第K小的元素
+     * 给你一个 n x n 矩阵 matrix ，其中每行和每列元素均按升序排序，找到矩阵中第 k 小的元素。
+     * 请注意，它是 排序后 的第 k 小元素，而不是第 k 个 不同 的元素。
+     * <p>
+     * 思路：归并排序
+     * 1、维护一个（矩阵行相关的）最小堆 pq
+     * 2、初始化最小堆, 将每行的第一个元素和其位置放入pq (m[i][j], i, 0)
+     * 3、遍历k-1遍, 每次pq.poll()取出最小元素, 若第i行没到行位，则将（m[i][j], i, j+1）放入堆中
+     * eg: 若 m[0][1]>m[1][0]，则下一个最小元素应该是m[0][1]，所以需要将（m[i][j], i, j+1）放入最小堆中
+     */
+    public int kthSmallest(int[][] matrix, int k) {
+        int n = matrix.length;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
+        for (int i = 0; i < n; i++) {
+            pq.offer(new int[]{matrix[i][0], i, 0});
+        }
+        for (int i = 0; i < k - 1; i++) {
+            int[] min = pq.poll();
+            if (min[2] != n - 1) {
+                pq.offer(new int[]{matrix[min[1]][min[2] + 1], min[1], min[2] + 1});
+            }
+        }
+        return pq.poll()[0];
+    }
+
+    /**
      * 摆动排序 II
      * 给你一个整数数组 nums，将它重新排列成 nums[0] < nums[1] > nums[2] < nums[3]... 的顺序。
      * <p>
