@@ -18,6 +18,38 @@ public class Level3 {
     // -------------------------- 排序和搜索 ------------------------------
 
     /**
+     * 寻找两个正序数组的中位数
+     * 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+     * <p>
+     * 算法的时间复杂度应该为 O(log (m+n)) 。
+     * <p>
+     * 思路：
+     * 1、令len = nums1.len+nums2.len, i指向nums1的下标，j指向nums2的下标
+     * 2、2、遍历 [0~len/2], 令q等于当前值, p等于q的前一个值。若 i未越界 且 (j越界 或 nums1[i]<=nums2[j]), 则 i++, 反之j++
+     * 3、若len为偶数，返回 (p+q)/2, 否则返回 q
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length;
+        int n = nums2.length;
+        int len = m + n;
+        int p = -1, q = -1;
+        int i = 0, j = 0;
+        for (int k = 0; k <= len / 2; k++) {
+            p = q;
+            if (i < m && (j >= n || nums1[i] <= nums2[j])) {
+                q = nums1[i++];
+            } else {
+                q = nums2[j++];
+            }
+        }
+        if ((len & 1) == 0) {
+            return (p + q) * 1.0 / 2;
+        } else {
+            return q;
+        }
+    }
+
+    /**
      * 有序矩阵中第K小的元素
      * 给你一个 n x n 矩阵 matrix ，其中每行和每列元素均按升序排序，找到矩阵中第 k 小的元素。
      * 请注意，它是 排序后 的第 k 小元素，而不是第 k 个 不同 的元素。
