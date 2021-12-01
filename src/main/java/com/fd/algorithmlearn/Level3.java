@@ -15,6 +15,57 @@ import java.util.stream.Collectors;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+
+    // -------------------------- 动态规划 ------------------------------
+
+    /**
+     * 乘积最大子数组
+     * 给你一个整数数组 nums ，请你找出数组中乘积最大的连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+     * <p>
+     * <p>
+     * 思路：动态规划
+     * 1、定义max[i]:以 nums[i] 为结尾的最大乘积
+     * 2、定义min[i]:以 nums[i] 为结尾的最小乘积
+     * 3、max[i] = Math.max(nums[i], Math.max(nums[i] * max[i - 1], nums[i] * min[i - 1]));
+     * 4、min[i] = Math.min(nums[i], Math.min(nums[i] * max[i - 1], nums[i] * min[i - 1]));
+     * 5、res = Math.max(res, max[i])
+     * <p>
+     * 优化：状态压缩
+     */
+    public int maxProduct(int[] nums) {
+        int len = nums.length;
+        int max = nums[0];
+        int min = nums[0];
+        int res = nums[0];
+        for (int i = 1; i < len; i++) {
+            if (nums[i] < 0) {
+                int tmp = max;
+                max = min;
+                min = tmp;
+            }
+            max = Math.max(nums[i], nums[i] * max);
+            min = Math.min(nums[i], nums[i] * min);
+            res = Math.max(res, max);
+        }
+        return res;
+    }
+
+    public int maxProduct1(int[] nums) {
+        int len = nums.length;
+        int[] max = new int[len];
+        int[] min = new int[len];
+        max[0] = nums[0];
+        min[0] = nums[0];
+        int res = max[0];
+        for (int i = 1; i < len; i++) {
+            max[i] = Math.max(nums[i], Math.max(nums[i] * max[i - 1], nums[i] * min[i - 1]));
+            min[i] = Math.min(nums[i], Math.min(nums[i] * max[i - 1], nums[i] * min[i - 1]));
+            res = Math.max(res, max[i]);
+        }
+        return res;
+    }
+
+    // -------------------------- 动态规划 ------------------------------ end
     // -------------------------- 排序和搜索 ------------------------------
 
     /**
