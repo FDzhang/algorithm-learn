@@ -19,6 +19,64 @@ public class Level3 {
     // -------------------------- 动态规划 ------------------------------
 
     /**
+     * 完全平方数
+     * 给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
+     * <p>
+     * 给你一个整数 n ，返回和为 n 的完全平方数的 最少数量 。
+     * <p>
+     * 完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。
+     * <p>
+     * 思路：动态规划  (参考零钱兑换)
+     * 1、dp[i]: 和为i 的完全平方数的 最少数量
+     * 2、遍历[1~n], 再遍历小于等于i的平方数，找到最小的dp[x] （min）： 转移方程：min = Math.min(min, dp[i - j * j])
+     * 3、令dp[i] = min + 1, 最后返回dp[n]
+     */
+    public int numSquares(int n) {
+        if (isPerfectSquare(n)) {
+            return 1;
+        }
+        if (checkAnswer4(n)) {
+            return 4;
+        }
+        for (int i = 1; i * i <= n; i++) {
+            int j = n - i * i;
+            if (isPerfectSquare(j)) {
+                return 2;
+            }
+        }
+        return 3;
+    }
+
+    // 判断是否为完全平方数
+    public boolean isPerfectSquare(int x) {
+        int y = (int) Math.sqrt(x);
+        return y * y == x;
+    }
+
+    // 判断是否能表示为 4^k*(8m+7)
+    public boolean checkAnswer4(int x) {
+        while (x % 4 == 0) {
+            x /= 4;
+        }
+        return x % 8 == 7;
+    }
+
+    public int numSquares1(int n) {
+        int[] dp = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            int min = Integer.MAX_VALUE - 1;
+
+            for (int j = 1; j * j <= i; j++) {
+                min = Math.min(min, dp[i - j * j]);
+            }
+
+            dp[i] = min + 1;
+        }
+        return dp[n];
+    }
+
+    /**
      * 最佳买卖股票时机含冷冻期
      * 给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
      * <p>

@@ -35,6 +35,12 @@ class Level3Test {
     }
 
     @Test
+    public void TestNumSquares(){
+        int res = test.numSquares(12);
+        System.err.println(res);
+    }
+
+    @Test
     void wiggleSortTest(){
         int[] x = {1,5,1,1,6,4};
         test.wiggleSort(x);
