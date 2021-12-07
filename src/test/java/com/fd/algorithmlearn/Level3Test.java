@@ -35,20 +35,29 @@ class Level3Test {
     }
 
     @Test
-    public void TestNumSquares(){
+    public void TestWordBreak() {
+        String s = "cars";
+        String[] words = {"car", "ca", "rs"};
+
+        boolean res = test.wordBreak(s, Arrays.asList(words));
+        System.err.println(res);
+    }
+
+    @Test
+    public void TestNumSquares() {
         int res = test.numSquares(12);
         System.err.println(res);
     }
 
     @Test
-    void wiggleSortTest(){
-        int[] x = {1,5,1,1,6,4};
+    void wiggleSortTest() {
+        int[] x = {1, 5, 1, 1, 6, 4};
         test.wiggleSort(x);
         print(x);
     }
 
     @Test
-    void isMatch2(){
+    void isMatch2() {
         String s = "abbbbc";
         String p = "ab*d*c";
         System.err.println(test.isMatch2(s, p));

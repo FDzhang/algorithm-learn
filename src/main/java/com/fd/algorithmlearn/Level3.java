@@ -19,6 +19,93 @@ public class Level3 {
     // -------------------------- 动态规划 ------------------------------
 
     /**
+     * 单词拆分
+     * 给你一个字符串 s 和一个字符串列表 wordDict 作为字典，判定 s 是否可以由空格拆分为一个或多个在字典中出现的单词。
+     * <p>
+     * 说明：拆分时可以重复使用字典中的单词。
+     * <p>
+     * 思路：动态规划 （类似 跳跃游戏）
+     * 1、dp[i]: 字符串s.sub(0, i),是否能够由wordDict中的单词组成
+     * 2、依据wordDict构建字典words。 遍历wordDict，记录每个单词的长度，记为lens，（使用set去除重复）
+     * 3、遍历[0~len],
+     * a、若dp[i]==true, 则遍历lens，每次截取w=s.sub(i, i+len), 若words.contains(w), 则令dp[i+k] = true;
+     * b、若dp[i]==false, 则跳过
+     * 4、返回dp[s.len]
+     *
+     * @Param: [s, wordDict]
+     * @return: boolean
+     * @Author: zxq
+     * @Date: 2021/12/7
+     */
+    // me use set
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> words = new HashSet<>(wordDict);
+        Set<Integer> lens = new HashSet<>();
+        for (String word : wordDict) {
+            lens.add(word.length());
+        }
+
+        int len = s.length();
+        boolean[] dp = new boolean[len + 1];
+        dp[0] = true;
+        for (int i = 0; i <= len; i++) {
+            if (dp[i]) {
+                for (Integer k : lens) {
+                    if (i + k > len) {
+                        continue;
+                    }
+                    String w = s.substring(i, i + k);
+                    if (words.contains(w)) {
+                        dp[i + k] = true;
+                    }
+                }
+            }
+        }
+        return dp[len];
+    }
+
+    // me
+    public boolean wordBreakMy(String s, List<String> wordDict) {
+        Set<Integer> lens = new HashSet<>();
+        for (String word : wordDict) {
+            lens.add(word.length());
+        }
+
+        int len = s.length();
+        boolean[] dp = new boolean[len + 1];
+        dp[0] = true;
+        for (int i = 0; i <= len; i++) {
+            if (dp[i]) {
+                for (Integer k : lens) {
+                    if (i + k > len) {
+                        break;
+                    }
+                    String w = s.substring(i, i + k);
+                    if (wordDict.contains(w)) {
+                        dp[i + k] = true;
+                    }
+                }
+            }
+        }
+        return dp[len];
+    }
+
+    // 超时
+    public boolean wordBreak1(String s, List<String> wordDict) {
+        List<Integer> b = new ArrayList<>();
+        b.add(0);
+        for (int i = 1; i <= s.length(); i++) {
+            for (int k = b.size() - 1; k >= 0; k--) {
+                String w = s.substring(b.get(k), i);
+                if (wordDict.contains(w)) {
+                    b.add(i);
+                }
+            }
+        }
+        return b.get(b.size() - 1) == s.length();
+    }
+
+    /**
      * 完全平方数
      * 给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
      * <p>
