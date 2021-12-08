@@ -19,6 +19,48 @@ public class Level3 {
     // -------------------------- 动态规划 ------------------------------
 
     /**
+     * 单词拆分 II
+     * 给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，在字符串中增加空格来构建一个句子，使得句子中所有的单词都在词典中。返回所有这些可能的句子。
+     * <p>
+     * 说明：
+     * 分隔时可以重复使用字典中的单词。
+     * 你可以假设字典中没有重复的单词。
+     *
+     * 思路：回溯 （+参考 单词拆分）
+     * 1、在判断是否能 通过增加空格来构建句子 的同时，记录下路径 （回溯三件套）
+     * a、路径：（记为sen） 记录下每次匹配的单词
+     * b、选择列表：wordDict 字典
+     * c、结束条件：s.len == 0, 即sen中已经包含s中的所有字符
+     * 2、返回记录的结果集
+     *
+     * @Date: 2021/12/8
+     */
+    public List<String> wordBreakII(String s, List<String> wordDict) {
+        List<String> res = new ArrayList<>();
+        String sen = "";
+
+        wordBreakIIHelp(s, sen, wordDict, res);
+
+        return res;
+    }
+
+    private void wordBreakIIHelp(String s, String sen, List<String> wordDict, List<String> res) {
+        if (s.length() == 0) {
+            res.add(sen);
+            return;
+        }
+        for (String word : wordDict) {
+            if (s.startsWith(word)) {
+                String temp = sen;
+                sen = sen.length() > 0 ? sen + " " : sen;
+                sen = sen + word;
+                wordBreakIIHelp(s.substring(word.length()), sen, wordDict, res);
+                sen = temp;
+            }
+        }
+    }
+
+    /**
      * 单词拆分
      * 给你一个字符串 s 和一个字符串列表 wordDict 作为字典，判定 s 是否可以由空格拆分为一个或多个在字典中出现的单词。
      * <p>
