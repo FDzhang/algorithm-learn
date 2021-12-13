@@ -31,14 +31,49 @@ public class Level3 {
      * nums = [3,1,5,8] --> [3,5,8] --> [3,8] --> [8] --> []
      * coins =  3*1*5    +   3*5*8   +  1*3*8  + 1*8*1 = 167
      * <p>
-     *  1 [3,1,5,8] 1
-     *
-     *  [3,1,5,8] --> [1,5,8] --> [3,8] --> [8] --> []
-     *    1*3*1   +    3*5*8   +  1*3*8  + 1*8*1 = 167
-     *
+     * 1 3,1,5,8 1
+     * 0 1 2 3 4 5
+     * <p>
+     * [3,1,5,8] --> [1,5,8] --> [3,8] --> [8] --> []
+     * 1*3*1   +    3*5*8   +  1*3*8  + 1*8*1 = 167
      */
     public int maxCoins(int[] nums) {
-        return 0;
+        int len = nums.length;
+        int nLen = len + 2;
+
+        int[] ns = new int[nLen];
+        ns[0] = 1;
+        ns[nLen - 1] = 1;
+        System.arraycopy(nums, 0, ns, 1, len);
+
+        int[][] dp = new int[nLen][nLen];
+        for (int x = 2; x < nLen; x++) {
+            for (int i = 0; i < nLen - x; i++) {
+                rangeBest(i, i + x, dp, ns);
+            }
+        }
+        return dp[0][nLen - 1];
+    }
+
+    public void rangeBest(int i, int j, int[][] dp, int[] ns) {
+        int max = 0;
+        for (int k = i + 1; k < j; k++) {
+            int left = dp[i][k];
+            int right = dp[k][j];
+            int t = left + right + ns[i] * ns[k] * ns[j];
+            max = Math.max(max, t);
+
+//            System.err.print("i="+i+" ");
+//            System.err.print("j="+j+" ");
+//            System.err.print("k="+k+" ");
+//            System.err.print("left="+left+" ");
+//            System.err.print("right="+right+" ");
+//            System.err.print("k="+(ns[i] * ns[k] * ns[j])+" ");
+//            System.err.print("t="+t+" ");
+//            System.err.print("max="+max+", ");
+        }
+//        System.err.println();
+        dp[i][j] = max;
     }
 
     /**

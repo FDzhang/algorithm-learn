@@ -33,6 +33,12 @@ class Level3Test {
 
 //        print(list);
     }
+    @Test
+    void TestMaxCoins(){
+        int[] nums = {3,1,5,8};
+        int res = test.maxCoins(nums);
+        System.err.println(res);
+    }
 
     @Test
     public void TestWordBreakII(){
