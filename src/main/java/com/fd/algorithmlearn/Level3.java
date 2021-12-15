@@ -36,6 +36,19 @@ public class Level3 {
      * <p>
      * [3,1,5,8] --> [1,5,8] --> [3,8] --> [8] --> []
      * 1*3*1   +    3*5*8   +  1*3*8  + 1*8*1 = 167
+     * <p>
+     * 思路：动态规划
+     * 1、dp[i][j]:表示开区间 (i,j) 内能拿到的最多金币。在原数组的两边各添加一个1
+     * 2、状态转移方程：
+     * a、total = dp[i][k] + val[i] * val[k] * val[j] + dp[k][j]
+     * b、k是这个区间(i,j) 最后一个 被戳爆的气球
+     * <p>
+     *  关于：val[i] * val[k] * val[j]
+     *  1、当i和j不是数组的首和尾时，此时的i或j可能会是最后一步（即i和j分别是0和len-1时）的k
+     *  2、最后一步的 val[i] * val[k] * val[j]， 此时一定有 val[i]=val[j]=1
+     * <p>
+     * [\[这个菜谱, 自己在家也能做\] 关键思路解释 - 戳气球 - 力扣（LeetCode）](https://leetcode-cn.com/problems/burst-balloons/solution/zhe-ge-cai-pu-zi-ji-zai-jia-ye-neng-zuo-guan-jian-/)
+     * ![image.png](https://pic.leetcode-cn.com/1639559345-EsbDEl-image.png)
      */
     public int maxCoins(int[] nums) {
         int len = nums.length;
@@ -52,6 +65,7 @@ public class Level3 {
                 rangeBest(i, i + x, dp, ns);
             }
         }
+//        IUtil.print(dp);
         return dp[0][nLen - 1];
     }
 
@@ -63,15 +77,15 @@ public class Level3 {
             int t = left + right + ns[i] * ns[k] * ns[j];
             max = Math.max(max, t);
 
-//            System.err.print("i="+i+" ");
-//            System.err.print("j="+j+" ");
-//            System.err.print("k="+k+" ");
-//            System.err.print("left="+left+" ");
-//            System.err.print("right="+right+" ");
-//            System.err.print("k="+(ns[i] * ns[k] * ns[j])+" ");
-//            System.err.print("t="+t+" ");
-//            System.err.print("max="+max+", ");
+
+//            System.err.printf("left=dp[%d][%d]=%d ", i, k, left);
+//            System.err.printf("right=dp[%d][%d]=%d ", k, j, right);
+//            System.err.printf("ns[%d]*ns[%d]*ns[%d]=", i, k, j);
+//            System.err.printf("%d*%d*%d=", ns[i], ns[k], ns[j]);
+//            System.err.printf("%d ", (ns[i] * ns[k] * ns[j]));
+//            System.err.printf("max=%d ,", max);
         }
+//        System.err.printf("dp[%d][%d]=%d ", i, j, max);
 //        System.err.println();
         dp[i][j] = max;
     }
