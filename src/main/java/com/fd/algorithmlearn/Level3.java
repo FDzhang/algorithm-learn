@@ -16,6 +16,174 @@ import java.util.stream.Collectors;
  */
 public class Level3 {
 
+    // -------------------------- 设计问题 ------------------------------
+
+    /**
+     * LRU缓存机制
+     * 运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制 。
+     * 实现 LRUCache 类：
+     * <p>
+     * LRUCache(int capacity) 以正整数作为容量 capacity 初始化 LRU 缓存
+     * int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
+     * void put(int key, int value) 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。
+     * 当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。
+     *  
+     * <p>
+     * 进阶：你是否可以在 O(1) 时间复杂度内完成这两种操作？
+     * <p>
+     * 思路：哈希队列
+     * 1、使用LinkedHashMap<Integer, Integer> map
+     * 2、get操作：不存在则返回-1， 存在则将key变为最近使用， 返回key对应的val
+     * 3、put操作
+     * a、若已存在，则更新key val, 且将key变为最近使用
+     * b、若不存在，判断是否到达容量上限，是则删除最久未使用元素（即为：队首元素）
+     * c、将key val插入队尾
+     * 4、将key变为最近使用 操作: 获取key对应的val，在map中将key删除，再将key val插入队尾
+     *
+     *
+     *
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xdu2v2/
+     */
+    static class LRUCache {
+        private int cap;
+        private LinkedHashMap<Integer, Integer> map;
+
+        public LRUCache(int capacity) {
+            map = new LinkedHashMap<>(capacity);
+            cap = capacity;
+        }
+
+        public int get(int key) {
+            if (!map.containsKey(key)){
+                return -1;
+            }
+            makeRecently(key);
+            return map.get(key);
+        }
+
+        public void put(int key, int value) {
+           if (map.containsKey(key)){
+               map.put(key, value);
+               makeRecently(key);
+               return;
+           }
+
+           if (map.size() >= cap){
+               Integer d = map.keySet().iterator().next();
+               map.remove(d);
+           }
+           map.put(key, value);
+        }
+
+        private void makeRecently(int key) {
+            Integer v = map.get(key);
+            map.remove(key);
+            map.put(key, v);
+        }
+    }
+
+    class LRUCache1 extends LinkedHashMap<Integer, Integer>{
+        private int capacity;
+
+        public LRUCache1(int capacity) {
+            super(capacity, 0.75F, true);
+            this.capacity = capacity;
+        }
+
+        public int get(int key) {
+            return super.getOrDefault(key, -1);
+        }
+
+        public void put(int key, int value) {
+            super.put(key, value);
+        }
+
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
+            return size() > capacity;
+        }
+    }
+
+    static class LFUCache {
+        private Map<Integer, Integer> mapKV;
+        private Map<Integer, Integer> mapKF;
+        private Map<Integer, LinkedHashSet<Integer>> mapFK;
+
+        private int minF;
+        private int cap;
+
+        public LFUCache(int capacity) {
+            mapKV = new HashMap<>();
+            mapKF = new HashMap<>();
+            mapFK = new HashMap<>();
+
+            minF = 0;
+            cap = capacity;
+        }
+
+        public int get(int key) {
+            if (!mapKV.containsKey(key)) {
+                return -1;
+            }
+            addF1(key);
+            return mapKV.get(key);
+        }
+
+        public void put(int key, int value) {
+            if (cap <= 0) {
+                return;
+            }
+
+            if (mapKV.containsKey(key)) {
+                mapKV.put(key, value);
+                addF1(key);
+                return;
+            }
+
+            if (mapKV.size() >= this.cap) {
+                removeMinFKey();
+            }
+
+            mapKV.put(key, value);
+            mapKF.put(key, 1);
+            mapFK.putIfAbsent(1, new LinkedHashSet<>());
+            mapFK.get(1).add(key);
+            this.minF = 1;
+        }
+
+        private void removeMinFKey() {
+            LinkedHashSet<Integer> ks = mapFK.get(this.minF);
+            Integer mk = ks.iterator().next();
+            ks.remove(mk);
+            if (ks.isEmpty()){
+                mapFK.remove(this.minF);
+            }
+
+            mapKF.remove(mk);
+            mapKV.remove(mk);
+        }
+
+        private void addF1(int key) {
+            Integer f = mapKF.get(key);
+            mapKF.put(key, f + 1);
+
+            mapFK.get(f).remove(key);
+            mapFK.putIfAbsent(f + 1, new LinkedHashSet<>());
+            mapFK.get(f + 1).add(key);
+
+            if (mapFK.get(f).isEmpty()) {
+                mapFK.remove(f);
+                if (f == this.minF) {
+                    this.minF++;
+                }
+            }
+        }
+    }
+
+
+    // -------------------------- 设计问题 ------------------------------ end
+
     // -------------------------- 动态规划 ------------------------------
 
     /**
@@ -43,9 +211,9 @@ public class Level3 {
      * a、total = dp[i][k] + val[i] * val[k] * val[j] + dp[k][j]
      * b、k是这个区间(i,j) 最后一个 被戳爆的气球
      * <p>
-     *  关于：val[i] * val[k] * val[j]
-     *  1、当i和j不是数组的首和尾时，此时的i或j可能会是最后一步（即i和j分别是0和len-1时）的k
-     *  2、最后一步的 val[i] * val[k] * val[j]， 此时一定有 val[i]=val[j]=1
+     * 关于：val[i] * val[k] * val[j]
+     * 1、当i和j不是数组的首和尾时，此时的i或j可能会是最后一步（即i和j分别是0和len-1时）的k
+     * 2、最后一步的 val[i] * val[k] * val[j]， 此时一定有 val[i]=val[j]=1
      * <p>
      * [\[这个菜谱, 自己在家也能做\] 关键思路解释 - 戳气球 - 力扣（LeetCode）](https://leetcode-cn.com/problems/burst-balloons/solution/zhe-ge-cai-pu-zi-ji-zai-jia-ye-neng-zuo-guan-jian-/)
      * ![image.png](https://pic.leetcode-cn.com/1639559345-EsbDEl-image.png)
