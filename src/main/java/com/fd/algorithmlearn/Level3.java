@@ -19,6 +19,40 @@ public class Level3 {
     // -------------------------- 设计问题 ------------------------------
 
     /**
+     * 实现 Trie (前缀树)
+     * Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+     * <p>
+     * 请你实现 Trie 类：
+     * <p>
+     * Trie() 初始化前缀树对象。
+     * void insert(String word) 向前缀树中插入字符串 word 。
+     * boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+     * boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xdtp2c/
+     *
+     * @Date: 2021/12/17
+     */
+    static class Trie {
+
+        public Trie() {
+
+        }
+
+        public void insert(String word) {
+
+        }
+
+        public boolean search(String word) {
+            return false;
+        }
+
+        public boolean startsWith(String prefix) {
+            return false;
+        }
+    }
+
+    /**
      * LRU缓存机制
      * 运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制 。
      * 实现 LRUCache 类：
@@ -55,7 +89,7 @@ public class Level3 {
         }
 
         public int get(int key) {
-            if (!map.containsKey(key)){
+            if (!map.containsKey(key)) {
                 return -1;
             }
             makeRecently(key);
@@ -63,17 +97,17 @@ public class Level3 {
         }
 
         public void put(int key, int value) {
-           if (map.containsKey(key)){
-               map.put(key, value);
-               makeRecently(key);
-               return;
-           }
+            if (map.containsKey(key)) {
+                map.put(key, value);
+                makeRecently(key);
+                return;
+            }
 
-           if (map.size() >= cap){
-               Integer d = map.keySet().iterator().next();
-               map.remove(d);
-           }
-           map.put(key, value);
+            if (map.size() >= cap) {
+                Integer d = map.keySet().iterator().next();
+                map.remove(d);
+            }
+            map.put(key, value);
         }
 
         private void makeRecently(int key) {
@@ -83,7 +117,7 @@ public class Level3 {
         }
     }
 
-    class LRUCache1 extends LinkedHashMap<Integer, Integer>{
+    class LRUCache1 extends LinkedHashMap<Integer, Integer> {
         private int capacity;
 
         public LRUCache1(int capacity) {
@@ -156,7 +190,7 @@ public class Level3 {
             LinkedHashSet<Integer> ks = mapFK.get(this.minF);
             Integer mk = ks.iterator().next();
             ks.remove(mk);
-            if (ks.isEmpty()){
+            if (ks.isEmpty()) {
                 mapFK.remove(this.minF);
             }
 
