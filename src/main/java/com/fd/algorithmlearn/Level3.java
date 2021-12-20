@@ -31,24 +31,56 @@ public class Level3 {
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xdtp2c/
      *
+     * [Trie Tree 的实现 (适合初学者)🌳 - 实现 Trie (前缀树) - 力扣（LeetCode）](https://leetcode-cn.com/problems/implement-trie-prefix-tree/solution/trie-tree-de-shi-xian-gua-he-chu-xue-zhe-by-huwt/)
+     * 思路：字典树 （from官方精选题解）
+     * 要想学会 Trie 就得先明白它的结点设计。我们可以看到TrieNode结点中并没有直接保存字符值的数据成员，那它是怎么保存字符的呢？
+     * 这时字母映射表next 的妙用就体现了，TrieNode* next[26]中保存了对当前结点而言下一个可能出现的所有字符的链接，
+     * 因此我们可以通过一个父结点来预知它所有子结点的值：
+     *
+     * 链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/solution/trie-tree-de-shi-xian-gua-he-chu-xue-zhe-by-huwt/
+     *
      * @Date: 2021/12/17
      */
     static class Trie {
+        private boolean isEnd;
+        private Trie[] next;
 
         public Trie() {
-
+            isEnd = false;
+            next = new Trie[26];
         }
 
         public void insert(String word) {
-
+            Trie node = this;
+            for (char c : word.toCharArray()) {
+                if (node.next[c - 'a'] == null) {
+                    node.next[c - 'a'] = new Trie();
+                }
+                node = node.next[c - 'a'];
+            }
+            node.isEnd = true;
         }
 
         public boolean search(String word) {
-            return false;
+            Trie node = this;
+            for (char c : word.toCharArray()) {
+                node = node.next[c - 'a'];
+                if (node == null) {
+                    return false;
+                }
+            }
+            return node.isEnd;
         }
 
         public boolean startsWith(String prefix) {
-            return false;
+            Trie node = this;
+            for (char c : prefix.toCharArray()) {
+                node = node.next[c - 'a'];
+                if (node == null) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
