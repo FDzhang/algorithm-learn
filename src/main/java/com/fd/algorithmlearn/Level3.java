@@ -1,6 +1,7 @@
 package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
+import com.fd.algorithmlearn.tree.NestedInteger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +19,77 @@ public class Level3 {
 
     // -------------------------- 设计问题 ------------------------------
 
+    /**
+     * 扁平化嵌套列表迭代器
+     * 给你一个嵌套的整数列表 nestedList 。每个元素要么是一个整数，要么是一个列表；该列表的元素也可能是整数或者是其他列表。
+     * 请你实现一个迭代器将其扁平化，使之能够遍历这个列表中的所有整数。
+     *
+     * 实现扁平迭代器类 NestedIterator ：
+     *
+     * NestedIterator(List<NestedInteger> nestedList) 用嵌套列表 nestedList 初始化迭代器。
+     * int next() 返回嵌套列表的下一个整数。
+     * boolean hasNext() 如果仍然存在待迭代的整数，返回 true ；否则，返回 false 。
+     * 你的代码将会用下述伪代码检测：
+     *
+     * initialize iterator with nestedList
+     * res = []
+     * while iterator.hasNext()
+     *     append iterator.next() to the end of res
+     * return res
+     * 如果 res 与预期的扁平化列表匹配，那么你的代码将会被判为正确。
+     *
+     * 思路：
+     * 1、使用LinkedList维护一个未扁平化的list
+     * 2、next() ：获取下一个元素
+     * 3、hasNext() : 是否还有下个一元素
+     * a、如果list不空，且第一个元素是列表，则需要把列表展开
+     * b、返回list是否不空
+     *
+     * ps：为什么展开逻辑不在next()中？ 因为list中需要有部分是展平的，hasNext()判断才是有效的。eg: [[]] 会报错
+     * ps2：展开逻辑是否能在构造函数中？ 能，放在hasNext中是需要时再展开，在构造函数中需要一次性全部展开
+     *
+     *
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xd8eai/
+     */
+    /**
+     * // This is the interface that allows for creating nested lists.
+     * // You should not implement it, or speculate about its implementation
+     * public interface NestedInteger {
+     *
+     *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
+     *     public boolean isInteger();
+     *
+     *     // @return the single integer that this NestedInteger holds, if it holds a single integer
+     *     // Return null if this NestedInteger holds a nested list
+     *     public Integer getInteger();
+     *
+     *     // @return the nested list that this NestedInteger holds, if it holds a nested list
+     *     // Return empty list if this NestedInteger holds a single integer
+     *     public List<NestedInteger> getList();
+     * }
+     */
+    class NestedIterator implements Iterator<Integer> {
+        private LinkedList<NestedInteger> list;
+        public NestedIterator(List<NestedInteger> nestedList) {
+            this.list = new LinkedList<>(nestedList);
+        }
+
+        @Override
+        public Integer next() {
+            return list.remove(0).getInteger();
+        }
+
+        @Override
+        public boolean hasNext() {
+            while (!list.isEmpty() && !list.get(0).isInteger()){
+                List<NestedInteger> sub = this.list.remove(0).getList();
+                for (int i = sub.size() - 1; i >= 0; i--) {
+                    list.addFirst(sub.get(i));
+                }
+            }
+            return !list.isEmpty();
+        }
+    }
     /**
      * 实现 Trie (前缀树)
      * Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
