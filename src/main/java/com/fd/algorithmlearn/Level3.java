@@ -20,6 +20,56 @@ public class Level3 {
     // -------------------------- 设计问题 ------------------------------
 
     /**
+     * 数据流的中位数
+     * 中位数是有序列表中间的数。如果列表长度是偶数，中位数则是中间两个数的平均值。
+     * <p>
+     * 例如，
+     * <p>
+     * [2,3,4] 的中位数是 3
+     * <p>
+     * [2,3] 的中位数是 (2 + 3) / 2 = 2.5
+     * <p>
+     * 设计一个支持以下两种操作的数据结构：
+     * <p>
+     * void addNum(int num) - 从数据流中添加一个整数到数据结构中。
+     * double findMedian() - 返回目前所有元素的中位数。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xd3xme/
+     * <p>
+     * 思路：堆（优先队列）
+     * 1、初始化一个大顶堆max (放小的值)，一个小顶堆min (放大的值)
+     * 2、添加一个val, min.size > max.size, 放入max, 反之放入min
+     * 3、放入max,需要先放入min，在从min的堆顶取出放入max。 放入min同理。
+     */
+    class MedianFinder {
+        private PriorityQueue<Integer> min;
+        private PriorityQueue<Integer> max;
+
+        public MedianFinder() {
+            min = new PriorityQueue<>();
+            max = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+        }
+
+        public void addNum(int num) {
+            if (min.size() > max.size()) {
+                min.offer(num);
+                max.offer(min.poll());
+            } else {
+                max.offer(num);
+                min.offer(max.poll());
+            }
+        }
+
+        public double findMedian() {
+            if ((min.size() + max.size()) % 2 == 0) {
+                return (min.peek() + max.peek()) / 2.0;
+            } else {
+                return min.peek() * 1.0;
+            }
+        }
+    }
+
+    /**
      * 扁平化嵌套列表迭代器
      * 给你一个嵌套的整数列表 nestedList 。每个元素要么是一个整数，要么是一个列表；该列表的元素也可能是整数或者是其他列表。
      * 请你实现一个迭代器将其扁平化，使之能够遍历这个列表中的所有整数。
@@ -55,21 +105,22 @@ public class Level3 {
      * // This is the interface that allows for creating nested lists.
      * // You should not implement it, or speculate about its implementation
      * public interface NestedInteger {
-     *
-     *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
-     *     public boolean isInteger();
-     *
-     *     // @return the single integer that this NestedInteger holds, if it holds a single integer
-     *     // Return null if this NestedInteger holds a nested list
-     *     public Integer getInteger();
-     *
-     *     // @return the nested list that this NestedInteger holds, if it holds a nested list
-     *     // Return empty list if this NestedInteger holds a single integer
-     *     public List<NestedInteger> getList();
+     * <p>
+     * // @return true if this NestedInteger holds a single integer, rather than a nested list.
+     * public boolean isInteger();
+     * <p>
+     * // @return the single integer that this NestedInteger holds, if it holds a single integer
+     * // Return null if this NestedInteger holds a nested list
+     * public Integer getInteger();
+     * <p>
+     * // @return the nested list that this NestedInteger holds, if it holds a nested list
+     * // Return empty list if this NestedInteger holds a single integer
+     * public List<NestedInteger> getList();
      * }
      */
     class NestedIterator implements Iterator<Integer> {
         private LinkedList<NestedInteger> list;
+
         public NestedIterator(List<NestedInteger> nestedList) {
             this.list = new LinkedList<>(nestedList);
         }
@@ -81,7 +132,7 @@ public class Level3 {
 
         @Override
         public boolean hasNext() {
-            while (!list.isEmpty() && !list.get(0).isInteger()){
+            while (!list.isEmpty() && !list.get(0).isInteger()) {
                 List<NestedInteger> sub = this.list.remove(0).getList();
                 for (int i = sub.size() - 1; i >= 0; i--) {
                     list.addFirst(sub.get(i));
@@ -90,6 +141,7 @@ public class Level3 {
             return !list.isEmpty();
         }
     }
+
     /**
      * 实现 Trie (前缀树)
      * Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
@@ -102,13 +154,13 @@ public class Level3 {
      * boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xdtp2c/
-     *
+     * <p>
      * [Trie Tree 的实现 (适合初学者)🌳 - 实现 Trie (前缀树) - 力扣（LeetCode）](https://leetcode-cn.com/problems/implement-trie-prefix-tree/solution/trie-tree-de-shi-xian-gua-he-chu-xue-zhe-by-huwt/)
      * 思路：字典树 （from官方精选题解）
      * 要想学会 Trie 就得先明白它的结点设计。我们可以看到TrieNode结点中并没有直接保存字符值的数据成员，那它是怎么保存字符的呢？
      * 这时字母映射表next 的妙用就体现了，TrieNode* next[26]中保存了对当前结点而言下一个可能出现的所有字符的链接，
      * 因此我们可以通过一个父结点来预知它所有子结点的值：
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/problems/implement-trie-prefix-tree/solution/trie-tree-de-shi-xian-gua-he-chu-xue-zhe-by-huwt/
      *
      * @Date: 2021/12/17

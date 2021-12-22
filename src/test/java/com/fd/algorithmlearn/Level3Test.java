@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author zhangxinqiang
@@ -21,10 +22,14 @@ class Level3Test {
 //        map.put(1, 1);
 //        System.err.println(map.get(1));
 //        System.err.println(map.get(null));
+        PriorityQueue<Integer> max = new PriorityQueue<>((a,b)->(Integer.compare(b, a)));
+        max.offer(1);
+        max.offer(2);
+        max.offer(3);
+        System.err.println(max.peek());
 
-        String s = "123";
-
-        System.err.println(s.substring(3));
+//        String s = "123";
+//        System.err.println(s.substring(3));
 //
 //        Stack<String> stack = new Stack<>();
 //        stack.push("123");
