@@ -25,8 +25,12 @@ class Level3Test {
         PriorityQueue<Integer> max = new PriorityQueue<>((a,b)->(Integer.compare(b, a)));
         max.offer(1);
         max.offer(2);
+        max.offer(2);
         max.offer(3);
         System.err.println(max.peek());
+        for (Integer integer : max) {
+            System.err.print(integer);
+        }
 
 //        String s = "123";
 //        System.err.println(s.substring(3));
@@ -38,6 +42,15 @@ class Level3Test {
 
 //        print(list);
     }
+
+
+    @Test
+    void largestNumberTest() {
+        int[] x = {10,2};
+        String res = test.largestNumber(x);
+        System.err.println(res);
+    }
+
     @Test
     void TestMaxCoins(){
         int[] nums = {3,1,5,8};

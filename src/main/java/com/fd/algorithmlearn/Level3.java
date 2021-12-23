@@ -17,6 +17,62 @@ import java.util.stream.Collectors;
  */
 public class Level3 {
 
+    // -------------------------- 数学 ------------------------------
+
+    /**
+     * 最大数
+     * 给定一组非负整数 nums，重新排列每个数的顺序（每个数不可拆分）使之组成一个最大的整数。
+     * <p>
+     * 注意：输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xd3jrg/
+     * 来源：力扣（LeetCode）
+     * <p>
+     * 思路： 优先队列
+     * 1、拆开 排序 拼接
+     *
+     *
+     * [3,30,34,5,9]
+     * 9534330
+     *
+     *
+     * @Date: 2021/12/23
+     */
+    public String largestNumber(int[] nums) {
+
+        return Arrays.stream(nums).boxed()
+                .sorted((a, b) -> numCompare(b, a))
+                .map(String::valueOf)
+                .collect(Collectors.joining());
+    }
+
+    public int numCompare(int a, int b) {
+        // 数字大的放前面， 长度短的放前面
+        while (a > 0 && b > 0) {
+            int tempa = a;
+            int tempb = b;
+
+            a = firstNum(a);
+            b = firstNum(b);
+
+            if (a != b) {
+                return (a < b) ? -1 : 1;
+            }
+            a = tempa / 10;
+            b = tempb / 10;
+        }
+        return (a < b) ? 1 : -1;
+    }
+
+    public int firstNum(int x) {
+        while (x >= 10) {
+            x /= 10;
+        }
+        return x;
+    }
+
+
+    // -------------------------- 数学 ------------------------------ end
     // -------------------------- 设计问题 ------------------------------
 
     /**
