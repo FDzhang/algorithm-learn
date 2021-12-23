@@ -5,6 +5,8 @@ import com.fd.algorithmlearn.tree.NestedInteger;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * 高级算法
@@ -28,47 +30,42 @@ public class Level3 {
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xd3jrg/
      * 来源：力扣（LeetCode）
      * <p>
-     * 思路： 优先队列
-     * 1、拆开 排序 拼接
-     *
-     *
+     * 思路：排序 贪心
+     * 1、现将 nums 转为字符串数组 ss
+     * 2、排序ss, 排序规则：若 a+b > b+a 则将a放在b前面, 反之则b在a前。
+     * 3、拼接已排序的数组ss，返回结果 (注意特殊情况： eg: nums = [0, 0])
+     * <p>
+     * [【宫水三叶の相信科学系列】为什么根据「拼接结果的字典序大小」决定「其在序列里的相对关系」是正确的 - 最大数 - 力扣（LeetCode）](https://leetcode-cn.com/problems/largest-number/solution/gong-shui-san-xie-noxiang-xin-ke-xue-xi-vn86e/)
+     * <p>
      * [3,30,34,5,9]
      * 9534330
-     *
      *
      * @Date: 2021/12/23
      */
     public String largestNumber(int[] nums) {
+        String[] ss = new String[nums.length];
 
-        return Arrays.stream(nums).boxed()
-                .sorted((a, b) -> numCompare(b, a))
+        for (int i = 0; i < nums.length; i++) {
+            ss[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(ss, (a, b) -> (b + a).compareTo(a + b));
+
+        StringBuilder sb = new StringBuilder();
+        for (String s : ss) {
+            sb.append(s);
+        }
+        String res = sb.toString();
+        return res.charAt(0) == '0' ? "0" : res;
+    }
+
+    public String largestNumber1(int[] nums) {
+
+        String res = Arrays.stream(nums).boxed()
                 .map(String::valueOf)
+                .sorted((a, b) -> (b + a).compareTo(a + b))
                 .collect(Collectors.joining());
-    }
 
-    public int numCompare(int a, int b) {
-        // 数字大的放前面， 长度短的放前面
-        while (a > 0 && b > 0) {
-            int tempa = a;
-            int tempb = b;
-
-            a = firstNum(a);
-            b = firstNum(b);
-
-            if (a != b) {
-                return (a < b) ? -1 : 1;
-            }
-            a = tempa / 10;
-            b = tempb / 10;
-        }
-        return (a < b) ? 1 : -1;
-    }
-
-    public int firstNum(int x) {
-        while (x >= 10) {
-            x /= 10;
-        }
-        return x;
+        return res.startsWith("0") ? "0" : res;
     }
 
 
