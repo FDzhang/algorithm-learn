@@ -5,8 +5,6 @@ import com.fd.algorithmlearn.tree.NestedInteger;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * 高级算法
@@ -20,6 +18,46 @@ import java.util.stream.Stream;
 public class Level3 {
 
     // -------------------------- 数学 ------------------------------
+
+    /**
+     * 直线上最多的点数
+     * 给你一个数组 points ，其中 points[i] = [xi, yi] 表示 X-Y 平面上的一个点。求最多有多少个点在同一条直线上。
+     * <p>
+     * 思路：数学+哈希表 （from 官方精选题解）
+     * 1、双重循环，遍历所有的点i，从i+1遍历剩下的点j (j>i)
+     * - a、依据点【i, j】枚举所有 斜率 （需要用最大公约数约分）
+     * b、使用map<斜率, 点数> kMap 计数相同斜率的点
+     * c、记 kMap 中的最大值为max
+     * d、res = math.max(res, max+1)， +1是因为点【i】未计数
+     * 2、返回res
+     *
+     * <p>
+     * link: [【宫水三叶】两种枚举直线的思路 - 直线上最多的点数 - 力扣（LeetCode）](https://leetcode-cn.com/problems/max-points-on-a-line/solution/gong-shui-san-xie-liang-chong-mei-ju-zhi-u44s/)
+     *
+     * @Date: 2021/12/24
+     */
+    public int maxPoints(int[][] points) {
+        int res = 1;
+        for (int i = 0; i < points.length; i++) {
+            Map<String, Integer> kMap = new HashMap<>();
+            int max = 0;
+            for (int j = i + 1; j < points.length; j++) {
+                int a = points[j][1] - points[i][1];// y2-y1
+                int b = points[j][0] - points[i][0];// x2-x1
+                int gcd = gcd(a, b);
+                String key = (a / gcd) + "_" + (b / gcd);
+                kMap.merge(key, 1, Integer::sum);
+
+                max = Math.max(max, kMap.get(key));
+            }
+            res = Math.max(res, max + 1);
+        }
+        return res;
+    }
+    // 辗转相除法
+    public int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
 
     /**
      * 最大数

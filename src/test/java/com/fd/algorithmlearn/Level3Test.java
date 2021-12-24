@@ -22,7 +22,7 @@ class Level3Test {
 //        map.put(1, 1);
 //        System.err.println(map.get(1));
 //        System.err.println(map.get(null));
-        PriorityQueue<Integer> max = new PriorityQueue<>((a,b)->(Integer.compare(b, a)));
+        PriorityQueue<Integer> max = new PriorityQueue<>((a, b) -> (Integer.compare(b, a)));
         max.offer(1);
         max.offer(2);
         max.offer(2);
@@ -43,23 +43,36 @@ class Level3Test {
 //        print(list);
     }
 
+    @Test
+    void maxPointsTest() {
+        int[][] input = {
+                {1, 1},
+                {3, 2},
+                {5, 3},
+                {4, 1},
+                {2, 3},
+                {1, 4}};
+
+        int res = test.maxPoints(input);
+        System.err.println(res);
+    }
 
     @Test
     void largestNumberTest() {
-        int[] x = {10,2};
+        int[] x = {10, 2};
         String res = test.largestNumber(x);
         System.err.println(res);
     }
 
     @Test
-    void TestMaxCoins(){
-        int[] nums = {3,1,5,8};
+    void TestMaxCoins() {
+        int[] nums = {3, 1, 5, 8};
         int res = test.maxCoins(nums);
         System.err.println(res);
     }
 
     @Test
-    public void TestWordBreakII(){
+    public void TestWordBreakII() {
 
     }
 
