@@ -2,6 +2,7 @@ package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.tree.NestedInteger;
+import com.fd.algorithmlearn.util.IUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +17,107 @@ import java.util.stream.Collectors;
  * @create 2021/10/13 10:24
  */
 public class Level3 {
+    // -------------------------- 其它 ------------------------------
 
+    /**
+     * 根据身高重建队列
+     * 假设有打乱顺序的一群人站成一个队列，数组 people 表示队列中一些人的属性（不一定按顺序）。
+     * 每个 people[i] = [hi, ki] 表示第 i 个人的身高为 hi ，前面 正好 有 ki 个身高大于或等于 hi 的人。
+     * 请你重新构造并返回输入数组 people 所表示的队列。返回的队列应该格式化为数组 queue ，
+     * 其中 queue[j] = [hj, kj] 是队列中第 j 个人的属性（queue[0] 是排在队列前面的人）。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xd6s9j/
+     * <p>
+     * 示例 1：
+     * 输入：people = [[7,0],[4,4],[7,1],[5,0],[6,1],[5,2]]
+     * 输出：[[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]]
+     * 解释：
+     * 编号为 0 的人身高为 5 ，没有身高更高或者相同的人排在他前面。
+     * 编号为 1 的人身高为 7 ，没有身高更高或者相同的人排在他前面。
+     * 编号为 2 的人身高为 5 ，有 2 个身高更高或者相同的人排在他前面，即编号为 0 和 1 的人。
+     * 编号为 3 的人身高为 6 ，有 1 个身高更高或者相同的人排在他前面，即编号为 1 的人。
+     * 编号为 4 的人身高为 4 ，有 4 个身高更高或者相同的人排在他前面，即编号为 0、1、2、3 的人。
+     * 编号为 5 的人身高为 7 ，有 1 个身高更高或者相同的人排在他前面，即编号为 1 的人。
+     * 因此 [[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]] 是重新构造后的队列。
+     * <p>
+     * 5,0
+     * 7,0
+     * 5,2
+     * 6,1
+     * 4,4
+     * 7,1
+     * <p>
+     * [[6,0],[5,0],[4,0],[3,2],[2,2],[1,4]]
+     * <p>
+     * 4,0
+     * 5,0
+     * 2,2
+     * 3,2
+     * 1,4
+     * 6,0
+     * <p>
+     * <p>
+     * 思路1： 排序
+     * 1、排序 by people[i][1] 升序, people[i][0] 降序
+     * 2、遍历数组people
+     * a、若people[i][1]==0,则直接放入结果集list
+     * b、若people[i][1]!=0,则遍历比较 list[i][1]和people[i][0]并计数cnt, 当cnt=list[i][0]或者到list结尾为止
+     * 3、将list转换为int[][]返回
+     * <p>
+     * 思路2： 排序
+     * 1、排序 by people[i][0] 降序（优先）, people[i][1] 升序
+     */
+    public int[][] reconstructQueue(int[][] people) {
+        Arrays.sort(people, (a, b) -> {
+            if (a[0] == b[0]) {
+                return Integer.compare(a[1], b[1]);
+            } else {
+                return Integer.compare(b[0], a[0]);
+            }
+        });
+        IUtil.print(people);
+        ArrayList<int[]> res = new ArrayList<>();
+
+        for (int[] p : people) {
+            res.add(p[1], p);
+        }
+        return res.toArray(new int[res.size()][]);
+    }
+
+    public int[][] reconstructQueue1(int[][] people) {
+        Arrays.sort(people, (a, b) -> {
+            if (a[1] != b[1]) {
+                return Integer.compare(a[1], b[1]);
+            } else {
+                return Integer.compare(b[0], a[0]);
+            }
+        });
+        ArrayList<int[]> list = new ArrayList<>();
+
+        for (int[] p : people) {
+            if (p[1] == 0) {
+                list.add(0, p);
+            } else {
+                int cnt = 0;
+                for (int i = 0; i < list.size(); i++) {
+                    if (cnt == p[1]) {
+                        list.add(i, p);
+                        cnt = 0;
+                        break;
+                    }
+                    if (list.get(i)[0] >= p[0]) {
+                        cnt++;
+                    }
+                }
+                if (cnt != 0) {
+                    list.add(p);
+                }
+            }
+        }
+
+        return list.stream().toArray(int[][]::new);
+    }
+    // -------------------------- 其它 ------------------------------ end
     // -------------------------- 数学 ------------------------------
 
     /**
@@ -54,10 +155,12 @@ public class Level3 {
         }
         return res;
     }
+
     // 辗转相除法
     public int gcd(int a, int b) {
         return b == 0 ? a : gcd(b, a % b);
     }
+
     // 暴力
     public int maxPoints1(int[][] ps) {
         int n = ps.length;
@@ -71,7 +174,7 @@ public class Level3 {
                     int[] p = ps[k];
                     int s1 = (y[1] - x[1]) * (p[0] - y[0]); // 原理 a/b=c/d  -->  ad=bc
                     int s2 = (p[1] - y[1]) * (y[0] - x[0]);
-                    if (s1 == s2){
+                    if (s1 == s2) {
                         cnt++;
                     }
                 }

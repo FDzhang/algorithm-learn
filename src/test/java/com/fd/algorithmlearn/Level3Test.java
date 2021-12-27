@@ -1,6 +1,7 @@
 package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
+import com.fd.algorithmlearn.util.IUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -41,6 +42,21 @@ class Level3Test {
 //        stack.push("321");
 
 //        print(list);
+    }
+
+    @Test
+    void reconstructQueueTest() {
+
+        int[][] people = {
+                {7, 0},
+                {4, 4},
+                {7, 1},
+                {5, 0},
+                {6, 1},
+                {5, 2}};
+        int[][] res = test.reconstructQueue(people);
+        IUtil.print(res);
+
     }
 
     @Test

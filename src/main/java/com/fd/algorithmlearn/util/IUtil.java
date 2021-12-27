@@ -8,6 +8,10 @@ import java.util.List;
  */
 public class IUtil {
     public static void print(int[][] nums) {
+        if (nums == null){
+            System.err.println("null");
+            return;
+        }
         System.err.println("------------------------------");
         for (int[] num : nums) {
             for (int x : num) {
@@ -19,6 +23,10 @@ public class IUtil {
     }
 
     public static void print(int[] list) {
+        if (list == null){
+            System.err.println("null");
+            return;
+        }
         System.err.println("------------------------------");
         for (int i : list) {
             System.err.print(i + "\t");
@@ -27,6 +35,10 @@ public class IUtil {
     }
 
     public static <T> void print(List<T> list) {
+        if (list == null){
+            System.err.println("null");
+            return;
+        }
         System.err.println("------------------------------");
         for (T i : list) {
             System.err.print(i + "\t");
