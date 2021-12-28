@@ -20,6 +20,108 @@ public class Level3 {
     // -------------------------- 其它 ------------------------------
 
     /**
+     * 接雨水
+     * 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+     * <p>
+     * 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+     * 输出：6
+     * 解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xdkk5t/
+     * <p>
+     *  from: [详细通俗的思路分析，多解法 - 接雨水 - 力扣（LeetCode）](https://leetcode-cn.com/problems/trapping-rain-water/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-w-8/)
+     * 解法二：按列求
+     * 1、情况分析：
+     * a、较矮的墙的高度大于当前列的墙的高度, 计算：较矮的墙的高度-当前列的墙的高度
+     * b、较矮的墙的高度小于当前列的墙的高度, 不计算
+     * c、较矮的墙的高度等于当前列的墙的高度，不计算
+     * 2、遍历每一列，然后分别求出这一列两边最高的墙。找出较矮的一端，和当前列的高度比较，结果就是上边的三种情况.
+     * <p>
+     * 解法三: 动态规划
+     * 用两个数组，max_left [i] 代表第 i 列左边最高的墙的高度，max_right[i] 代表第 i 列右边最高的墙的高度。
+     * <p>
+     * 解法四：双指针
+     * 可以看到，max_left [i] 和 max_right [i] 数组中的元素我们其实只用一次，然后就再也不会用到了。所以我们可以不用数组，只用一个元素就行了
+     *
+     *
+     */
+    public int trap(int[] height) {
+        int sum = 0;
+
+        int left = 0;
+        int right = 0;
+        int p = 1;
+        int q = height.length - 2;
+
+        for (int i = 1; i < height.length - 1; i++) {
+            if (height[p - 1] < height[q + 1]) {
+                left = Math.max(left, height[p - 1]);
+                int min = left;
+                if (min > height[p]) {
+                    sum = sum + (min - height[p]);
+                }
+                p++;
+            } else {
+                right = Math.max(right, height[q + 1]);
+                int min = right;
+                if (min > height[q]) {
+                    sum = sum + (min - height[q]);
+                }
+                q--;
+            }
+        }
+        return sum;
+    }
+
+    public int trap2(int[] height) {
+        int sum = 0;
+
+        int[] left = new int[height.length];
+        int[] right = new int[height.length];
+
+        for (int i = 1; i < height.length; i++) {
+            left[i] = Math.max(left[i - 1], height[i - 1]);
+        }
+
+        for (int i = height.length - 2; i >= 0; i--) {
+            right[i] = Math.max(right[i + 1], height[i + 1]);
+        }
+
+        for (int i = 1; i < height.length - 1; i++) {
+            int min = Math.min(left[i], right[i]);
+            if (min > height[i]) {
+                sum = sum + (min - height[i]);
+            }
+        }
+        return sum;
+    }
+
+    public int trap1(int[] height) {
+        int sum = 0;
+
+        for (int i = 1; i < height.length - 1; i++) {
+            int left = 0;
+            for (int j = 0; j < i; j++) {
+                if (height[j] > left) {
+                    left = height[j];
+                }
+            }
+            int right = 0;
+            for (int j = i + 1; j < height.length; j++) {
+                if (height[j] > right) {
+                    right = height[j];
+                }
+            }
+            int min = Math.min(left, right);
+            if (min > height[i]) {
+                sum = sum + (min - height[i]);
+            }
+        }
+
+        return sum;
+    }
+
+    /**
      * 根据身高重建队列
      * 假设有打乱顺序的一群人站成一个队列，数组 people 表示队列中一些人的属性（不一定按顺序）。
      * 每个 people[i] = [hi, ki] 表示第 i 个人的身高为 hi ，前面 正好 有 ki 个身高大于或等于 hi 的人。
