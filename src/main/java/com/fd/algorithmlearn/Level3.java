@@ -20,6 +20,137 @@ public class Level3 {
     // -------------------------- 其它 ------------------------------
 
     /**
+     * 天际线问题
+     * 城市的天际线是从远处观看该城市中所有建筑物形成的轮廓的外部轮廓。给你所有建筑物的位置和高度，请返回由这些建筑物形成的 天际线 。
+     * <p>
+     * 每个建筑物的几何信息由数组 buildings 表示，其中三元组 buildings[i] = [lefti, righti, heighti] 表示：
+     * <p>
+     * lefti 是第 i 座建筑物左边缘的 x 坐标。
+     * righti 是第 i 座建筑物右边缘的 x 坐标。
+     * heighti 是第 i 座建筑物的高度。
+     * 天际线 应该表示为由 “关键点” 组成的列表，格式 [[x1,y1],[x2,y2],...] ，并按 x 坐标 进行 排序 。
+     * 关键点是水平线段的左端点。列表中最后一个点是最右侧建筑物的终点，y 坐标始终为 0 ，仅用于标记天际线的终点。
+     * 此外，任何两个相邻建筑物之间的地面都应被视为天际线轮廓的一部分。
+     * <p>
+     * 注意：输出天际线中不得有连续的相同高度的水平线。例如 [...[2 3], [4 5], [7 5], [11 5], [12 7]...] 是不正确的答案；
+     * 三条高度为 5 的线应该在最终输出中合并为一个：[...[2 3], [4 5], [12 7], ...]
+     * <p>
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xdg3xr/
+     * <p>
+     * from: [【宫水三叶】扫描线算法基本思路 &amp; 优先队列维护当前最大高度 - 天际线问题 - 力扣（LeetCode）](https://leetcode-cn.com/problems/the-skyline-problem/solution/gong-shui-san-xie-sao-miao-xian-suan-fa-0z6xc/)
+     * 思路： 扫描线算法基本思路 & 优先队列维护当前最大高度
+     * 1、预处理所有的点，为了方便排序，对于左端点，令高度为负；对于右端点令高度为正 (记为ps)
+     * 2、先严格按照横坐标进行「从小到大」排序，对于某个横坐标而言，可能会同时出现多个点，应当按照如下规则进行处理：
+     * a. 优先处理左端点，再处理右端点
+     * b. 如果同样都是左端点，则按照高度「从大到小」进行处理（将高度增加到优先队列中）
+     * c. 如果同样都是右端点，则按照高度「从小到大」进行处理（将高度从优先队列中删掉）
+     * 3、遍历ps
+     * a、如果是左端点，说明存在一条往右延伸的可记录的边，将高度存入优先队列,
+     * b、如果是右端点，说明这条边结束了，将当前高度从队列中移除
+     * c、取出最高高度，如果当前不与前一矩形“上边”延展而来的那些边重合，则可以被记录
+     * <p>
+     * 优化: 优先队列的 remove 操作成为了瓶颈，如何优化？
+     * 由于优先队列的remove的操作复杂度为 O(n)。（先查找O(n), 再删除O(logn)，--> O(n)）
+     * 优化方式：使用map记录 [高度，删除次数], 每次使用高度前，先依据map检查是否已被删除，是则更新删除次数，且pq.poll; 直到找到没被删除的高度
+     *
+     * <p>
+     * 链接：https://leetcode-cn.com/problems/the-skyline-problem/solution/gong-shui-san-xie-sao-miao-xian-suan-fa-0z6xc/
+     */
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        List<List<Integer>> res = new ArrayList<>();
+
+        List<int[]> ps = new ArrayList<>();
+        for (int[] b : buildings) {
+            int[] l = new int[]{b[0], -b[2]};
+            int[] r = new int[]{b[1], b[2]};
+            ps.add(l);
+            ps.add(r);
+        }
+        ps.sort((a, b) -> {
+            if (a[0] != b[0]) {
+                return Integer.compare(a[0], b[0]);
+            } else {
+                return Integer.compare(a[1], b[1]);
+            }
+        });
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+        Map<Integer, Integer> map = new HashMap<>();
+        int prev = 0;
+        pq.add(prev);
+        for (int[] p : ps) {
+            if (p[1] < 0) {
+                pq.add(-p[1]);
+            } else {
+                map.merge(p[1], 1, Integer::sum);
+            }
+
+            while (!map.isEmpty()) {
+                int peek = pq.peek();
+                if (map.containsKey(peek)) {
+                    if (map.get(peek) == 1) {
+                        map.remove(peek);
+                    } else {
+                        map.merge(peek, -1, Integer::sum);
+                    }
+                    pq.poll();
+                } else {
+                    break;
+                }
+            }
+
+            int cur = pq.peek();
+            if (prev != cur) {
+                List<Integer> point = new ArrayList<>();
+                point.add(p[0]);
+                point.add(cur);
+                res.add(point);
+                prev = cur;
+            }
+        }
+        return res;
+    }
+
+    public List<List<Integer>> getSkyline1(int[][] buildings) {
+        List<List<Integer>> res = new ArrayList<>();
+
+        List<int[]> ps = new ArrayList<>();
+        for (int[] b : buildings) {
+            int[] l = new int[]{b[0], -b[2]};
+            int[] r = new int[]{b[1], b[2]};
+            ps.add(l);
+            ps.add(r);
+        }
+        ps.sort((a, b) -> {
+            if (a[0] != b[0]) {
+                return Integer.compare(a[0], b[0]);
+            } else {
+                return Integer.compare(a[1], b[1]);
+            }
+        });
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+        int prev = 0;
+        pq.add(prev);
+        for (int[] p : ps) {
+            if (p[1] < 0) {
+                pq.add(-p[1]);
+            } else {
+                pq.remove(p[1]);
+            }
+            int cur = pq.peek();
+            if (prev != cur) {
+                List<Integer> point = new ArrayList<>();
+                point.add(p[0]);
+                point.add(cur);
+                res.add(point);
+                prev = cur;
+            }
+        }
+        return res;
+    }
+
+    /**
      * 接雨水
      * 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
      * <p>
@@ -29,7 +160,7 @@ public class Level3 {
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-hard/xdkk5t/
      * <p>
-     *  from: [详细通俗的思路分析，多解法 - 接雨水 - 力扣（LeetCode）](https://leetcode-cn.com/problems/trapping-rain-water/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-w-8/)
+     * from: [详细通俗的思路分析，多解法 - 接雨水 - 力扣（LeetCode）](https://leetcode-cn.com/problems/trapping-rain-water/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-w-8/)
      * 解法二：按列求
      * 1、情况分析：
      * a、较矮的墙的高度大于当前列的墙的高度, 计算：较矮的墙的高度-当前列的墙的高度
@@ -42,8 +173,6 @@ public class Level3 {
      * <p>
      * 解法四：双指针
      * 可以看到，max_left [i] 和 max_right [i] 数组中的元素我们其实只用一次，然后就再也不会用到了。所以我们可以不用数组，只用一个元素就行了
-     *
-     *
      */
     public int trap(int[] height) {
         int sum = 0;
