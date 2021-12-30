@@ -20,6 +20,91 @@ public class Level3 {
     // -------------------------- 其它 ------------------------------
 
     /**
+     * 柱状图中最大的矩形
+     * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+     * 求在该柱状图中，能够勾勒出来的矩形的最大面积。
+     * <p>
+     * 示例 1:
+     * 输入：heights = [2,1,5,6,2,3]
+     * 输出：10
+     * 解释：最大的矩形为图中红色区域，面积为 10
+     * <p>
+     * <p>
+     * <p>
+     * <p>
+     *  from : [暴力解法、栈（单调栈、哨兵技巧） - 柱状图中最大的矩形 - 力扣（LeetCode）](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/solution/bao-li-jie-fa-zhan-by-liweiwei1419/)
+     * 思路1：暴力
+     * 1、遍历每个柱子，中心扩散分别向左，向右找到第一个比当前柱子矮的下标。
+     * <p>
+     * 思路2：单调栈 (时间复杂度：O(N))
+     * 1、观察暴力解法，关键在于 找到每个柱子的左边(l)和右边(r)第一个小于当前柱子高度(h)的位置，(r-l-1)*h就是当前柱子能构成最大矩形
+     * 2、初始化一个stack，保证stack的元素单调增（单调不减），遍历heights
+     * a、若 heights[i] >= 栈顶则入栈，反之将所有 > heights[i]的元素出栈，并计算一轮最大矩形
+     * b、计算：高度h = heights[栈.pop()], 左边第一个小于当前的位置 L = 栈.peek(), 右边第一个小于当前的位置 R = i
+     * c、公式：v = (R-L-1)*h。 max = Math(max, v)
+     * 3、遍历完后，若栈不空则再 【计算一轮】， 最后返回max
+     *
+     * ps: 最先开始存一个-1, 防止栈空取不到L。 遍历完heights后，此时 R恒等于heights.length
+     * ps2: （b、计算 ： 先pop(), 再取栈顶才是L）
+     * ps3: 可用eg:[2,1,5,6,2,3], 在纸上模拟一遍，便于理解
+     *
+     */
+    public int largestRectangleArea(int[] heights) {
+        int max = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.add(-1);
+
+        for (int i = 0; i < heights.length; i++) {
+            int cur = heights[i];
+            if (stack.peek() == -1 || cur >= heights[stack.peek()]) {
+                stack.push(i);
+            } else {
+                while (stack.peek() != -1 && cur < heights[stack.peek()]) {
+                    Integer pop = stack.pop();
+                    int h = heights[pop];
+                    int v = (i - stack.peek() - 1) * h;
+                    max = Math.max(max, v);
+                }
+                stack.push(i);
+            }
+        }
+
+        int len = heights.length;
+        while(stack.size() > 1){
+            Integer pop = stack.pop();
+            int h = heights[pop];
+            int v = (len - stack.peek() - 1) * h;
+            max = Math.max(max, v);
+        }
+
+        return max;
+    }
+
+    public int largestRectangleArea1(int[] heights) {
+        int max = 0;
+        for (int i = 0; i < heights.length; i++) {
+            int left = i - 1;
+            while (left >= 0) {
+                if (heights[left] < heights[i]) {
+                    break;
+                }
+                --left;
+            }
+            int right = i + 1;
+            while (right < heights.length) {
+                if (heights[right] < heights[i]) {
+                    break;
+                }
+                ++right;
+            }
+
+            int len = right - left - 1;
+            max = Math.max(max, heights[i] * len);
+        }
+        return max;
+    }
+
+    /**
      * 天际线问题
      * 城市的天际线是从远处观看该城市中所有建筑物形成的轮廓的外部轮廓。给你所有建筑物的位置和高度，请返回由这些建筑物形成的 天际线 。
      * <p>

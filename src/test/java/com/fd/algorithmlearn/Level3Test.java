@@ -45,6 +45,13 @@ class Level3Test {
     }
 
     @Test
+    void largestRectangleAreaTest(){
+        int[] x = {1, 1};
+        int res = test.largestRectangleArea(x);
+        System.err.println(res);
+    }
+
+    @Test
     void reconstructQueueTest() {
 
         int[][] people = {
