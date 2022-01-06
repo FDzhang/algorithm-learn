@@ -1,7 +1,6 @@
 package com.fd.algorithmlearn;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * 初级算法
@@ -19,6 +18,102 @@ public class Level1 {
     // -------------------------- 数组 ------------------------------
     // 数组问题在面试中出现频率很高，你极有可能在面试中遇到。
     // 我们推荐以下题目：只出现一次的数字，旋转数组，两个数组的交集 II 和 两数之和。
+
+    /**
+     * 两个数组的交集 II
+     * 给你两个整数数组 nums1 和 nums2 ，请你以数组形式返回两数组的交集。返回结果中每个元素出现的次数，应与元素在两个数组中都出现的次数一致（如果出现次数不一致，则考虑取较小值）。可以不考虑输出结果的顺序。
+     * <p>
+     * 示例 1：
+     * 输入：nums1 = [1,2,2,1], nums2 = [2,2]
+     * 输出：[2,2]
+     * <p>
+     * 思路：排序+双指针
+     * 1、先排序，在用双指针i,j遍历数组
+     * 2、nums1[i], nums2[j] : 两者不同时，值小的指针往后移。相同时，则相交，加入结果集，两个指针同时往后移
+     * <p>
+     * 思路2：哈希表
+     * 1、遍历nums1, 使用map记录，【数字，数字出现的次数】
+     * 2、遍历nums2, 使用map判断nums1中是否存在该数字，存在则加入结果集，并更新map记录
+     */
+    public int[] intersect(int[] nums1, int[] nums2) {
+        if (nums1.length < nums2.length) {
+            return intersect(nums2, nums1);
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int x : nums1) {
+            map.merge(x, 1, Integer::sum);
+        }
+
+        List<Integer> list = new ArrayList<>();
+        for (int x : nums2) {
+            if (map.getOrDefault(x, 0) > 0) {
+                list.add(x);
+                map.merge(x, -1, Integer::sum);
+            }
+        }
+
+        int[] res = new int[list.size()];
+        for (int k = 0; k < list.size(); k++) {
+            res[k] = list.get(k);
+        }
+        return res;
+    }
+
+
+    public int[] intersect1(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0, j = 0; i < nums1.length && j < nums2.length; ) {
+            if (nums1[i] > nums2[j]) {
+                j++;
+            } else if (nums1[i] < nums2[j]) {
+                i++;
+            } else {
+                list.add(nums1[i]);
+                i++;
+                j++;
+            }
+        }
+
+        int[] res = new int[list.size()];
+        for (int k = 0; k < list.size(); k++) {
+            res[k] = list.get(k);
+        }
+        return res;
+    }
+
+    /**
+     * 只出现一次的数字
+     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     * 说明：
+     * 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+     * <p>
+     * 思路：异或运算
+     * 1、异或运算：a^a=0, a^0=a, a^b^a=a^a^b=b
+     * 2、遍历数组两两进行异或，会留下只出现过一次的数字
+     * <p>
+     * 思路2：Set
+     * 1、使用set.add()判断，是否是第二次添加
+     */
+    public int singleNumber(int[] nums) {
+        int res = 0;
+        for (int num : nums) {
+            res ^= num;
+        }
+        return res;
+    }
+
+    public int singleNumber1(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (!set.add(num)) {
+                set.remove(num);
+            }
+        }
+        return (int) set.toArray()[0];
+    }
 
     /**
      * 存在重复元素
