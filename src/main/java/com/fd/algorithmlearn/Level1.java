@@ -20,6 +20,87 @@ public class Level1 {
     // 我们推荐以下题目：只出现一次的数字，旋转数组，两个数组的交集 II 和 两数之和。
 
     /**
+     * 移动零
+     * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+     * <p>
+     * 示例:
+     * 输入: [0,1,0,3,12]
+     * 输出: [1,3,12,0,0]
+     * <p>
+     * 思路：双指针
+     * 1、指针 i, j。初始化i指向第一个0,j(j>i)指向第一个不为0的数
+     * 2、交换nus[i],nums[j], j向后移动找到不是0的元素，i向后移动找0
+     *
+     * 思路2：快慢指针
+     * 1、初始化两个指针slow， fast
+     * 2、遍历nums，每当遇到不是0的数，令nums[slow]=nums[fast], slow++;
+     * 3、遍历完nums后，若slow<nums.length, 则将[slow,nums.length)置0
+     */
+
+    // 思路2
+    public void moveZeroes(int[] nums) {
+        int fast = 0, slow = 0;
+        for (; fast < nums.length; fast++) {
+            if (nums[fast] != 0) {
+                nums[slow++] = nums[fast];
+            }
+        }
+        for (; slow < nums.length; slow++) {
+            nums[slow] = 0;
+        }
+    }
+    public void moveZeroes1(int[] nums) {
+        int i = 0;
+        int j = 0;
+        while (i < nums.length && j < nums.length) {
+            while (i < nums.length && nums[i] != 0) {
+                i++;
+            }
+            j = i + 1;
+            while (j < nums.length && nums[j] == 0) {
+                j++;
+            }
+            if (i < nums.length && j < nums.length) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+    }
+
+
+
+    /**
+     * 加一
+     * 给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+     * 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+     * 你可以假设除了整数 0 之外，这个整数不会以零开头。
+     * <p>
+     * 示例 1：
+     * 输入：digits = [1,2,3]
+     * 输出：[1,2,4]
+     * 解释：输入数组表示数字 123。
+     * <p>
+     * 思路：
+     * 1、遍历digits，从后往前加
+     * 2、处理两种情况：digits[i]=9, 则进位。不是9则加1，且退出循环
+     * 3、处理 类似 【9,99,999】加一位数会变多的情况
+     */
+    public int[] plusOne(int[] digits) {
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (digits[i] == 9) {
+                digits[i] = 0;
+            } else {
+                digits[i] += 1;
+                return digits;
+            }
+        }
+        digits = new int[digits.length + 1];
+        digits[0] = 1;
+        return digits;
+    }
+
+    /**
      * 两个数组的交集 II
      * 给你两个整数数组 nums1 和 nums2 ，请你以数组形式返回两数组的交集。返回结果中每个元素出现的次数，应与元素在两个数组中都出现的次数一致（如果出现次数不一致，则考虑取较小值）。可以不考虑输出结果的顺序。
      * <p>
