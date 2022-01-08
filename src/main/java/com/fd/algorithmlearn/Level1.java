@@ -20,6 +20,130 @@ public class Level1 {
     // 我们推荐以下题目：只出现一次的数字，旋转数组，两个数组的交集 II 和 两数之和。
 
     /**
+     * 有效的数独
+     * 请你判断一个 9 x 9 的数独是否有效。只需要 根据以下规则 ，验证已经填入的数字是否有效即可。
+     * <p>
+     * 数字 1-9 在每一行只能出现一次。
+     * 数字 1-9 在每一列只能出现一次。
+     * 数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）
+     * <p>
+     * 注意：
+     * 一个有效的数独（部分已被填充）不一定是可解的。
+     * 只需要根据以上规则，验证已经填入的数字是否有效即可。
+     * 空白格用 '.' 表示。
+     * <p>
+     * 思路1：哈希
+     * 1、使用Set的特性判断是否重复放入
+     * 2、检查行，检查列，检查宫（3*3）
+     * <p>
+     * 思路2：数组 空间换时间
+     * 1、声明3个9*9的 bool数组, 分别用于检查行，列，宫
+     * 2、双重循环，判断行，列，宫都符合规则
+     * a、行[i][board[i][j] - '1'],
+     * b、列[j][board[i][j] - '1'],
+     * c、宫[int bid = 3 * (i / 3) + (j / 3)][board[i][j] - '1']
+     */
+    public boolean isValidSudoku(char[][] board) {
+        Set<Character> num = new HashSet<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] != '.') {
+                    if (!num.add(board[i][j])) {
+                        return false;
+                    }
+                }
+            }
+            num.clear();
+        }
+
+        for (int i = 0; i < board[0].length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[j][i] != '.') {
+                    if (!num.add(board[j][i])) {
+                        return false;
+                    }
+                }
+            }
+            num.clear();
+        }
+
+        for (int k = 0; k < 9; k += 3) {
+            for (int i = 0; i < 9; i++) {
+                if (i % 3 == 0) {
+                    num.clear();
+                }
+                for (int j = 0; j < 3; j++) {
+                    char x = board[i][j + k];
+                    if (x != '.') {
+                        if (!num.add(x)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    // 空间换时间
+    public boolean isValidSudoku1(char[][] board) {
+        //每一行num是否存在 存在为true
+        boolean[][] row = new boolean[9][9];
+        //每一列num是否存在 存在为true
+        boolean[][] col = new boolean[9][9];
+        //每一宫num是否存在 存在为true
+        boolean[][] bucket = new boolean[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                //获取每个宫的位置
+                int bid = 3 * (i / 3) + (j / 3);
+                if (board[i][j] != '.') {
+                    int num = board[i][j] - '0';
+                    if (row[i][num] || col[j][num] || bucket[bid][num])
+                        return false;
+                    row[i][num] = true;
+                    col[j][num] = true;
+                    bucket[bid][num] = true;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 两数之和
+     * 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
+     * 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+     * 你可以按任意顺序返回答案。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [2,7,11,15], target = 9
+     * 输出：[0,1]
+     * 解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+     * <p>
+     * 思路：哈希
+     * 1、遍历nums，令 b = target-nums[i]
+     * a、判断map中是否存在b，存在则返回
+     * b、不存在，则将 (nums[i],i) 放入map
+     */
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            int b = target - nums[i];
+            if (map.containsKey(b)) {
+                return new int[]{i, map.get(b)};
+            } else {
+                map.put(nums[i], i);
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+
+    /**
      * 移动零
      * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
      * <p>
@@ -30,7 +154,7 @@ public class Level1 {
      * 思路：双指针
      * 1、指针 i, j。初始化i指向第一个0,j(j>i)指向第一个不为0的数
      * 2、交换nus[i],nums[j], j向后移动找到不是0的元素，i向后移动找0
-     *
+     * <p>
      * 思路2：快慢指针
      * 1、初始化两个指针slow， fast
      * 2、遍历nums，每当遇到不是0的数，令nums[slow]=nums[fast], slow++;
@@ -49,6 +173,7 @@ public class Level1 {
             nums[slow] = 0;
         }
     }
+
     public void moveZeroes1(int[] nums) {
         int i = 0;
         int j = 0;
@@ -67,7 +192,6 @@ public class Level1 {
             }
         }
     }
-
 
 
     /**
