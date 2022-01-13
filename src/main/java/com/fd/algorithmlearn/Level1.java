@@ -22,6 +22,145 @@ public class Level1 {
     // 我们推荐以下题目：反转字符串，字符串中第一个唯一字符，字符串转整数（atoi）和 实现 strStr() 。
 
     /**
+     * 字符串转换整数 (atoi)
+     * 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
+     * <p>
+     * 函数 myAtoi(string s) 的算法如下：
+     * <p>
+     * 读入字符串并丢弃无用的前导空格
+     * 检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。
+     * 读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。
+     * 将前面步骤读入的这些数字转换为整数（即，"123" -> 123， "0032" -> 32）。如果没有读入数字，则整数为 0 。必要时更改符号（从步骤 2 开始）。
+     * 如果整数数超过 32 位有符号整数范围 [−231,  231 − 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −231 的整数应该被固定为 −231 ，大于 231 − 1 的整数应该被固定为 231 − 1 。
+     * 返回整数作为最终结果。
+     * <p>
+     * 思路：
+     * 1、预处理去掉前导空格转为char[]数组cs，然后处理第一个字符
+     * 2、若为数字，res+=数字; 若为负号，则记录符号；若为正号，则继续。
+     * 3、遍历cs,若不是数字返回res, 反之res*10+=数字（注意越界判断）
+     * ps:越界判断：令 long tmp = res; 若tmp!=(int)tmp,则越界
+     * ps:越界判断2：令 int tmp = res*10 + x; 若(tmp-x)/10!=res,则越界 (无法处理数字：2147483648)
+     */
+    public int myAtoi(String s) {
+        if (s == null || s.trim().length() == 0) {
+            return 0;
+        }
+        char[] cs = s.trim().toCharArray();
+
+        int res = 0;
+        int fh = 1;
+        if (checkNum(cs[0])) {
+            res += (cs[0] - '0');
+        } else if (cs[0] == '-') {
+            fh = -1;
+        } else if (cs[0] != '+') {
+            return 0;
+        }
+
+        for (int i = 1; i < cs.length; i++) {
+            if (checkNum(cs[i])) {
+                long newRes = (long) res * 10 + (cs[i] - '0') * fh;
+                if (newRes != (int) newRes) {
+                    return fh > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+                }
+                res = (int) newRes;
+            } else {
+                break;
+            }
+        }
+        return res;
+    }
+
+    public boolean checkNum(char c) {
+        return c >= '0' && c <= '9';
+    }
+
+    /**
+     * 验证回文串
+     * 给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+     * <p>
+     * 说明：本题中，我们将空字符串定义为有效的回文串。
+     * <p>
+     * 思路1：双指针
+     * 1、将字符串s转成小写的char[]数组cs
+     * 2、指针i，j分别指向cs的头尾。
+     * 3、处理i,j 若cs[i]不是字母或数字, 则i++; j同理
+     * 4、若cs[i]!=cs[j],则返回false
+     */
+    public boolean isPalindrome(String s) {
+        char[] cs = s.toLowerCase().toCharArray();
+        int i = 0;
+        int j = cs.length - 1;
+
+        while (i < j) {
+            while (i < j && !check(cs[i])) {
+                i++;
+            }
+            while (i < j && !check(cs[j])) {
+                j--;
+            }
+            if (i > j) {
+                break;
+            }
+            if (cs[i] != cs[j]) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+
+    public boolean check(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
+    }
+
+    /**
+     * 有效的字母异位词
+     * 给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的字母异位词。
+     * 注意：若 s 和 t 中每个字符出现的次数都相同，则称 s 和 t 互为字母异位词。
+     * <p>
+     * 思路1：数组计数
+     * 1、创建int[26] record
+     * 2、遍历字符串s，对应字符的计数+1，遍历字符串t，对应字符的计数-1
+     * 3、遍历record，若record[i]!=0, 则返回false
+     * <p>
+     * 思路2：排序
+     * 1、将字符串转成char[]数组
+     * 2、将两个char[]数组排序
+     * 3、若排序后的两个char[]数组相等，则返回true
+     */
+    public boolean isAnagram(String s, String t) {
+        int[] record = new int[26];
+        char[] cs = s.toCharArray();
+        char[] ct = t.toCharArray();
+
+        for (char c : cs) {
+            record[c - 'a']++;
+        }
+        for (char c : ct) {
+            record[c - 'a']--;
+        }
+        for (int i : record) {
+            if (i != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAnagram1(String s, String t) {
+        char[] cs = s.toCharArray();
+        char[] ct = t.toCharArray();
+
+        Arrays.sort(cs);
+        Arrays.sort(ct);
+
+        return Arrays.equals(cs, ct);
+    }
+
+    /**
      * 字符串中的第一个唯一字符
      * 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
      * <p>
