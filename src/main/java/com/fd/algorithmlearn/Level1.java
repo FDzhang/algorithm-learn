@@ -22,6 +22,107 @@ public class Level1 {
     // 我们推荐以下题目：反转字符串，字符串中第一个唯一字符，字符串转整数（atoi）和 实现 strStr() 。
 
     /**
+     * 实现 strStr()
+     * 实现 strStr() 函数。
+     * 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。
+     * 如果不存在，则返回  -1 。
+     * 说明：
+     * 当 needle 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。
+     * 对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与 C 语言的 strstr() 以及 Java 的 indexOf() 定义相符。
+     * <p>
+     * 示例 1：
+     * 输入：haystack = "hello", needle = "ll"
+     * 输出：2
+     * <p>
+     * 思路1：(工作中使用)
+     * 1、借用语言自带的api (eg: java indexOf)
+     * <p>
+     * 思路2：双指针
+     * 1、指针i,j分别指向haystack，needle
+     * 2、遍历haystack，
+     * a、若h[i]==n[j],逐个比较needle的其它字符，
+     * b、若匹配不成功，则将i,j位置复原，再将i++, 匹配成功则返回i-j
+     * 3、匹配不到返回-1,
+     * <p>
+     * 思路3：kmp from [如何更好地理解和掌握 KMP 算法? - 知乎](https://www.zhihu.com/question/21923021/answer/281346746)
+     * 1、理解 部分匹配表(Partial Match Table)的数组 的含义 -> 获取next数组
+     * 2、遍历 haystack 并借助next数组，进行匹配
+     * ps： 时间复杂度O（m+n）
+     */
+    public int strStr(String haystack, String needle) {
+        if (needle.length() == 0) {
+            return 0;
+        }
+        char[] hc = haystack.toCharArray();
+        char[] nc = needle.toCharArray();
+
+        int[] next = new int[nc.length];
+        getNext(nc, next);
+
+        int i = 0;
+        int j = 0;
+        while (i < hc.length && j < nc.length) {
+            if (j == -1 || hc[i] == nc[j]) {
+                ++i;
+                ++j;
+            } else {
+                j = next[j];
+            }
+        }
+        return j == nc.length ? i - j : -1;
+    }
+
+    public void getNext(char[] cs, int[] next) {
+        int i = 0;
+        int j = -1;
+        next[0] = -1;
+
+        while (i < cs.length - 1) {
+            if (j == -1 || cs[i] == cs[j]) {
+                ++i;
+                ++j;
+                next[i] = j;
+            } else {
+                j = next[j];
+            }
+        }
+    }
+
+
+    public int strStr2(String haystack, String needle) {
+        if (needle.length() == 0) {
+            return 0;
+        }
+        char[] hc = haystack.toCharArray();
+        char[] nc = needle.toCharArray();
+
+        int i = 0;
+        int j = 0;
+        while (i < hc.length && j < nc.length) {
+            int temp = i;
+            while (i < hc.length && j < nc.length && hc[i] == nc[j]) {
+                i++;
+                j++;
+            }
+            if (j == nc.length) {
+                return temp;
+            }
+            i = temp + 1;
+            j = 0;
+        }
+
+        return -1;
+    }
+
+    public int strStr1(String haystack, String needle) {
+        int i = -1;
+        if (haystack != null) {
+            i = haystack.indexOf(needle);
+        }
+        return i;
+    }
+
+    /**
      * 字符串转换整数 (atoi)
      * 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
      * <p>
