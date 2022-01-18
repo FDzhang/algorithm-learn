@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.linked.ListNode;
+
 import java.util.*;
 
 /**
@@ -15,24 +17,99 @@ import java.util.*;
  */
 public class Level1 {
 
+    // -------------------------- 链表 ------------------------------
+    // 链表
+    // 链表问题相对容易掌握。 不要忘记 "双指针解法" ，它不仅适用于数组问题，而且还适用于链表问题。
+    // 另一种大大简化链接列表问题的方法是 "Dummy node" 节点技巧 ，所谓 Dummy Node 其实就是带头节点的指针。
+    // 我们推荐以下题目：反转链表，合并两个有序链表和链接环。
+    // 更有额外的挑战，你可以尝试运用 递归 来解决这些问题：反转链表，回文链表和合并两个有序链表。
 
+    /**
+     * 删除链表中的节点
+     * 请编写一个函数，用于 删除单链表中某个特定节点 。在设计函数时需要注意，你无法访问链表的头节点 head ，只能直接访问 要被删除的节点 。
+     * <p>
+     * 题目数据保证需要删除的节点 不是末尾节点 。
+     * <p>
+     * 思路：
+     * 1、A->B->C，一般删除B需要给节点A，现在给的是节点B本身
+     * 2、所以用C的数据覆盖B即可
+     */
+    public void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+
+    // -------------------------- 链表 ------------------------------ end
     // -------------------------- 字符串 ------------------------------
     // 字符串
     // 字符串问题在面试中出现频率很高，你极有可能在面试中遇到。
     // 我们推荐以下题目：反转字符串，字符串中第一个唯一字符，字符串转整数（atoi）和 实现 strStr() 。
 
     /**
+     * 最长公共前缀
+     * 编写一个函数来查找字符串数组中的最长公共前缀。
+     * 如果不存在公共前缀，返回空字符串 ""。
+     * <p>
+     * 示例 1：
+     * 输入：strs = ["flower","flow","flight"]
+     * 输出："fl"
+     * <p>
+     * 思路：
+     * 1、找出长度最小的字符串 (也可以任取一个字符串)
+     * 2、用长度最小的字符串 去与 每个字符匹配， 不成功则长度减一，继续匹配，直至成功或长度为0则停止
+     */
+    public String longestCommonPrefix(String[] strs) {
+        // 找出最小长度的的字符串
+        int minLen = Integer.MAX_VALUE;
+        String minStr = "";
+        for (String str : strs) {
+            if (minLen > str.length()) {
+                minLen = str.length();
+                minStr = str;
+            }
+        }
+
+        for (String str : strs) {
+            while (minLen > 0) {
+                // 是否是共同前缀
+                boolean start = str.startsWith(minStr.substring(0, minLen));
+                if (start) {
+                    break;
+                } else {
+                    minLen--;
+                }
+            }
+        }
+        return minStr.substring(0, minLen);
+    }
+
+    // 写法2
+    public static String longestCommonPrefix1(String[] strs) {
+        String pre = strs[0];
+        for (String str : strs) {
+            while (!str.startsWith(pre)) {
+                pre = pre.substring(0, pre.length() - 1);
+                if ("".equals(pre)) {
+                    return pre;
+                }
+            }
+        }
+        return pre;
+    }
+
+
+    /**
      * 外观数列
      * 给定一个正整数 n ，输出外观数列的第 n 项。
-     *
+     * <p>
      * 「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。
-     *
+     * <p>
      * 你可以将其视作是由递归公式定义的数字字符串序列：
-     *
+     * <p>
      * countAndSay(1) = "1"
      * countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。
      * 前五项如下：
-     *
+     * <p>
      * 1.     1
      * 2.     11
      * 3.     21
@@ -45,12 +122,11 @@ public class Level1 {
      * 描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 "111221"
      * 要 描述 一个数字字符串，首先要将字符串分割为 最小 数量的组，每个组都由连续的最多 相同字符 组成。然后对于每个组，
      * 先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。
-     *
+     * <p>
      * 思路：
      * 1、初始化外观数列的第一项 "1"
      * 2、以第一项为基础 循环处理外观数列n次,规则如题所述
      * a、遍历外观字符串s, 记录连续字符的次数cnt和字符本身c，拼接cnt、c，到结果集
-     *
      */
     public String countAndSay(int n) {
         String str = "1";
