@@ -25,6 +25,87 @@ public class Level1 {
     // 更有额外的挑战，你可以尝试运用 递归 来解决这些问题：反转链表，回文链表和合并两个有序链表。
 
     /**
+     * 反转链表
+     * 给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
+     * <p>
+     * 思路：指针
+     * 1、使用pre，cur，next三个指针，pre在cur之前，next在cur之后
+     * 2、遍历链表借助pre,cur,next逐个进行翻转
+     * a、next=cur.next,cur.next=pre,pre=cur,cur=next
+     * <p>
+     * 思路2：递归
+     * 1、使用pre，cur，next三个指针，pre在cur之前，next在cur之后
+     * 2、递归进行翻转即可，当cur.next=null时，代表到达尾部，返回当前的cur
+     */
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode pre = null;
+        ListNode cur = head;
+        ListNode next = null;
+
+        while (cur.next != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        cur.next = pre;
+
+        return cur;
+    }
+
+    // 递归
+    public ListNode reverseList1(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        return reverseListHelp(null, head, head.next);
+    }
+
+    public ListNode reverseListHelp(ListNode pre, ListNode cur, ListNode next) {
+        if (cur.next == null) {
+            cur.next = pre;
+            return cur;
+        }
+
+        cur.next = pre;
+        return reverseListHelp(cur, next, next.next);
+    }
+
+
+    /**
+     * 删除链表的倒数第N个节点
+     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+     * <p>
+     * 思路：前后指针
+     * 1、先将指针fast向后移动n格 （slow指向头结点，slow和fast距离为n）
+     * 2、再同时移动指针slow，fast。当fast到达链尾时，slow就是倒数第n+1个节点
+     * 3、删除slow后面的节点
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        // 1 2 3 4 5 null
+        int i = 0;
+        while (fast != null && i < n) {
+            fast = fast.next;
+            i++;
+        }
+        if (fast == null) {
+            return head.next;
+        }
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        return head;
+    }
+
+    /**
      * 删除链表中的节点
      * 请编写一个函数，用于 删除单链表中某个特定节点 。在设计函数时需要注意，你无法访问链表的头节点 head ，只能直接访问 要被删除的节点 。
      * <p>
