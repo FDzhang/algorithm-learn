@@ -25,6 +25,148 @@ public class Level1 {
     // 更有额外的挑战，你可以尝试运用 递归 来解决这些问题：反转链表，回文链表和合并两个有序链表。
 
     /**
+     * 回文链表
+     * 给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。
+     * <p>
+     * 示例 1：
+     * 输入：head = [1,2,2,1]
+     * 输出：true
+     * <p>
+     * 1 2 2 1
+     * s   f
+     * 1 2 2 1 2
+     * s   f
+     * 思路1: 快慢指针
+     * 1、快慢指针找到中点
+     * 2、翻转后半部分链表, 定义left指向head，right指向翻转的后半部分链表
+     * 3、left,right同时前进，不同则不是回文链表
+     * <p>
+     * 思路2：递归
+     * 1、参考链表逆序打印 (可以用快慢指针的技巧加速 （2n->1.5n）)
+     */
+    private ListNode temp;
+
+    public boolean isPalindrome1(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        temp = head;
+        return check(slow);
+    }
+
+    private boolean check(ListNode head) {
+        if (head == null) {
+            return true;
+        }
+        boolean res = check(head.next) && (temp.val == head.val);
+        temp = temp.next;
+        return res;
+    }
+
+    // 非递归
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow, fast, left;
+        slow = fast = left = head;
+        // 快慢指针，找到中点
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        // 翻转后半部分链表
+        ListNode right = reverse(slow);
+
+        while (right != null && left != null) {
+            if (left.val != right.val) {
+                return false;
+            }
+            left = left.next;
+            right = right.next;
+        }
+        return true;
+    }
+
+    // 翻转链表，返回新链表的头结点
+    public ListNode reverse(ListNode head) {
+        ListNode pre = null, cur = head, next;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+    /**
+     * 合并两个有序链表
+     * 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+     * <p>
+     * 思路1：
+     * 1、循环遍历l1,l2进行拼接
+     * 2、先确定要返回的head，再遍历两个链表进行拼接，再将剩下的链表直接接到新链表尾部
+     * <p>
+     * 思路2：递归
+     * 1、参考循环拼接，确定base case，和拼接逻辑即可
+     */
+    // 递归
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+
+        if (l1.val > l2.val) {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
+        } else {
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        }
+    }
+
+    // 循环
+    public ListNode mergeTwoLists1(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        ListNode head, cur;
+        if (l1.val > l2.val) {
+            head = l2;
+            cur = l2;
+            l2 = l2.next;
+        } else {
+            head = l1;
+            cur = l1;
+            l1 = l1.next;
+        }
+
+        while (l1 != null && l2 != null) {
+            if (l1.val > l2.val) {
+                cur.next = l2;
+                l2 = l2.next;
+            } else {
+                cur.next = l1;
+                l1 = l1.next;
+            }
+            cur = cur.next;
+        }
+        if (l1 != null) {
+            cur.next = l1;
+        }
+        if (l2 != null) {
+            cur.next = l2;
+        }
+        return head;
+    }
+
+    /**
      * 反转链表
      * 给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
      * <p>
