@@ -25,6 +25,75 @@ public class Level1 {
     // 我们推荐以下题目：二叉树的最大深度，验证二叉搜索树，二叉树的层次遍历 和 将有序数组转换为二叉搜索树。
 
     /**
+     * 对称二叉树
+     * 给你一个二叉树的根节点 root ， 检查它是否轴对称。
+     * <p>
+     * 输入：root = [1,2,2,3,4,4,3]
+     * 输出：true
+     * <p>
+     * 思路：(自顶向下)
+     * 1、左右对称
+     * a、左右都为空，则对称 （base case）
+     * b、左右只有其中一个为空，则不对称
+     * c、左右的val不相等，则不对称
+     * d、下一层也需要左右对称：左的左和右的右对称 且 左的右和右的左对称，则对称
+     */
+    public boolean isSymmetric(TreeNode root) {
+        return isSymmetricHelp(root.left, root.right);
+    }
+
+    private boolean isSymmetricHelp(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null) {
+            return false;
+        }
+        if (left.val != right.val) {
+            return false;
+        }
+        return isSymmetricHelp(left.left, right.right) && isSymmetricHelp(left.right, right.left);
+    }
+
+
+    /**
+     * 验证二叉搜索树
+     * 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
+     * <p>
+     * 有效 二叉搜索树定义如下：
+     * <p>
+     * 节点的左子树只包含 小于 当前节点的数。
+     * 节点的右子树只包含 大于 当前节点的数。
+     * 所有左子树和右子树自身必须也是二叉搜索树。
+     * <p>
+     * 思路：递归 (排除错误的情况，就是正确的情况)
+     * 0、定义理解：当前节点符合二叉搜索树定义 且 左右子树符合二叉搜索树定义，则正确
+     * 1、若当前节点是 左子节点，则需要小于最大值，反之则不是二叉搜索树
+     * 2、若当前节点是 右子节点，则需要大于最小值，反之则不是二叉搜索树
+     * 3、对于下一层而言，当前节点 是左子树的最大值，右子树的最小值
+     * ps:  max!=null则为左子节点，min!=null则为右子节点
+     * <p>
+     * 思路2：中序遍历后有序
+     */
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null, null);
+    }
+
+    public boolean isValidBST(TreeNode root, TreeNode min, TreeNode max) {
+        if (root == null) {
+            return true;
+        }
+
+        if (max != null && root.val >= max.val) {
+            return false;
+        }
+        if (min != null && root.val <= min.val) {
+            return false;
+        }
+        return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
+    }
+
+    /**
      * 二叉树的最大深度
      * 给定一个二叉树，找出其最大深度。
      * 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
@@ -33,7 +102,7 @@ public class Level1 {
      * 示例：
      * 给定二叉树 [3,9,20,null,null,15,7]，
      * 返回它的最大深度 3 。
-     *
+     * <p>
      * 思路：递归
      * 1、函数定义：返回max(左子树的深度，右子树的深度)+1
      * 2、定义base case：root=null,则返回0
