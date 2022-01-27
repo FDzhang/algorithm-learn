@@ -25,6 +25,114 @@ public class Level1 {
     // 我们推荐以下题目：二叉树的最大深度，验证二叉搜索树，二叉树的层次遍历 和 将有序数组转换为二叉搜索树。
 
     /**
+     * 将有序数组转换为二叉搜索树
+     * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+     * <p>
+     * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+     * <p>
+     * 思路：分治
+     * 1、不停的取指定范围内的1/2的val作为当前节点
+     * 2、当前节点.left  等于 左子范围的1/2处
+     * 3、当前节点.right 等于 右子范围的1/2处
+     * ps:范围[lo,hi], mid=(lo+hi)/2, 则左子范围=[lo,mid-1], 右子范围=[mid+1,hi]
+     *
+     * 思路2：bfs
+     * 1、借助队列记录当前节点在左子范围，右子范围
+     *
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBSTHelp(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode sortedArrayToBSTHelp(int[] nums, int lo, int hi) {
+        if (lo > hi) {
+            return null;
+        }
+        int mid = lo + (hi - lo) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+
+        root.left = sortedArrayToBSTHelp(nums, lo, mid - 1);
+        root.right = sortedArrayToBSTHelp(nums, mid + 1, hi);
+        return root;
+    }
+
+    /**
+     * 二叉树的层序遍历
+     * 给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。
+     * <p>
+     * 思路：队列 (先进先出)
+     * 1、根节点入队，（第0层）
+     * 2、当前层逐个出队，若节点的左右节点不为空，则左右节点入队，以此类推
+     * <p>
+     * 思路2：dfs
+     * 1、借助level记录层数，先左后右进行递归
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> res = new ArrayList<>();
+
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> level = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.remove();
+                level.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            res.add(level);
+        }
+        return res;
+    }
+
+    /**
+     * 二叉树的层序遍历
+     */
+    public List<List<Integer>> levelOrder1(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> res = new ArrayList<>();
+
+        Queue<TreeNode> level = new LinkedList<>();
+        level.offer(root);
+
+        while (!level.isEmpty()) {
+            List<Integer> l = new ArrayList<>();
+            level = levelNode(level, l);
+            res.add(l);
+        }
+        return res;
+    }
+
+    /**
+     * 填充当前层的 val
+     * 返回下一层的nodes
+     */
+    public Queue<TreeNode> levelNode(Queue<TreeNode> level, List<Integer> list) {
+        Queue<TreeNode> next = new LinkedList<>();
+        while (!level.isEmpty()) {
+            TreeNode node = level.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                next.offer(node.left);
+            }
+            if (node.right != null) {
+                next.offer(node.right);
+            }
+        }
+        return next;
+    }
+
+    /**
      * 对称二叉树
      * 给你一个二叉树的根节点 root ， 检查它是否轴对称。
      * <p>
