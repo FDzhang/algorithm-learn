@@ -18,6 +18,61 @@ import java.util.*;
 public class Level1 {
 
 
+    // -------------------------- 排序和搜索 ------------------------------
+    // 排序和搜索
+    // 本章涵盖了在有序结构中的排序和搜索问题。
+    // 我们推荐 第一个错误的版本 这道题，作为介绍一个重要的算法的起始点。
+
+    /**
+     * 合并两个有序数组
+     * 给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
+     * <p>
+     * 请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。
+     * <p>
+     * 注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。
+     * 为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
+     * <p>
+     * 相关标签 数组 双指针 排序
+     *
+     * 思路1：空间换时间
+     * 1、将nums1,nums2有序放入res(length: m+n)
+     * 2、将res拷贝到nums1
+     *
+     * 思路2：倒着写入
+     * 1、指针i指向m-1，指针j指向n-1，指针k指向m+n-1
+     * 2、比较num1[i]和nums2[j], 顺序写入num1[k], 然后（i--,k-- 或 j--,k--)
+     * 3、若nums2仍有剩余，则继续写入num1
+     * ps: nums1的实际长度为m+n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] res = new int[m + n];
+        int p = 0;
+        int q = 0;
+        for (int i = 0; i < res.length; i++) {
+            if (p < m && q < n && nums1[p] <= nums2[q]) {
+                res[i] = nums1[p++];
+            } else if (q < n) {
+                res[i] = nums2[q++];
+            } else if (p < m) {
+                res[i] = nums1[p++];
+            }
+        }
+        System.arraycopy(res, 0, nums1, 0, m + n);
+    }
+
+    public void merge1(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n - 1, writeIdx = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            nums1[writeIdx--] = nums1[i] > nums2[j] ? nums1[i--] : nums2[j--];
+        }
+        while (j >= 0) {
+            nums1[writeIdx--] = nums2[j--];
+        }
+    }
+
+
+    // -------------------------- 排序和搜索 ------------------------------ end
+
     // -------------------------- 树 ------------------------------
     // 树
     // 树比链表稍微复杂，因为链表是线性数据结构，而树不是。 树的问题可以由 广度优先搜索 或 深度优先搜索 解决。
@@ -35,10 +90,9 @@ public class Level1 {
      * 2、当前节点.left  等于 左子范围的1/2处
      * 3、当前节点.right 等于 右子范围的1/2处
      * ps:范围[lo,hi], mid=(lo+hi)/2, 则左子范围=[lo,mid-1], 右子范围=[mid+1,hi]
-     *
+     * <p>
      * 思路2：bfs
      * 1、借助队列记录当前节点在左子范围，右子范围
-     *
      */
     public TreeNode sortedArrayToBST(int[] nums) {
         return sortedArrayToBSTHelp(nums, 0, nums.length - 1);
