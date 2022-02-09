@@ -25,6 +25,45 @@ public class Level1 {
     // 我们推荐以下题目：爬楼梯，买卖股票最佳时机 和 最大子序和。
 
     /**
+     * 最大子序和
+     * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+     * <p>
+     * 子数组 是数组中的一个连续部分。
+     * <p>
+     * 相关标签 数组 分治 动态规划
+     * <p>
+     * 思路1：动态规划
+     * 1、定义dp数组: [0~i]的最大子序和, dp[0]=MinValue, dp[i]=max(nums[i], dp[i-1]+nums[i]), res=max(res, dp[i])
+     * 2、返回res
+     * ps: 空间优化，dp[i]只依赖dp[i-1],可使用一个常量替换
+     * <p>
+     * 思路2：分治
+     * 1、
+     */
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(nums[i], dp[i - 1] + nums[i]);
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+    // 空间优化
+    public int maxSubArray1(int[] nums) {
+        int res = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            max = Math.max(nums[i], max + nums[i]);
+            res = Math.max(res, max);
+        }
+        return res;
+    }
+
+
+    /**
      * 买卖股票的最佳时机
      * 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
      * <p>
