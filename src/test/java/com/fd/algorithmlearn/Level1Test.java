@@ -2,6 +2,8 @@ package com.fd.algorithmlearn;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -29,5 +31,36 @@ class Level1Test {
         int[] x = {2,2,1};
         int res = test.singleNumber1(x);
         System.err.println(res);
+    }
+
+
+    @Test
+    void shuffleTest(){
+        int[] nums  = new int[]{1,2,3};
+
+
+
+        Level1.Solution obj = new Level1.Solution(nums);
+        int[] param_1 = obj.reset();
+        System.err.println(Arrays.toString(param_1));
+
+        int[] param_2 = obj.shuffle();
+        System.err.println(Arrays.toString(param_2));
+
+        for (int i = 0; i < param_1.length; i++) {
+            param_1[i] = i;
+        }
+        System.err.println(Arrays.toString(param_1));
+        int[] param_3 = obj.reset();
+        System.err.println(Arrays.toString(param_3));
+
+
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = i;
+        }
+        System.err.println(Arrays.toString(nums));
+        int[] param_4 = obj.reset();
+        System.err.println(Arrays.toString(param_4));
+
     }
 }

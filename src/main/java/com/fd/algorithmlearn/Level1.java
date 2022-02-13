@@ -2,6 +2,7 @@ package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -17,6 +18,61 @@ import java.util.*;
  */
 public class Level1 {
 
+
+    // -------------------------- 设计问题 ------------------------------
+    // 设计问题
+    // 这类问题通常要求你实现一个给定的类的接口，并可能涉及使用一种或多种数据结构。 这些问题对于提高数据结构是很好的练习。
+    //
+    // 我们推荐以下题目：打乱数组 和 最小栈。
+    //
+    // 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x26epd/
+
+    /**
+     * 打乱数组
+     * 给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。打乱后，数组的所有排列应该是 等可能 的。
+     * <p>
+     * 实现 Solution class:
+     * <p>
+     * Solution(int[] nums) 使用整数数组 nums 初始化对象
+     * int[] reset() 重设数组到它的初始状态并返回
+     * int[] shuffle() 返回数组随机打乱后的结果
+     *
+     * 思路：随机数
+     * 1、定义两个数组 raw, shu
+     * 2、初始化：将nums分别拷贝一份给 raw, shu
+     * 3、reset() 将raw拷贝给shu, 返回 shu
+     * 4、shuffle() 遍历shu, 从前往后（从后往前）, 将当前数shu[i]与[0~i]的任意一个数交换位置
+     */
+    static class Solution {
+        private int[] raw;
+        private int[] shu;
+
+        public Solution(int[] nums) {
+            raw = new int[nums.length];
+            shu = new int[nums.length];
+            System.arraycopy(nums, 0, raw, 0, nums.length);
+            System.arraycopy(nums, 0, shu, 0, nums.length);
+        }
+
+        public int[] reset() {
+            System.arraycopy(raw, 0, shu, 0, raw.length);
+            return shu;
+        }
+
+        public int[] shuffle() {
+            Random random = new Random();
+            int length = shu.length;
+            for (int i = length - 1; i > 0; i--) {
+                int pre = random.nextInt(i + 1);
+                int temp = shu[pre];
+                shu[pre] = shu[i];
+                shu[i] = temp;
+            }
+            return shu;
+        }
+    }
+
+    // -------------------------- 设计问题 ------------------------------ end
 
     // -------------------------- 动态规划 ------------------------------
     // 动态规划
