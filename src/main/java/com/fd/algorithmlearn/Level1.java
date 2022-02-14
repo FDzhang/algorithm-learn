@@ -2,7 +2,6 @@ package com.fd.algorithmlearn;
 
 import com.fd.algorithmlearn.linked.ListNode;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -28,6 +27,81 @@ public class Level1 {
     // 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x26epd/
 
     /**
+     * 最小栈
+     * 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+     * <p>
+     * push(x) —— 将元素 x 推入栈中。
+     * pop() —— 删除栈顶的元素。
+     * top() —— 获取栈顶元素。
+     * getMin() —— 检索栈中的最小元素。
+     * <p>
+     * 思路：
+     * 1、Stack<int[2]> ：栈顶的 int[0] 栈元素，int[1] 当前栈的最小元素
+     * 2、push元素时： int[1]=Math.min(val, stack.peek()[1])
+     */
+    static class MinStack {
+        private Stack<int[]> stack = new Stack<>();
+
+        /**
+         * initialize your data structure here.
+         */
+        public MinStack() {
+
+        }
+
+        public void push(int val) {
+            if (stack.isEmpty()) {
+                stack.push(new int[]{val, val});
+            } else {
+                stack.push(new int[]{val, Math.min(val, stack.peek()[1])});
+            }
+        }
+
+        public void pop() {
+            stack.pop();
+        }
+
+        public int top() {
+            return stack.peek()[0];
+        }
+
+        public int getMin() {
+            return stack.peek()[1];
+        }
+    }
+
+    static class MinStack1 {
+        private LinkedList<int[]> stack = new LinkedList<>();
+
+        /**
+         * initialize your data structure here.
+         */
+        public MinStack1() {
+
+        }
+
+        public void push(int val) {
+            if (stack.isEmpty()) {
+                stack.push(new int[]{val, val});
+            } else {
+                stack.push(new int[]{val, Math.min(val, stack.peek()[1])});
+            }
+        }
+
+        public void pop() {
+            stack.pop();
+        }
+
+        public int top() {
+            return stack.peek()[0];
+        }
+
+        public int getMin() {
+            return stack.peek()[1];
+        }
+    }
+
+    /**
      * 打乱数组
      * 给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。打乱后，数组的所有排列应该是 等可能 的。
      * <p>
@@ -36,7 +110,7 @@ public class Level1 {
      * Solution(int[] nums) 使用整数数组 nums 初始化对象
      * int[] reset() 重设数组到它的初始状态并返回
      * int[] shuffle() 返回数组随机打乱后的结果
-     *
+     * <p>
      * 思路：随机数
      * 1、定义两个数组 raw, shu
      * 2、初始化：将nums分别拷贝一份给 raw, shu
