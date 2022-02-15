@@ -18,6 +18,65 @@ import java.util.*;
 public class Level1 {
 
 
+    // -------------------------- 数学 ------------------------------
+    // 数学
+    // 面试中提出的大部分数学问题都不需要超出初中阶段的数学知识。
+    //
+    // 我们推荐以下题目：计数质数 和 3 的幂 。
+
+    /**
+     * Fizz Buzz
+     * 给你一个整数 n ，找出从 1 到 n 各个整数的 Fizz Buzz 表示，并用字符串数组 answer（下标从 1 开始）返回结果，其中：
+     * <p>
+     * answer[i] == "FizzBuzz" 如果 i 同时是 3 和 5 的倍数。
+     * answer[i] == "Fizz" 如果 i 是 3 的倍数。
+     * answer[i] == "Buzz" 如果 i 是 5 的倍数。
+     * answer[i] == i （以字符串形式）如果上述条件全不满足。
+     * <p>
+     * 相关标签 数学 字符串 模拟
+     *
+     * 思路：for循环+条件判断
+     * 1、四种情况分别判断
+     * ps: 可以每15个进行一次枚举add，进行加速
+     *
+     */
+    public List<String> fizzBuzz(int n) {
+        List<String> list = new ArrayList<>(n);
+        for (int i = 1; i <= n; i++) {
+            if (i % 3 == 0 && i % 5 == 0) {
+                list.add("FizzBuzz");
+            } else if (i % 3 == 0) {
+                list.add("Fizz");
+            } else if (i % 5 == 0) {
+                list.add("Buzz");
+            } else {
+                list.add(String.valueOf(i));
+            }
+        }
+        return list;
+    }
+
+    public List<String> fizzBuzz1(int n) {
+        List<String> strList = new ArrayList<>();
+        boolean a;
+        boolean b;
+        for (int i = 1; i <= n; i++) {
+            a = i % 3 == 0;
+            b = i % 5 == 0;
+            if (a && b) {
+                strList.add("FizzBuzz");
+            } else if (a) {
+                strList.add("Fizz");
+            } else if (b) {
+                strList.add("Buzz");
+            } else {
+                strList.add(String.valueOf(i));
+            }
+        }
+        return strList;
+    }
+
+    // -------------------------- 设计问题 ------------------------------end
     // -------------------------- 设计问题 ------------------------------
     // 设计问题
     // 这类问题通常要求你实现一个给定的类的接口，并可能涉及使用一种或多种数据结构。 这些问题对于提高数据结构是很好的练习。
