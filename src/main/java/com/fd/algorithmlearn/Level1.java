@@ -25,6 +25,53 @@ public class Level1 {
     // 我们推荐以下题目：计数质数 和 3 的幂 。
 
     /**
+     * 计数质数
+     * 给定整数 n ，返回 所有小于非负整数 n 的质数的数量 。
+     *
+     * 思路：埃氏筛 form [快来秒懂筛质数！ - 计数质数 - 力扣（LeetCode）](https://leetcode-cn.com/problems/count-primes/solution/kuai-lai-miao-dong-shai-zhi-shu-by-sweetiee/)
+     * 这是一个古老的筛素数的方法。方法如下：
+     * 1、初始化长度 boolean[] 的标记数组，表示这个数组是否为质数。数组初始化所有的数都是质数.
+     * 2、从 2 开始将当前数字的倍数全都标记为合数。标记到 sqrt(n)时停止即可。具体可以看来自维基百科的动画
+     *
+     */
+    public int countPrimes(int n) {
+        boolean[] isNoPrime = new boolean[n];
+        for (int i = 2; i * i < n; i++) {
+            if (!isNoPrime[i]){
+                for (int j = i * i; j < n; j += i) {
+                    isNoPrime[j] = true;
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 2; i < n; i++) {
+            if (!isNoPrime[i]){
+                ans++;
+            }
+        }
+        return ans;
+    }
+    public int countPrimes1(int n) {
+        boolean[] isPrime = new boolean[n];
+        for (int i = 2; i < n; i++) {
+            isPrime[i] = true;
+        }
+        for (int i = 2; i * i < n; i++) {
+            if (!isPrime[i]){
+                continue;
+            }
+            for (int j = i * i; j < n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+        int ans = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i]) ans++;
+        }
+        return ans;
+    }
+
+    /**
      * Fizz Buzz
      * 给你一个整数 n ，找出从 1 到 n 各个整数的 Fizz Buzz 表示，并用字符串数组 answer（下标从 1 开始）返回结果，其中：
      * <p>
@@ -34,11 +81,10 @@ public class Level1 {
      * answer[i] == i （以字符串形式）如果上述条件全不满足。
      * <p>
      * 相关标签 数学 字符串 模拟
-     *
+     * <p>
      * 思路：for循环+条件判断
      * 1、四种情况分别判断
      * ps: 可以每15个进行一次枚举add，进行加速
-     *
      */
     public List<String> fizzBuzz(int n) {
         List<String> list = new ArrayList<>(n);
