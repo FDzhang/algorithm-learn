@@ -25,19 +25,141 @@ public class Level1 {
     // 我们推荐以下题目：计数质数 和 3 的幂 。
 
     /**
+     * 罗马数字转整数
+     * 罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。
+     * 字符          数值
+     * I             1
+     * V             5
+     * X             10
+     * L             50
+     * C             100
+     * D             500
+     * M             1000
+     * 例如， 罗马数字 2 写做 II ，即为两个并列的 1 。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。
+     * <p>
+     * 通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，
+     * 所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：
+     * <p>
+     * I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。
+     * X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。 
+     * C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。
+     * 给定一个罗马数字，将其转换成整数。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: s = "III"
+     * 输出: 3
+     * 示例 2:
+     * <p>
+     * 输入: s = "IV"
+     * 输出: 4
+     * 示例 3:
+     * <p>
+     * 输入: s = "IX"
+     * 输出: 9
+     * 示例 4:
+     * <p>
+     * 输入: s = "LVIII"
+     * 输出: 58
+     * 解释: L = 50, V= 5, III = 3.
+     * 示例 5:
+     * <p>
+     * 输入: s = "MCMXCIV"
+     * 输出: 1994
+     * 解释: M = 1000, CM = 900, XC = 90, IV = 4.
+     * <p>
+     * <p>
+     * 相关标签 哈希表 数学 字符串
+     * <p>
+     * 思路1：哈希
+     * 1、将7个罗马字符做一个到int的映射
+     * 2、对于六种特殊组合（IV等）：记录前一个字符，若当前字符大于前一个字符, 则减掉前一个字符对应的int
+     * a、eg: IV : res=res-1; res=res+5; 从而实现 res整体+4的效果
+     * ps: 也可以将六种特殊组合 用其它 单个字符 先做字符串替换，然后将这6个自定义的字符加入映射集合中
+     */
+    public int romanToInt(String s) {
+        char[] chars = s.toCharArray();
+        int res = 0;
+
+        int preNum = getValue(chars[0]);
+        for (int i = 1; i < chars.length; i++) {
+            int curNum = getValue(chars[i]);
+            if (preNum < curNum) {
+                res -= preNum;
+            } else {
+                res += preNum;
+            }
+            preNum = curNum;
+        }
+        return res + preNum;
+    }
+
+    public int getValue(char ch) {
+        switch (ch) {
+            case 'I':
+                return 1;
+            case 'V':
+                return 5;
+            case 'X':
+                return 10;
+            case 'L':
+                return 50;
+            case 'C':
+                return 100;
+            case 'D':
+                return 500;
+            case 'M':
+                return 1000;
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * 3的幂
+     * 给定一个整数，写一个函数来判断它是否是 3 的幂次方。如果是，返回 true ；否则，返回 false 。
+     * <p>
+     * 整数 n 是 3 的幂次方需满足：存在整数 x 使得 n == 3x
+     * <p>
+     * 相关标签 递归 数学
+     * <p>
+     * 思路1：循环
+     * 1、3 的幂次方： 能一直被3整除，直到1为止
+     * <p>
+     * 思路2：数学
+     * 1、找到int内最大的 3的幂次方 m3, 判断m3%n==0 （n若是3的幂，则m3一定能被n整除）
+     */
+    public boolean isPowerOfThree1(int n) {
+        if (n < 1) {
+            return false;
+        }
+        while (n % 3 == 0) {
+            n /= 3;
+        }
+        return n == 1;
+    }
+
+    public boolean isPowerOfThree(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        return 1162261467 % n == 0;
+    }
+
+
+    /**
      * 计数质数
      * 给定整数 n ，返回 所有小于非负整数 n 的质数的数量 。
-     *
+     * <p>
      * 思路：埃氏筛 form [快来秒懂筛质数！ - 计数质数 - 力扣（LeetCode）](https://leetcode-cn.com/problems/count-primes/solution/kuai-lai-miao-dong-shai-zhi-shu-by-sweetiee/)
      * 这是一个古老的筛素数的方法。方法如下：
      * 1、初始化长度 boolean[] 的标记数组，表示这个数组是否为质数。数组初始化所有的数都是质数.
      * 2、从 2 开始将当前数字的倍数全都标记为合数。标记到 sqrt(n)时停止即可。具体可以看来自维基百科的动画
-     *
      */
     public int countPrimes(int n) {
         boolean[] isNoPrime = new boolean[n];
         for (int i = 2; i * i < n; i++) {
-            if (!isNoPrime[i]){
+            if (!isNoPrime[i]) {
                 for (int j = i * i; j < n; j += i) {
                     isNoPrime[j] = true;
                 }
@@ -45,19 +167,20 @@ public class Level1 {
         }
         int ans = 0;
         for (int i = 2; i < n; i++) {
-            if (!isNoPrime[i]){
+            if (!isNoPrime[i]) {
                 ans++;
             }
         }
         return ans;
     }
+
     public int countPrimes1(int n) {
         boolean[] isPrime = new boolean[n];
         for (int i = 2; i < n; i++) {
             isPrime[i] = true;
         }
         for (int i = 2; i * i < n; i++) {
-            if (!isPrime[i]){
+            if (!isPrime[i]) {
                 continue;
             }
             for (int j = i * i; j < n; j += i) {
