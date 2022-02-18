@@ -20,6 +20,12 @@ class Level1Test {
     }
 
     @Test
+    void test1(){
+        int res = test.hammingWeight(-3);
+        System.err.println(res);
+    }
+
+    @Test
     void myAtoi(){
         String s = "2147483648";
         int res = test.myAtoi(s);
