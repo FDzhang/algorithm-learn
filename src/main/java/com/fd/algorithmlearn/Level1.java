@@ -24,6 +24,71 @@ public class Level1 {
     // 我们推荐以下题目：位 1 的个数 和 有效的括号。
 
     /**
+     * 杨辉三角
+     * 给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+     * <p>
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     * <p>
+     * 相关标签 数组 动态规划
+     * <p>
+     * 思路：动态规划
+     * 1、 初始化前两层
+     * 2、 第三层开始， n[i] = m[i-1]+m[i]  (m为n的上一层)， 此外 在每次循环的时，最前一次添加元素 1， 最后一次加元素 1
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(Arrays.asList(1));
+        if (numRows == 1) {
+            return res;
+        }
+        res.add(Arrays.asList(1, 1));
+
+        for (int i = 2; i < numRows; i++) {
+            List<Integer> up = res.get(i - 1);
+
+            List<Integer> down = new ArrayList<>();
+            down.add(1);
+            for (int j = 1; j < up.size(); j++) {
+                down.add(up.get(j - 1) + up.get(j));
+            }
+            down.add(1);
+
+            res.add(down);
+        }
+        return res;
+    }
+
+    /**
+     * 颠倒二进制位
+     * 颠倒给定的 32 位无符号整数的二进制位。
+     * <p>
+     * 提示：
+     * 请注意，在某些语言（如 Java）中，没有无符号整数类型。在这种情况下，输入和输出都将被指定为有符号整数类型，并且不应影响您的实现，
+     * 因为无论整数是有符号的还是无符号的，其内部的二进制表示形式都是相同的。
+     * 在 Java 中，编译器使用二进制补码记法来表示有符号整数。因此，在 示例 2 中，输入表示有符号整数 -3，输出表示有符号整数 -1073741825。
+     * <p>
+     * 相关标签 位运算 分治
+     * <p>
+     * 思路：位运算
+     * 1、令res=0，循环32次遍历n的每一位
+     * a、res左移一位，取n的最低位(n&1)加到res上，再将n右移一位
+     * <p>
+     * 思路2：
+     * 1、参见java自带的reverse()方法 （源码：有限次位操作）
+     */
+    // you need treat n as an unsigned value
+    public int reverseBits(int n) {
+        int res = 0;
+        for (int i = 0; i < 32; i++) {
+            res = res + (n & 1);
+            res = res << 1;
+            n = n >> 1;
+        }
+        return res;
+    }
+
+
+    /**
      * 汉明距离
      * 两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。
      * <p>
