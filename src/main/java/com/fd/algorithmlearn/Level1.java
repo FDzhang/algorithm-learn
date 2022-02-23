@@ -24,6 +24,59 @@ public class Level1 {
     // 我们推荐以下题目：位 1 的个数 和 有效的括号。
 
     /**
+     * 缺失数字
+     * 给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
+     * <p>
+     * 提示：
+     * n == nums.length
+     * 1 <= n <= 10^4
+     * 0 <= nums[i] <= n
+     * nums 中的所有数字都 独一无二
+     * <p>
+     * <p>
+     * 进阶：你能否实现线性时间复杂度、仅使用额外常数空间的算法解决此问题?
+     * <p>
+     * 相关标签 位运算 数组 哈希表 数学 排序
+     * <p>
+     * 思路1，排序+遍历
+     * <p>
+     * 思路2：数组+遍历2遍
+     * <p>
+     * 思路3：位运算+遍历一遍
+     * 1、异或运算的特性： a^b^a = b （即两个相同数字可以两两抵消）
+     * 2、令res=0, 从[1,n]遍历nums, res=res^i^nums[i-1];
+     * <p>
+     * 思路4：哈希 （BitSet）
+     */
+    public int missingNumber(int[] nums) {
+        int res = 0;
+        for (int i = 1; i <= nums.length; i++) {
+            res = res ^ i ^ nums[i - 1];
+        }
+        return res;
+    }
+
+    public int missingNumber1(int[] nums) {
+        int reduce = 0;
+        for (int i = 0; i < nums.length; i++) {
+            reduce = reduce ^ nums[i] ^ i;
+        }
+        return reduce ^ nums.length;
+    }
+
+    public int missingNumber2(int[] nums) {
+        BitSet bs = new BitSet(nums.length + 1);
+        for (int i = nums.length - 1; i >= 0; i--) {
+            bs.set(nums[i], true);
+        }
+        for (int i = nums.length; i >= 0; i--) {
+            if (!bs.get(i)) return i;
+        }
+
+        return -1; // never
+    }
+
+    /**
      * 有效的括号
      * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
      * <p>
