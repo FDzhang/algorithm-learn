@@ -24,6 +24,47 @@ public class Level1 {
     // 我们推荐以下题目：位 1 的个数 和 有效的括号。
 
     /**
+     * 有效的括号
+     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+     * <p>
+     * 有效字符串需满足：
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     * <p>
+     * 相关标签 栈 字符串
+     * <p>
+     * 思路：栈 先进后出
+     * 1、初始化一个stack, 遍历字符串s的每个字符c, 分情况处理
+     * a、c为左括号，则加入stack, 处理下一个
+     * b、c为右括号，若stack为空，则返回false
+     * c、c为右括号, 若不能与stack栈顶的左括号正确匹配，返回false
+     * 2、返回true
+     */
+    public boolean isValid(String s) {
+        LinkedList<Character> stack = new LinkedList<>();
+
+        char[] cs = s.toCharArray();
+        for (char c : cs) {
+            if (c == '(' || c == '[' || c == '{') {
+                stack.addLast(c);
+                continue;
+            }
+            if (stack.isEmpty()) {
+                return false;
+            }
+
+            char L = stack.removeLast();
+            boolean k1 = L == '(' && c == ')';
+            boolean k2 = L == '[' && c == ']';
+            boolean k3 = L == '{' && c == '}';
+            if (!(k1 || k2 || k3)) {
+                return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    /**
      * 杨辉三角
      * 给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
      * <p>
