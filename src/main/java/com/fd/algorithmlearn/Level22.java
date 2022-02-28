@@ -18,6 +18,149 @@ public class Level22 {
     // 我们推荐以下题目：字母异位词分组，无重复字符的最长子串 和 最长回文子串。
 
     /**
+     * 无重复字符的最长子串
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+     * <p>
+     * 输入: s = "pwwkew"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     *      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+     * <p>
+     * "abba"
+     * <p>
+     * 提示：
+     * 0 <= s.length <= 5 * 104
+     * s 由英文字母、数字、符号和空格组成
+     * <p>
+     * 相关标签 哈希表 字符串 滑动窗口
+     * <p>
+     * 思路1：哈希+滑动窗口
+     * <p>
+     * 思路2：数组哈希+滑动窗口
+     * 1、int[128] : 记录字符最近出现的位置
+     * 2、遍历s
+     * a、判断是否需要缩小窗口的左边界
+     * b、res = Max(res, 右边界-左边界+1)
+     * c、int[cs[i]]=i+1
+     * 3、返回res
+     */
+    public int lengthOfLongestSubstring(String s) {
+        int[] map = new int[128];
+        char[] cs = s.toCharArray();
+
+        int res = 0;
+        int minIndex = 0;
+        for (int i = 0; i < cs.length; i++) {
+            minIndex = Math.max(minIndex, map[cs[i]]);
+            res = Math.max(res, i - minIndex + 1);
+            map[cs[i]] = i + 1;
+        }
+        return res;
+    }
+
+    public int lengthOfLongestSubstring2(String s) {
+        Map<Character, Integer> map = new HashMap<>(128);
+        char[] cs = s.toCharArray();
+
+        int res = 0;
+        int minIndex = -1;
+        for (int i = 0; i < cs.length; i++) {
+            if (map.containsKey(cs[i])) {
+                minIndex = Math.max(minIndex, map.get(cs[i]));
+            }
+            res = Math.max(res, i - minIndex);
+
+            map.put(cs[i], i);
+        }
+        return res;
+    }
+
+
+    public int lengthOfLongestSubstring1(String s) {
+        Map<Character, Integer> map = new HashMap<>(128);
+        int left = 0;
+        int right = 0;
+        int max = 0;
+
+        char[] cs = s.toCharArray();
+        while (right < cs.length) {
+            char cr = cs[right++];
+            map.put(cr, map.getOrDefault(cr, 0) + 1);
+
+            while (map.get(cr) > 1) {
+                char cl = cs[left++];
+                map.put(cl, map.get(cl) - 1);
+            }
+
+            max = Math.max(max, right - left);
+        }
+        return max;
+    }
+
+    /**
+     * 字母异位词分组
+     * 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+     * <p>
+     * 字母异位词 是由重新排列源单词的字母得到的一个新单词，所有源单词中的字母通常恰好只用一次。
+     * <p>
+     * 输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+     * 输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+     * <p>
+     * 提示：
+     * 1 <= strs.length <= 104
+     * 0 <= strs[i].length <= 100
+     * strs[i] 仅包含小写字母
+     * <p>
+     * 相关标签 哈希表 字符串 排序
+     * <p>
+     * 思路1：哈希+排序
+     * 1、map<key, values> : 字母异位词有相同的key, 将具有相同的key的str加入values
+     * 2、字母异位词的判断：将str转为char[], 对char[]排序后，再转为字符串即为key
+     * 3、返回 new ArrayList<>(map.values());
+     * ps: 字母异位词的判断：也可以通过计数每个字符出现的次数来作为key
+     * ps2: 字母异位词的判断：可以通过26个素数 乘以 字符出现的次数，来做为key
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            char[] cs = str.toCharArray();
+            Arrays.sort(cs);
+            String key = new String(cs);
+            List<String> temp = map.getOrDefault(key, new ArrayList<>());
+            temp.add(str);
+            map.put(key, temp);
+        }
+        return new ArrayList<>(map.values());
+    }
+
+    public List<List<String>> groupAnagrams1(String[] strs) {
+        HashMap<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            String key = cCnt(str.toCharArray());
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+            map.get(key).add(str);
+        }
+        return new ArrayList<>(map.values());
+    }
+
+    public String cCnt(char[] cs) {
+        int[] cnt = new int[26];
+        for (char c : cs) {
+            cnt[c - 'a']++;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 26; i++) {
+            if (cnt[i] != 0) {
+                sb.append((char) (i + 'a')).append(cnt[i]);
+            }
+        }
+        return sb.toString();
+    }
+
+
+    /**
      * 矩阵置零
      * 给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
      * <p>
