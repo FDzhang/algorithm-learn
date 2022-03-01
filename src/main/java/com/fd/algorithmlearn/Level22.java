@@ -18,6 +18,86 @@ public class Level22 {
     // 我们推荐以下题目：字母异位词分组，无重复字符的最长子串 和 最长回文子串。
 
     /**
+     * 最长回文子串
+     * 给你一个字符串 s，找到 s 中最长的回文子串。
+     * <p>
+     * 示例 1：
+     * 输入：s = "babad"
+     * 输出："bab"
+     * 解释："aba" 同样是符合题意的答案。
+     * <p>
+     * 提示：
+     * 1 <= s.length <= 1000
+     * s 仅由数字和英文字母组成
+     * <p>
+     * 相关标签 字符串 动态规划
+     * <p>
+     * 思路1：
+     * 1、遍历 字符串s, 每次都都向两边搜索 (定义max[3]{回文串的长度len，回文串的左下标i，回文串的右下标j})
+     * a、搜索长度为奇数的最长回文串，记录 t1 {len1, i, j}
+     * b、搜索长度为偶数的最长回文串，记为 t2 {len2, i, j}
+     * c、依据t1[0] 和 t2[0]，令 max 等于 t1 or t2
+     * 2、返回 s.substring(max[1], max[2] + 1);
+     *
+     * 思路2：动态规划
+     * 思路3：马拉车
+     */
+    public String longestPalindrome(String s) {
+        char[] cs = s.toCharArray();
+
+        int[] max = new int[3];
+        for (int k = 1; k < cs.length; k++) {
+            int[] t1 = longestPalindrome(cs, k - 1, k);
+            int[] t2 = longestPalindrome(cs, k - 1, k + 1);
+
+            if (t1[0] > max[0]) {
+                max = t1;
+            }
+            if (t2[0] > max[0]) {
+                max = t2;
+            }
+        }
+        return s.substring(max[1], max[2] + 1);
+    }
+
+    public int[] longestPalindrome(char[] cs, int i, int j) {
+        int[] res = new int[3];
+        while (i >= 0 && i < j && j < cs.length) {
+            if (cs[i] != cs[j]) {
+                break;
+            }
+            res[1] = i;
+            res[2] = j;
+            res[0] = j - i + 1;
+            i--;
+            j++;
+        }
+        return res;
+    }
+
+    public String longestPalindrome1(String s) {
+        String res = "";
+
+        for (int i = 0; i < s.length(); i++) {
+            String s1 = isPalindrome(s, i, i);
+            String s2 = isPalindrome(s, i, i + 1);
+
+            res = res.length() > s1.length() ? res : s1;
+            res = res.length() > s2.length() ? res : s2;
+        }
+
+        return res;
+    }
+
+    public String isPalindrome(String s, int l, int r) {
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
+        }
+        return s.substring(l + 1, r);
+    }
+
+    /**
      * 无重复字符的最长子串
      * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
      * <p>
