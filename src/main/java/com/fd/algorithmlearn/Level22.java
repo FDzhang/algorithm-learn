@@ -18,6 +18,58 @@ public class Level22 {
     // 我们推荐以下题目：字母异位词分组，无重复字符的最长子串 和 最长回文子串。
 
     /**
+     * 递增的三元子序列
+     * 给你一个整数数组 nums ，判断这个数组中是否存在长度为 3 的递增子序列。
+     * <p>
+     * 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k ，使得 nums[i] < nums[j] < nums[k] ，返回 true ；否则，返回 false 。
+     * <p>
+     * 进阶：你能实现时间复杂度为 O(n) ，空间复杂度为 O(1) 的解决方案吗？
+     * <p>
+     * 示例 1：
+     * 输入：nums = [1,2,3,4,5]
+     * 输出：true
+     * 解释：任何 i < j < k 的三元组都满足题意
+     * <p>
+     * 相关标签 贪心 数组
+     *
+     * 思路1： 贪心
+     * 1、遍历数组，记录两个值 a,b (a最小值， a<b)
+     * 2、若x<=a, 则a=x, 若 a<x<=b, 则b=x
+     * 3、若出现一个值大于b，则返回true
+     */
+    public boolean increasingTriplet(int[] nums) {
+        int a = Integer.MAX_VALUE;
+        int b = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= a) {
+                a = nums[i];
+            } else if (nums[i] <= b) {
+                b = nums[i];
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // version1 贪心
+    public boolean increasingTriplet1(int[] nums) {
+        int m1 = Integer.MAX_VALUE;
+        int m2 = Integer.MAX_VALUE;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > m2) {
+                return true;
+            } else if (nums[i] > m1) {
+                m2 = nums[i];
+            } else {
+                m1 = nums[i];
+            }
+        }
+        return false;
+    }
+
+    /**
      * 最长回文子串
      * 给你一个字符串 s，找到 s 中最长的回文子串。
      * <p>
