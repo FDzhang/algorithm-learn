@@ -50,6 +50,28 @@ public class Level22 {
         ListNode head = new ListNode();
         ListNode cur = head;
         int x = 0;
+        while (x > 0 || l1 != null || l2 != null) {
+            if (l1 != null) {
+                x += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                x += l2.val;
+                l2 = l2.next;
+            }
+
+            ListNode next = new ListNode(x % 10);
+            cur.next = next;
+            cur = next;
+            x = x / 10;
+        }
+        return head.next;
+    }
+
+    public ListNode addTwoNumbers3(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode();
+        ListNode cur = head;
+        int x = 0;
         while (l1 != null && l2 != null) {
             ListNode next = new ListNode();
             int val = l1.val + l2.val;
@@ -68,7 +90,7 @@ public class Level22 {
 
         while (l1 != null) {
             ListNode next = new ListNode();
-            int val = l1.val ;
+            int val = l1.val;
             if (x > 0) {
                 val += x;
             }
