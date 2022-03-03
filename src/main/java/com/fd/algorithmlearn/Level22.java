@@ -1,15 +1,129 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.linked.ListNode;
+
 import java.util.*;
 
 /**
  * 中级算法
  * LeetCode 官方推出的经典面试题目清单 —— 「中级算法 - 巩固训练」
+ * <p>
+ * https://leetcode-cn.com/leetbook/detail/top-interview-questions-medium/
  *
  * @author zhangxinqiang
  * @create 2022/2/24 11:18
  */
 public class Level22 {
+    // -------------------------- 链表 ------------------------------ end
+    // 链表
+    // 链表问题相对容易掌握。 不要忘记 "双指针解法" ，它不仅适用于数组问题，而且还适用于链表问题。
+    // 另一种大大简化链接列表问题的方法是 "Dummy node" 节点技巧 ，所谓 Dummy Node 其实就是带头节点的指针。
+    // 我们推荐以下题目：两数相加，相交链表。
+    //
+
+    /**
+     * 两数相加
+     * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+     * 请你将两个数相加，并以相同形式返回一个表示和的链表。
+     * 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+     * <p>
+     * <p>
+     * 示例：
+     * 输入：l1 = [2,4,3], l2 = [5,6,4]
+     * 输出：[7,0,8]
+     * 解释：342 + 465 = 807.
+     * <p>
+     * 提示：
+     * 每个链表中的节点数在范围 [1, 100] 内
+     * 0 <= Node.val <= 9
+     * 题目数据保证列表表示的数字不含前导零
+     * <p>
+     * 相关标签 递归 链表 数学
+     * <p>
+     * 思路1：循环
+     * 思路2：递归 (更简洁)
+     * 1、l1的节点，l2的节点，进位标识 t；
+     * 2、l1不为空 t += l1.val、 l1=l1.next, l2不为空 t += l2.val、 l2=l2.next;
+     * 3、t%10作为新节点的值， t/10作为新节点的 t;
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode();
+        ListNode cur = head;
+        int x = 0;
+        while (l1 != null && l2 != null) {
+            ListNode next = new ListNode();
+            int val = l1.val + l2.val;
+            if (x > 0) {
+                val += x;
+            }
+            next.val = val % 10;
+            x = val / 10;
+
+            cur.next = next;
+            cur = next;
+
+            l1 = l1.next;
+            l2 = l2.next;
+        }
+
+        while (l1 != null) {
+            ListNode next = new ListNode();
+            int val = l1.val ;
+            if (x > 0) {
+                val += x;
+            }
+            next.val = val % 10;
+            x = val / 10;
+
+            cur.next = next;
+            cur = next;
+
+            l1 = l1.next;
+        }
+
+        while (l2 != null) {
+            ListNode next = new ListNode();
+            int val = l2.val;
+            if (x > 0) {
+                val += x;
+            }
+            next.val = val % 10;
+            x = val / 10;
+
+            cur.next = next;
+            cur = next;
+
+            l2 = l2.next;
+        }
+
+        if (x > 0) {
+            ListNode next = new ListNode();
+            next.val = x;
+            cur.next = next;
+        }
+        return head.next;
+    }
+
+    public ListNode addTwoNumbers1(ListNode l1, ListNode l2) {
+        return this.addTwoNumbers2(l1, l2, 0);
+    }
+
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2, int a) {
+        if (l1 == null && l2 == null) {
+            return a == 0 ? null : new ListNode(a);
+        }
+        if (l1 != null) {
+            a += l1.val;
+            l1 = l1.next;
+        }
+        if (l2 != null) {
+            a += l2.val;
+            l2 = l2.next;
+        }
+        return new ListNode(a % 10, addTwoNumbers2(l1, l2, a / 10));
+    }
+
+    // -------------------------- 链表 ------------------------------ end
     // -------------------------- 数组和字符串 ------------------------------
 
     // 数组和字符串
@@ -31,7 +145,7 @@ public class Level22 {
      * 解释：任何 i < j < k 的三元组都满足题意
      * <p>
      * 相关标签 贪心 数组
-     *
+     * <p>
      * 思路1： 贪心
      * 1、遍历数组，记录两个值 a,b (a最小值， a<b)
      * 2、若x<=a, 则a=x, 若 a<x<=b, 则b=x
@@ -90,7 +204,7 @@ public class Level22 {
      * b、搜索长度为偶数的最长回文串，记为 t2 {len2, i, j}
      * c、依据t1[0] 和 t2[0]，令 max 等于 t1 or t2
      * 2、返回 s.substring(max[1], max[2] + 1);
-     *
+     * <p>
      * 思路2：动态规划
      * 思路3：马拉车
      */
