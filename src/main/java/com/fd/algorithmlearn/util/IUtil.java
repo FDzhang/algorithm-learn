@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn.util;
 
+import com.fd.algorithmlearn.linked.ListNode;
+
 import java.util.List;
 
 /**
@@ -7,8 +9,27 @@ import java.util.List;
  * @create 2021/12/15 11:36
  */
 public class IUtil {
+
+    public static ListNode buildNodes(int[] nums) {
+        ListNode head = new ListNode();
+        ListNode p = head;
+        for (int num : nums) {
+            p.next = new ListNode(num);
+            p = p.next;
+        }
+        return head.next;
+    }
+
+    public static void printNodes(ListNode head) {
+        while (head != null) {
+            System.err.print(head.val + " ");
+            head = head.next;
+        }
+        System.err.println();
+    }
+
     public static void print(int[][] nums) {
-        if (nums == null){
+        if (nums == null) {
             System.err.println("null");
             return;
         }
@@ -23,7 +44,7 @@ public class IUtil {
     }
 
     public static void print(int[] list) {
-        if (list == null){
+        if (list == null) {
             System.err.println("null");
             return;
         }
@@ -35,7 +56,7 @@ public class IUtil {
     }
 
     public static <T> void print(List<T> list) {
-        if (list == null){
+        if (list == null) {
             System.err.println("null");
             return;
         }

@@ -22,6 +22,67 @@ public class Level22 {
     //
 
     /**
+     * 奇偶链表
+     * 给定单链表的头节点 head ，将所有索引为奇数的节点和索引为偶数的节点分别组合在一起，然后返回重新排序的列表。
+     * <p>
+     * 第一个节点的索引被认为是 奇数 ， 第二个节点的索引为 偶数 ，以此类推。
+     * 请注意，偶数组和奇数组内部的相对顺序应该与输入时保持一致。
+     * 你必须在 O(1) 的额外空间复杂度和 O(n) 的时间复杂度下解决这个问题。
+     * <p>
+     * 提示:
+     * n ==  链表中的节点数
+     * 0 <= n <= 104
+     * -106 <= Node.val <= 106
+     * <p>
+     * 相关标签 链表
+     * <p>
+     * 思路：链表
+     * 1、 两个一组往后遍历，奇数节点接在odd， 偶数节点接在even
+     * ps: 若使用head往后移动，分奇偶接在两个dummy上，需要注意.next需要断开，避免环形链表
+     */
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode odd = head;
+        ListNode even = head.next;
+
+        ListNode o = odd;
+        ListNode e = even;
+
+        while (e != null && e.next != null) {
+            o.next = e.next;
+            o = o.next;
+            e.next = o.next;
+            e = e.next;
+        }
+        o.next = even;
+        return head;
+    }
+
+    public ListNode oddEvenList1(ListNode head) {
+        ListNode a = new ListNode();
+        ListNode b = new ListNode();
+        ListNode c = a;
+        ListNode d = b;
+        while (head != null) {
+            c.next = head;
+            c = c.next;
+            head = head.next;
+            c.next = null;
+            if (head != null) {
+                d.next = head;
+                d = d.next;
+                head = head.next;
+                d.next = null;
+            }
+        }
+        c.next = b.next;
+        return a.next;
+    }
+
+
+    /**
      * 两数相加
      * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
      * 请你将两个数相加，并以相同形式返回一个表示和的链表。
