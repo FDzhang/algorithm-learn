@@ -19,7 +19,100 @@ public class Level22 {
     // 链表问题相对容易掌握。 不要忘记 "双指针解法" ，它不仅适用于数组问题，而且还适用于链表问题。
     // 另一种大大简化链接列表问题的方法是 "Dummy node" 节点技巧 ，所谓 Dummy Node 其实就是带头节点的指针。
     // 我们推荐以下题目：两数相加，相交链表。
-    //
+
+    /**
+     * 相交链表
+     * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
+     * <p>
+     * 图示两个链表在节点 c1 开始相交：
+     * <p>
+     * 题目数据 保证 整个链式结构中不存在环。
+     * <p>
+     * 注意，函数返回结果后，链表必须 保持其原始结构 。
+     * <p>
+     * 自定义评测：
+     * <p>
+     * 评测系统 的输入如下（你设计的程序 不适用 此输入）：
+     * <p>
+     * intersectVal - 相交的起始节点的值。如果不存在相交节点，这一值为 0
+     * listA - 第一个链表
+     * listB - 第二个链表
+     * skipA - 在 listA 中（从头节点开始）跳到交叉节点的节点数
+     * skipB - 在 listB 中（从头节点开始）跳到交叉节点的节点数
+     * 评测系统将根据这些输入创建链式数据结构，并将两个头节点 headA 和 headB 传递给你的程序。如果程序能够正确返回相交节点，那么你的解决方案将被 视作正确答案 。
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * <p>
+     * 输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+     * 输出：Intersected at '8'
+     * 解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。
+     * 从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,6,1,8,4,5]。
+     * 在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。
+     * <p>
+     * <p>
+     * 提示：
+     * <p>
+     * listA 中节点数目为 m
+     * listB 中节点数目为 n
+     * 1 <= m, n <= 3 * 104
+     * 1 <= Node.val <= 105
+     * 0 <= skipA <= m
+     * 0 <= skipB <= n
+     * 如果 listA 和 listB 没有交点，intersectVal 为 0
+     * 如果 listA 和 listB 有交点，intersectVal == listA[skipA] == listB[skipB]
+     *
+     * <p>
+     * 进阶：你能否设计一个时间复杂度 O(m + n) 、仅用 O(1) 内存的解决方案？
+     * <p>
+     * 相关标签 哈希表 链表 双指针
+     * <p>
+     * 思路1： 哈希
+     * 1、遍历HeadA，存入哈希
+     * 2、遍历HeadB, 判断是否在哈希中存在，存在则返回当前节点
+     * 3、返回null
+     *
+     *  --  ---
+     *    --
+     * ---  --
+     *
+     * 思路2：双指针
+     * 1、
+     *
+     * ps: 跑两遍，
+     */
+    public ListNode getIntersectionNode1(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+
+        ListNode a = headA;
+        ListNode b = headB;
+        while (a != b) {
+            a = a == null ? headB : a.next;
+            b = b == null ? headA : b.next;
+        }
+        return a;
+    }
+    // 可行 8ms
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        HashSet<ListNode> set = new HashSet<>();
+        while (headA != null) {
+            set.add(headA);
+            headA = headA.next;
+        }
+        while (headB != null) {
+            if (set.contains(headB)) {
+                return headB;
+            }
+            headB = headB.next;
+        }
+        return null;
+    }
+
+
+
 
     /**
      * 奇偶链表
