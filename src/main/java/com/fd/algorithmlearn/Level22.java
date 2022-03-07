@@ -14,6 +14,85 @@ import java.util.*;
  * @create 2022/2/24 11:18
  */
 public class Level22 {
+
+    // -------------------------- 树和图 ------------------------------
+    // 树和图
+    // 树是图的简单表示形式，所以我们常用的两种图的遍历方法同样适用于树。
+    //
+    // 我们推荐以下题目：中序遍历二叉树，每个节点的右向指针 和 岛屿的个数。
+    //
+    // 请注意，很多树的问题会以 N 叉树 的形式出现，所以请确保你了解什么是 N 叉树 。
+    //
+    // 说明：岛屿的个数这道题并不是一个树的问题，它可以用图的形式呈现，因此我们将它归类为图的问题。
+    //
+
+    /**
+     * 二叉树的中序遍历
+     * 给定一个二叉树的根节点 root ，返回它的 中序 遍历。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：root = [1,null,2,3]
+     * 输出：[1,3,2]
+     * <p>
+     * 提示：
+     * <p>
+     * 树中节点数目在范围 [0, 100] 内
+     * -100 <= Node.val <= 100
+     *  
+     * <p>
+     * 进阶: 递归算法很简单，你可以通过迭代算法完成吗？
+     * <p>
+     * 相关标签 栈 树 深度优先搜索 二叉树
+     * <p>
+     * 思路1：递归
+     * 1、中序遍历：左，根，右
+     * <p>
+     * 思路2：迭代
+     * 1、借用栈：先进后出
+     *
+     * 思路3：颜色标记 [颜色标记法-一种通用且简明的树遍历方法 - 二叉树的中序遍历 - 力扣（LeetCode）](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/solution/yan-se-biao-ji-fa-yi-chong-tong-yong-qie-jian-ming/)
+     * 其核心思想如下：
+     * 1、使用颜色标记节点的状态，新节点为白色，已访问的节点为灰色。
+     * 2、如果遇到的节点为白色，则将其标记为灰色，然后将其右子节点、自身、左子节点依次入栈。
+     * 3、如果遇到的节点为灰色，则将节点的值输出。
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        ArrayList<Integer> res = new ArrayList<>();
+        inorderTraversal(root, res);
+        return res;
+    }
+
+    public void inorderTraversal(TreeNode root, List<Integer> res) {
+        if (root == null) {
+            return;
+        }
+
+        inorderTraversal(root.left, res);
+        res.add(root.val);
+        inorderTraversal(root.right, res);
+    }
+
+    public List<Integer> inorderTraversal1(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        midFor(root, list);
+        return list;
+    }
+
+    private void midFor(TreeNode root, List<Integer> list) {
+        if (root == null) {
+            return;
+        }
+        midFor(root.left, list);
+
+        list.add(root.val);
+
+        midFor(root.right, list);
+    }
+
+
+    // -------------------------- 树和图 ------------------------------ end
+
     // -------------------------- 链表 ------------------------------ end
     // 链表
     // 链表问题相对容易掌握。 不要忘记 "双指针解法" ，它不仅适用于数组问题，而且还适用于链表问题。
@@ -78,7 +157,9 @@ public class Level22 {
      * ---  --
      *
      * 思路2：双指针
-     * 1、
+     * 1、长 + 短 = 短 + 长
+     * ps: (开始时间相同、速度相同、距离相同，则到达终点的时间相同)
+     *
      *
      * ps: 跑两遍，
      */
