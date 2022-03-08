@@ -27,6 +27,118 @@ public class Level22 {
     //
 
     /**
+     * 二叉树的锯齿形层次遍历
+     * 给你二叉树的根节点 root ，返回其节点值的 锯齿形层序遍历 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+     * <p>
+     * <p>
+     * 示例 1：
+     * 输入：root = [3,9,20,null,null,15,7]
+     * 输出：[[3],[20,9],[15,7]]
+     * <p>
+     * 提示：
+     * 树中节点数目在范围 [0, 2000] 内
+     * -100 <= Node.val <= 100
+     * 相关标签 树 广度优先搜索 二叉树
+     * <p>
+     * 思路1：迭代
+     * 1、二叉树的层序遍历
+     * 2、如果是偶数层，将遍历的结果翻转 （设 root 为第一层）
+     * <p>
+     * 思路2：递归
+     */
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        int r = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            LinkedList<TreeNode> nextLevel = new LinkedList<>();
+            List<Integer> list = new ArrayList<>();
+            while (!queue.isEmpty()) {
+                TreeNode node = queue.poll();
+                if (node == null) {
+                    continue;
+                }
+                list.add(node.val);
+                nextLevel.offer(node.left);
+                nextLevel.offer(node.right);
+            }
+            queue = nextLevel;
+            if (r == 1) {
+                Collections.reverse(list);
+            }
+            if (!list.isEmpty()) {
+                res.add(list);
+            }
+            r = r == 0 ? 1 : 0;
+        }
+        return res;
+    }
+
+    public List<List<Integer>> zigzagLevelOrder1(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        Queue<TreeNode> level = new LinkedList<>();
+        level.offer(root);
+
+        int odd = 1;
+        while (!level.isEmpty()) {
+            List<Integer> l = new ArrayList<>();
+            level = levelNode(level, l);
+            if (odd % 2 == 0) {
+                Collections.reverse(l);
+            }
+            res.add(l);
+            odd++;
+        }
+        return res;
+    }
+
+    /**
+     * 填充当前层的 val
+     * 返回下一层的nodes
+     */
+    public Queue<TreeNode> levelNode(Queue<TreeNode> level, List<Integer> list) {
+        Queue<TreeNode> next = new LinkedList<>();
+        while (!level.isEmpty()) {
+            TreeNode node = level.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                next.offer(node.left);
+            }
+            if (node.right != null) {
+                next.offer(node.right);
+            }
+        }
+        return next;
+    }
+
+    // 递归
+    public List<List<Integer>> zigzagLevelOrder3(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        traverse(root, 0, res);
+        return res;
+    }
+
+    private void traverse(TreeNode root, int depth, List<List<Integer>> res) {
+        if (root == null) return;
+        if (depth >= res.size()) {
+            res.add(new ArrayList<>());
+        }
+        if (depth % 2 == 0) {
+            res.get(depth).add(root.val);
+        } else {
+            res.get(depth).add(0, root.val);
+        }
+        traverse(root.left, depth + 1, res);
+        traverse(root.right, depth + 1, res);
+    }
+
+    /**
      * 二叉树的中序遍历
      * 给定一个二叉树的根节点 root ，返回它的 中序 遍历。
      * <p>
