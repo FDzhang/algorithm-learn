@@ -47,7 +47,7 @@ public class Level22 {
      * <p>
      * 思路1：递归
      * 1、中序遍历：左，根，右
-     * <p>
+     *
      * 思路2：迭代
      * 1、借用栈：先进后出
      *
@@ -57,6 +57,38 @@ public class Level22 {
      * 2、如果遇到的节点为白色，则将其标记为灰色，然后将其右子节点、自身、左子节点依次入栈。
      * 3、如果遇到的节点为灰色，则将节点的值输出。
      */
+    class ColorNode {
+        public ColorNode(Integer color, TreeNode node) {
+            this.color = color;
+            this.node = node;
+        }
+
+        public Integer color;
+        public TreeNode node;
+    }
+
+    public List<Integer> inorderTraversal2(TreeNode root) {
+        int white = 0;
+        int gray = 1;
+        List<Integer> res = new ArrayList<>();
+        Stack<ColorNode> stack = new Stack<>();
+        stack.push(new ColorNode(white, root));
+        while (!stack.isEmpty()) {
+            ColorNode top = stack.pop();
+            if (top.node == null) {
+                continue;
+            }
+            if (top.color == white) {
+                stack.push(new ColorNode(white, top.node.right));
+                stack.push(new ColorNode(gray, top.node));
+                stack.push(new ColorNode(white, top.node.left));
+            } else {
+                res.add(top.node.val);
+            }
+        }
+        return res;
+    }
+
     public List<Integer> inorderTraversal(TreeNode root) {
         ArrayList<Integer> res = new ArrayList<>();
         inorderTraversal(root, res);
@@ -72,6 +104,7 @@ public class Level22 {
         res.add(root.val);
         inorderTraversal(root.right, res);
     }
+
 
     public List<Integer> inorderTraversal1(TreeNode root) {
         List<Integer> list = new ArrayList<>();
