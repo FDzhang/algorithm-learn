@@ -27,6 +27,77 @@ public class Level22 {
     //
 
     /**
+     * 从前序与中序遍历序列构造二叉树
+     * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+     * <p>
+     * 示例 1:
+     * 输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+     * 输出: [3,9,20,null,null,15,7]
+     * 示例 2:
+     * 输入: preorder = [-1], inorder = [-1]
+     * 输出: [-1]
+     * <p>
+     * 提示:
+     * <p>
+     * 1 <= preorder.length <= 3000
+     * inorder.length == preorder.length
+     * -3000 <= preorder[i], inorder[i] <= 3000
+     * preorder 和 inorder 均 无重复 元素
+     * inorder 均出现在 preorder
+     * preorder 保证 为二叉树的前序遍历序列
+     * inorder 保证 为二叉树的中序遍历序列
+     * <p>
+     * 相关标签 树 数组 哈希表 分治 二叉树
+     * <p>
+     * 思路：分治
+     * 1、构造右子树，构造左子树
+     * 2、
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return buildTreeHelp(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode buildTreeHelp(int[] preorder, int i, int j, int[] inorder, int p, int q) {
+        if (i > j || p > q) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preorder[i]);
+        int mid = Arrays.binarySearch(inorder, p, q + 1, preorder[i]);
+        int llen = mid - p;
+
+        root.left = buildTreeHelp(preorder, i + 1, i + llen, inorder, p, mid - 1);
+        root.right = buildTreeHelp(preorder, i + llen + 1, j, inorder, mid + 1, q);
+
+        return root;
+    }
+
+    public TreeNode buildTree1(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return build(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1, map);
+    }
+
+    public TreeNode build(int[] preorder, int lo1, int hi1, int[] inorder, int lo2, int hi2, Map<Integer, Integer> map) {
+        if (lo1 > hi1 || lo2 > hi2) {
+            return null;
+        }
+        int rootVal = preorder[lo1];
+        int mid = map.get(rootVal);
+
+        int leftSize = mid - lo2;
+
+        TreeNode root = new TreeNode(rootVal);
+        root.left = build(preorder, lo1 + 1, lo1 + leftSize,
+                inorder, lo2, mid - 1, map);
+        root.right = build(preorder, lo1 + leftSize + 1, hi1,
+                inorder, mid + 1, hi2, map);
+        return root;
+    }
+
+    /**
      * 二叉树的锯齿形层次遍历
      * 给你二叉树的根节点 root ，返回其节点值的 锯齿形层序遍历 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
      * <p>
@@ -159,10 +230,10 @@ public class Level22 {
      * <p>
      * 思路1：递归
      * 1、中序遍历：左，根，右
-     *
+     * <p>
      * 思路2：迭代
      * 1、借用栈：先进后出
-     *
+     * <p>
      * 思路3：颜色标记 [颜色标记法-一种通用且简明的树遍历方法 - 二叉树的中序遍历 - 力扣（LeetCode）](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/solution/yan-se-biao-ji-fa-yi-chong-tong-yong-qie-jian-ming/)
      * 其核心思想如下：
      * 1、使用颜色标记节点的状态，新节点为白色，已访问的节点为灰色。
@@ -296,16 +367,16 @@ public class Level22 {
      * 1、遍历HeadA，存入哈希
      * 2、遍历HeadB, 判断是否在哈希中存在，存在则返回当前节点
      * 3、返回null
-     *
-     *  --  ---
-     *    --
+     * <p>
+     * --  ---
+     * --
      * ---  --
-     *
+     * <p>
      * 思路2：双指针
      * 1、长 + 短 = 短 + 长
      * ps: (开始时间相同、速度相同、距离相同，则到达终点的时间相同)
-     *
-     *
+     * <p>
+     * <p>
      * ps: 跑两遍，
      */
     public ListNode getIntersectionNode1(ListNode headA, ListNode headB) {
@@ -321,6 +392,7 @@ public class Level22 {
         }
         return a;
     }
+
     // 可行 8ms
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         HashSet<ListNode> set = new HashSet<>();
@@ -336,8 +408,6 @@ public class Level22 {
         }
         return null;
     }
-
-
 
 
     /**
