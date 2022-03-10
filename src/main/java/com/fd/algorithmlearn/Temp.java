@@ -1,5 +1,6 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.entity.TreeNode;
 import com.fd.algorithmlearn.linked.ListNode;
 
 import java.util.*;
@@ -89,10 +90,10 @@ public class Temp {
 
         while (i < j) {
 
-            while (i < j && !check(cs[i])) {
+            while (i < j && !Temp.check(cs[i])) {
                 i++;
             }
-            while (i < j && !check(cs[j])) {
+            while (i < j && !Temp.check(cs[j])) {
                 j--;
             }
             if (i > j) {
@@ -128,7 +129,7 @@ public class Temp {
 
         int res = 0;
         int fh = 1;
-        if (checkNum(cs[0])) {
+        if (Temp.checkNum(cs[0])) {
             res += (cs[0] - '0') * fh;
         } else if (cs[0] == '-') {
             fh = -1;
@@ -137,7 +138,7 @@ public class Temp {
         }
 
         for (int i = 1; i < cs.length; i++) {
-            if (checkNum(cs[i])) {
+            if (Temp.checkNum(cs[i])) {
                 long newRes = (long) res * 10 + (cs[i] - '0') * fh;
                 if (newRes != (int) newRes) {
                     return fh > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
@@ -174,7 +175,7 @@ public class Temp {
             return str;
         }
         for (int i = 1; i < n; i++) {
-            str = say(str);
+            str = Temp.say(str);
         }
         return str;
     }
@@ -426,7 +427,7 @@ public class Temp {
         for (int i = 2; i < n; i++) {
             if (!isNotPrimes[i]) {
                 count++;
-                aiFilter(n, isNotPrimes, i);
+                Temp.aiFilter(n, isNotPrimes, i);
             }
         }
 
@@ -591,7 +592,7 @@ public class Temp {
     public static void main(String[] args) {
         int[] x = {0, 1};
 
-        List<List<Integer>> generate = generate(5);
+        List<List<Integer>> generate = Temp.generate(5);
         for (List<Integer> integers : generate) {
             System.err.println(integers);
         }
@@ -1449,14 +1450,18 @@ public class Temp {
             isPrime[i] = true;
         }
         for (int i = 2; i * i < n; i++) {
-            if (!isPrime[i]) continue;
+            if (!isPrime[i]) {
+                continue;
+            }
             for (int j = i * i; j < n; j += i) {
                 isPrime[j] = false;
             }
         }
         int ans = 0;
         for (int i = 2; i < n; i++) {
-            if (isPrime[i]) ans++;
+            if (isPrime[i]) {
+                ans++;
+            }
         }
         return ans;
     }
@@ -1563,49 +1568,7 @@ public class Temp {
     }
 }
 
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
 
-    TreeNode() {
-    }
-
-    TreeNode(int val) {
-        this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
-    }
-
-    public static TreeNode buildByArray(Integer[] vals) {
-        TreeNode head = new TreeNode(vals[0]);
-
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(head);
-        for (int i = 1; i < vals.length; i += 2) {
-            if (queue.isEmpty()) {
-                break;
-            }
-            TreeNode node = queue.poll();
-            if (vals[i] != null) {
-                node.left = new TreeNode(vals[i]);
-                queue.offer(node.left);
-            }
-            if (i == vals.length - 1) {
-                break;
-            }
-            if (vals[i + 1] != null) {
-                node.right = new TreeNode(vals[i + 1]);
-                queue.offer(node.right);
-            }
-        }
-        return head;
-    }
-}
 
 /***
  * 打乱数组

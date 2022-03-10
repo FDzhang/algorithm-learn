@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn.tree;
 
+import com.fd.algorithmlearn.entity.TreeNode;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;

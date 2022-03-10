@@ -1,5 +1,6 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.entity.TreeNode;
 import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.tree.Node;
 

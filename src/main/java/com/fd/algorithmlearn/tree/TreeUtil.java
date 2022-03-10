@@ -1,6 +1,6 @@
 package com.fd.algorithmlearn.tree;
 
-import java.util.*;
+import com.fd.algorithmlearn.entity.TreeNode;
 
 /**
  * @author ：zxq
@@ -19,8 +19,8 @@ public class TreeUtil {
 
         System.out.print(root.val + ", ");
 
-        print(root.left);
-        print(root.right);
+        TreeUtil.print(root.left);
+        TreeUtil.print(root.right);
     }
 
     /**

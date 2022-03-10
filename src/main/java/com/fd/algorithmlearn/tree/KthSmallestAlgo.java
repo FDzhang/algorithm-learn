@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn.tree;
 
+import com.fd.algorithmlearn.entity.TreeNode;
+
 /**
  * 230. 二叉搜索树中第K小的元素 中等
  * https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/

@@ -1,5 +1,6 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.entity.TreeNode;
 import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.util.IUtil;
 import org.junit.jupiter.api.Test;
@@ -27,4 +28,12 @@ class Level22Test {
         IUtil.printNodes(node);
     }
 
+    @Test
+    void buildTreeTest(){
+       int[] preorder = new int[]{3,9,20,15,7};
+       int[] inorder = new int[]{9,3,15,20,7};
+
+        TreeNode res = test.buildTree(preorder, inorder);
+        IUtil.printNodes(res);
+    }
 }

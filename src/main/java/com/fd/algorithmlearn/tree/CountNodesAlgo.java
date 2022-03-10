@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn.tree;
 
+import com.fd.algorithmlearn.entity.TreeNode;
+
 /**
  * 222.完全二叉树的节点个数（中等）
  * https://leetcode-cn.com/problems/count-complete-tree-nodes/

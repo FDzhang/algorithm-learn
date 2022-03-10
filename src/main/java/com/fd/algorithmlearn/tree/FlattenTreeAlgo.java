@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn.tree;
 
+import com.fd.algorithmlearn.entity.TreeNode;
+
 /**
  * 114. 二叉树展开为链表
  * https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/

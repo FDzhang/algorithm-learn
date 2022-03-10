@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn.tree;
 
+import com.fd.algorithmlearn.entity.TreeNode;
+
 /**
  * 538. 把二叉搜索树转换为累加树 中等
  * https://leetcode-cn.com/problems/convert-bst-to-greater-tree/

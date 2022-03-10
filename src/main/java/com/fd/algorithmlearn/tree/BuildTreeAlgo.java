@@ -1,5 +1,7 @@
 package com.fd.algorithmlearn.tree;
 
+import com.fd.algorithmlearn.entity.TreeNode;
+
 /**
  * 105. 从前序与中序遍历序列构造二叉树 （中等）
  * https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
