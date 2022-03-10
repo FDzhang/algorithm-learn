@@ -5,6 +5,8 @@ import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.util.IUtil;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 /**
  * @author zhangxinqiang
  * @create 2022/2/28 14:45
@@ -35,5 +37,11 @@ class Level22Test {
 
         TreeNode res = test.buildTree(preorder, inorder);
         IUtil.printNodes(res);
+    }
+
+    @Test
+    void test1(){
+        int res = Arrays.binarySearch(new int[]{1, 2, 3}, 2);
+        System.err.println(res);
     }
 }
