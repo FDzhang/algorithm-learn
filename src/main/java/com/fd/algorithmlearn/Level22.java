@@ -1,5 +1,6 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.entity.Node;
 import com.fd.algorithmlearn.entity.TreeNode;
 import com.fd.algorithmlearn.linked.ListNode;
 
@@ -28,6 +29,96 @@ public class Level22 {
     //
 
     /**
+     * 填充每个节点的下一个右侧节点指针
+     * 给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+     * <p>
+     * struct Node {
+     * int val;
+     * Node *left;
+     * Node *right;
+     * Node *next;
+     * }
+     * 填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+     * <p>
+     * 初始状态下，所有 next 指针都被设置为 NULL。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：root = [1,2,3,4,5,6,7]
+     * 输出：[1,#,2,3,#,4,5,6,7,#]
+     * 解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。
+     * 示例 2:
+     * <p>
+     * 输入：root = []
+     * 输出：[]
+     * <p>
+     * 提示：
+     * <p>
+     * 树中节点的数量在 [0, 212 - 1] 范围内
+     * -1000 <= node.val <= 1000
+     * <p>
+     * 进阶：
+     * 你只能使用常量级额外空间。
+     * 使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
+     * 相关标签 树 深度优先搜索 广度优先搜索 链表 二叉树
+     *
+     * 思路：bfs
+     * 1、二叉树的层序遍历
+     * 思路2：递归
+     * 1、链接节点的左右子节点, 在递归的链接 左节点的左右子节点， 右节点的左右子节点， 左节点的右节点和右节点的子节点
+     * 思路3：dfs
+     *
+     */
+    public Node connect(Node root) {
+        if (root == null) {
+            return root;
+        }
+        connectHelp(root.left, root.right);
+        return root;
+    }
+
+    private void connectHelp(Node left, Node right) {
+        if (left == null || right == null) {
+            return;
+        }
+        left.next = right;
+
+        connectHelp(left.left, left.right);
+        connectHelp(right.left, right.right);
+        connectHelp(left.right, right.left);
+    }
+
+    public Node connect1(Node root) {
+        connectDfs(root, null);
+        return root;
+    }
+
+    public void connectDfs(Node curr, Node next) {
+        if (curr == null) {
+            return;
+        }
+        curr.next = next;
+        connectDfs(curr.left, curr.right);
+        connectDfs(curr.right, curr.next == null ? null : curr.next.left);
+    }
+
+    // 写法2
+    public Node connect2(Node root) {
+        if (null == root || root.left == null) {
+            return root;
+        }
+
+        root.left.next = root.right;
+        if (root.next != null) {
+            root.right.next = root.next.left;
+        }
+        connect2(root.left);
+        connect2(root.right);
+        return root;
+    }
+
+
+    /**
      * 从前序与中序遍历序列构造二叉树
      * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
      * <p>
@@ -50,7 +141,7 @@ public class Level22 {
      * <p>
      * 相关标签 树 数组 哈希表 分治 二叉树
      * <p>
-     *
+     * <p>
      * 思路：分治
      * 1、辅助函数  build(pre, lo1, hi1, in, lo2, hi2);  pre: 前序遍历数组， in: 后序遍历的数组
      * 2、根据 pre的第一个值构造根节点 root， 根据root的val，在in的lo2~hi2中，找到rootVal的位置

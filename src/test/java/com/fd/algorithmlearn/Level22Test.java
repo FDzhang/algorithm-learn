@@ -1,5 +1,6 @@
 package com.fd.algorithmlearn;
 
+import com.fd.algorithmlearn.entity.Node;
 import com.fd.algorithmlearn.entity.TreeNode;
 import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.util.IUtil;
@@ -13,6 +14,16 @@ import java.util.Arrays;
  */
 class Level22Test {
     private Level22 test = new Level22();
+
+
+    @Test
+    void connect(){
+       Integer[] root = new Integer[]{1,2,3,4,5,6,7};
+
+        Node input = Node.build(root);
+        Node res = test.connect(input);
+        Node.printByNext(res);
+    }
 
     @Test
     void lengthOfLongestSubstringTest() {
