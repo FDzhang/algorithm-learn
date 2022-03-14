@@ -28,6 +28,76 @@ public class Level22 {
     //
 
     /**
+     * 二叉搜索树中第K小的元素
+     * 给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：root = [3,1,4,null,2], k = 1
+     * 输出：1
+     * 示例 2：
+     * <p>
+     * 输入：root = [5,3,6,2,4,null,null,1], k = 3
+     * 输出：3
+     * <p>
+     * 提示：
+     * <p>
+     * 树中的节点数为 n 。
+     * 1 <= k <= n <= 104
+     * 0 <= Node.val <= 104
+     *  
+     * <p>
+     * 进阶：如果二叉搜索树经常被修改（插入/删除操作）并且你需要频繁地查找第 k 小的值，你将如何优化算法？
+     * <p>
+     * 相关标签 树 深度优先搜索 二叉搜索树 二叉树
+     * <p>
+     * 思路：中序遍历
+     * 1、二叉搜索树的中序遍历，是一个从小到大的有序序列
+     * ps:为何用int[]? 值传递是复制传递
+     * 思路2：统计节点个数
+     */
+    public int kthSmallest(TreeNode root, int k) {
+        int[] res = new int[]{k, -1};
+        kthHelp(root, res);
+        return res[1];
+    }
+
+    public void kthHelp(TreeNode root, int[] res) {
+        if (root == null) {
+            return;
+        }
+        kthHelp(root.left, res);
+        res[0]--;
+        if (res[0] == 0) {
+            res[1] = root.val;
+            return;
+        }
+        kthHelp(root.right, res);
+    }
+
+    private int rank = 0;
+    private int val;
+
+    public int kthSmallest1(TreeNode root, int k) {
+        kth(root, k);
+        return val;
+    }
+
+    public void kth(TreeNode root, int k) {
+        if (root == null) {
+            return;
+        }
+        kth(root.left, k);
+        rank++;
+        if (rank == k) {
+            val = root.val;
+            return;
+        }
+        kth(root.right, k);
+    }
+
+
+    /**
      * 从前序与中序遍历序列构造二叉树
      * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
      * <p>

@@ -15,6 +15,21 @@ class Level22Test {
     private Level22 test = new Level22();
 
     @Test
+    void kthTest() {
+
+        Integer[] input = new Integer[]{3, 1, 4, null, 2};
+
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(1);
+        root.right = new TreeNode(4);
+        root.left.right = new TreeNode(2);
+
+
+        int res = test.kthSmallest(root, 1);
+        System.err.println(res);
+    }
+
+    @Test
     void lengthOfLongestSubstringTest() {
         int res = test.lengthOfLongestSubstring("abba");
         System.err.println(res);
@@ -22,7 +37,7 @@ class Level22Test {
 
     @Test
     void oddEvenList() {
-        int[] x = new int[]{1,2,3,4,5};
+        int[] x = new int[]{1, 2, 3, 4, 5};
         ListNode res = IUtil.buildNodes(x);
         IUtil.printNodes(res);
 
