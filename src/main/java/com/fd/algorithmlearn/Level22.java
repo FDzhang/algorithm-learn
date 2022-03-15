@@ -29,6 +29,111 @@ public class Level22 {
     //
 
     /**
+     * 岛屿数量
+     * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+     * <p>
+     * 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+     * <p>
+     * 此外，你可以假设该网格的四条边均被水包围。
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：grid = [
+     * ["1","1","1","1","0"],
+     * ["1","1","0","1","0"],
+     * ["1","1","0","0","0"],
+     * ["0","0","0","0","0"]
+     * ]
+     * 输出：1
+     * 示例 2：
+     * <p>
+     * 输入：grid = [
+     * ["1","1","0","0","0"],
+     * ["1","1","0","0","0"],
+     * ["0","0","1","0","0"],
+     * ["0","0","0","1","1"]
+     * ]
+     * 输出：3
+     * <p>
+     * 提示：
+     * <p>
+     * m == grid.length
+     * n == grid[i].length
+     * 1 <= m, n <= 300
+     * grid[i][j] 的值为 '0' 或 '1'
+     * 相关标签 深度优先搜索 广度优先搜索 并查集 数组 矩阵
+     * <p>
+     * 思路：dfs
+     * 1、路径：走过的点 （grid）
+     * 2、选择列表：上下左右
+     * 3、结束条件：遇到了 '0' or 越界
+     * ps：若不希望改变grid[][]，声明一个tag[][],进行标记即可
+     *
+     * 思路2：bfs
+     * 思路3：并查集
+     */
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int res = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != '0') {
+                    numIslandsDfs(grid, i, j);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    private void numIslandsDfs(char[][] grid, int i, int j) {
+        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length) {
+            return;
+        }
+        if (grid[i][j] == '0') {
+            return;
+        }
+        grid[i][j] = '0';
+        numIslandsDfs(grid, i + 1, j);
+        numIslandsDfs(grid, i, j + 1);
+        numIslandsDfs(grid, i - 1, j);
+        numIslandsDfs(grid, i, j - 1);
+    }
+
+    public int numIslands1(char[][] grid) {
+        boolean[][] tags = new boolean[grid.length][grid[0].length];
+
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1' && !tags[i][j]) {
+                    landsBackTrack(grid, i, j, tags);
+                    res++;
+                }
+            }
+        }
+
+        return res;
+    }
+
+    private void landsBackTrack(char[][] grid, int p, int q, boolean[][] tags) {
+        if (p >= grid.length || p < 0 || q >= grid[0].length || q < 0) {
+            return;
+        }
+        if (tags[p][q] || grid[p][q] == '0') {
+            return;
+        }
+
+        tags[p][q] = true;
+        landsBackTrack(grid, p + 1, q, tags);
+        landsBackTrack(grid, p - 1, q, tags);
+        landsBackTrack(grid, p, q + 1, tags);
+        landsBackTrack(grid, p, q - 1, tags);
+    }
+
+    /**
      * 二叉搜索树中第K小的元素
      * 给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
      * <p>
