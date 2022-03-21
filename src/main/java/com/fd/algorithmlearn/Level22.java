@@ -17,6 +17,81 @@ import java.util.*;
  */
 public class Level22 {
 
+
+    // -------------------------- 回溯算法 ------------------------------
+    // 回溯算法
+    //本章精选了一些回溯算法的面试题。
+    //
+    //电话号码的字母组合 以及 生成括号 都是经典问题。同时，请确保你可以独立完成 全排列 和 子集的解法，它们也是非常经典的例题。
+
+    /**
+     * 电话号码的字母组合
+     * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+     * <p>
+     * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：digits = "23"
+     * 输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
+     * 示例 2：
+     * <p>
+     * 输入：digits = ""
+     * 输出：[]
+     * 示例 3：
+     * <p>
+     * 输入：digits = "2"
+     * 输出：["a","b","c"]
+     *  
+     * <p>
+     * 提示：
+     * 0 <= digits.length <= 4
+     * digits[i] 是范围 ['2', '9'] 的一个数字。
+     * <p>
+     * 相关标签 哈希表 字符串 回溯
+     * <p>
+     * 思路：(回溯：路径， 选择列表，结束条件)
+     * 1、路径：已经选过的字母
+     * 2、选择列表：当前数字对应可以选择的字母
+     * 3、结束条件：字母数组长度 等于 号码长度
+     */
+    public List<String> letterCombinations(String digits) {
+        Map<Character, String> map = new HashMap<>();
+        map.put('2', "abc");
+        map.put('3', "def");
+        map.put('4', "ghi");
+        map.put('5', "jkl");
+        map.put('6', "mno");
+        map.put('7', "pqrs");
+        map.put('8', "tuv");
+        map.put('9', "wxyz");
+
+        List<String> res = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+
+        letterCombinationsDfs(digits.toCharArray(), map, sb, res);
+        return res;
+    }
+
+    private void letterCombinationsDfs(char[] digits, Map<Character, String> map, StringBuilder sb, List<String> res) {
+        if (sb.length() >= digits.length) {
+            if (sb.length() > 0) {
+                res.add(sb.toString());
+            }
+            return;
+        }
+        String cs = map.get(digits[sb.length()]);
+        for (char c : cs.toCharArray()) {
+            sb.append(c);
+            letterCombinationsDfs(digits, map, sb, res);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+
+    // -------------------------- 回溯算法 ------------------------------ end
+
+
     // -------------------------- 树和图 ------------------------------
     // 树和图
     // 树是图的简单表示形式，所以我们常用的两种图的遍历方法同样适用于树。
@@ -69,7 +144,7 @@ public class Level22 {
      * 2、选择列表：上下左右
      * 3、结束条件：遇到了 '0' or 越界
      * ps：若不希望改变grid[][]，声明一个tag[][],进行标记即可
-     *
+     * <p>
      * 思路2：bfs
      * 思路3：并查集
      */
@@ -236,13 +311,12 @@ public class Level22 {
      * 你只能使用常量级额外空间。
      * 使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
      * 相关标签 树 深度优先搜索 广度优先搜索 链表 二叉树
-     *
+     * <p>
      * 思路：bfs
      * 1、二叉树的层序遍历
      * 思路2：递归
      * 1、链接节点的左右子节点, 在递归的链接 左节点的左右子节点， 右节点的左右子节点， 左节点的右节点和右节点的子节点
      * 思路3：dfs
-     *
      */
     public Node connect(Node root) {
         if (root == null) {
@@ -291,6 +365,7 @@ public class Level22 {
         connect2(root.right);
         return root;
     }
+
     /**
      * 从前序与中序遍历序列构造二叉树
      * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
