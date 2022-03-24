@@ -7,6 +7,7 @@ import com.fd.algorithmlearn.util.IUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zhangxinqiang
@@ -23,6 +24,12 @@ class Level22Test {
         Node input = Node.build(root);
         Node res = test.connect(input);
         Node.printByNext(res);
+    }
+
+    @Test
+    void generateParenthesis(){
+        List<String> strings = test.generateParenthesis(3);
+        System.err.println(strings);
     }
 
     @Test

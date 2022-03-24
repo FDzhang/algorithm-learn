@@ -25,6 +25,59 @@ public class Level22 {
     //电话号码的字母组合 以及 生成括号 都是经典问题。同时，请确保你可以独立完成 全排列 和 子集的解法，它们也是非常经典的例题。
 
     /**
+     * 括号生成
+     * 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：n = 3
+     * 输出：["((()))","(()())","(())()","()(())","()()()"]
+     * 示例 2：
+     * <p>
+     * 输入：n = 1
+     * 输出：["()"]
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= n <= 8
+     * 相关标签 字符串 动态规划 回溯
+     *
+     * <p>
+     * 思路：回溯
+     * 1、路径：当前 括号组合 的字符串
+     * 2、选择列表：是有效的括号
+     * - a、放左括号的时候，剩余左括号的数量必须大于0
+     * - b、放右括号的时候，剩余左括号的数量必须小于右括号
+     * 3、结束条件：n对左右括号放置完毕，即没有剩余的左右括号
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        generateParenthesisDfs(n, n, sb, res);
+        return res;
+    }
+
+    private void generateParenthesisDfs(int left, int right, StringBuilder sb, List<String> res) {
+        if (left == 0 && right == 0) {
+            res.add(sb.toString());
+            return;
+        }
+        if (left > 0) {
+            sb.append("(");
+            generateParenthesisDfs(left - 1, right, sb, res);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+        if (left < right) {
+            sb.append(")");
+            generateParenthesisDfs(left, right - 1, sb, res);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+
+    /**
      * 电话号码的字母组合
      * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
      * <p>
