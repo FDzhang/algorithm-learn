@@ -25,6 +25,121 @@ public class Level22 {
     //电话号码的字母组合 以及 生成括号 都是经典问题。同时，请确保你可以独立完成 全排列 和 子集的解法，它们也是非常经典的例题。
 
     /**
+     * 全排列
+     * 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [1,2,3]
+     * 输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+     * 示例 2：
+     * <p>
+     * 输入：nums = [0,1]
+     * 输出：[[0,1],[1,0]]
+     * 示例 3：
+     * <p>
+     * 输入：nums = [1]
+     * 输出：[[1]]
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= nums.length <= 6
+     * -10 <= nums[i] <= 10
+     * nums 中的所有整数 互不相同
+     * 相关标签 数组 回溯
+     * <p>
+     * 思路：回溯
+     * 1、路径：已经选择过的数字
+     * 2、选择列表：可以选择的数字
+     * 3、结束条件：已选择数字的长度等于 数组的长度
+     */
+    public List<List<Integer>> permute(int[] nums) {
+
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+
+        boolean[] valid = new boolean[nums.length];
+        permuteBackTrack(path, nums, valid, res);
+
+        return res;
+    }
+
+    public void permuteBackTrack(List<Integer> path, int[] nums, boolean[] valid, List<List<Integer>> res) {
+        if (path.size() == nums.length) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (valid[i]) {
+                continue;
+            }
+
+            path.add(nums[i]);
+            valid[i] = true;
+            permuteBackTrack(path, nums, valid, res);
+            valid[i] = false;
+            path.remove(path.size() - 1);
+        }
+    }
+
+    // 通过交换
+    public List<List<Integer>> permute1(int[] nums) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+
+        List<Integer> output = new ArrayList<Integer>();
+        for (int num : nums) {
+            output.add(num);
+        }
+
+        int n = nums.length;
+        backtrack(n, output, res, 0);
+        return res;
+    }
+
+    public void backtrack(int n, List<Integer> output, List<List<Integer>> res, int first) {
+        // 所有数都填完了
+        if (first == n) {
+            res.add(new ArrayList<Integer>(output));
+        }
+        for (int i = first; i < n; i++) {
+            // 动态维护数组
+            Collections.swap(output, first, i);
+            // 继续递归填下一个数
+            backtrack(n, output, res, first + 1);
+            // 撤销操作
+            Collections.swap(output, first, i);
+        }
+    }
+
+    public List<List<Integer>> permute2(int[] nums) {
+
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> cur = new LinkedList<>();
+        Set<Integer> set = new HashSet<>();
+        permuteDfs(cur, nums, set, res);
+        return res;
+    }
+
+    private void permuteDfs(LinkedList<Integer> cur, int[] nums, Set<Integer> set, List<List<Integer>> res) {
+        if (cur.size() == nums.length) {
+            res.add(new ArrayList<>(cur));
+        }
+
+        for (int num : nums) {
+            if (set.contains(num)) {
+                continue;
+            }
+
+            cur.add(num);
+            set.add(num);
+            permuteDfs(cur, nums, set, res);
+            set.remove(num);
+            cur.removeLast();
+        }
+    }
+
+    /**
      * 括号生成
      * 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
      * <p>
