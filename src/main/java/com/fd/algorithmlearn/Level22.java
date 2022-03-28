@@ -51,6 +51,8 @@ public class Level22 {
      * 1、路径：已经选择过的数字
      * 2、选择列表： 可以选择的数字
      * 3、结束条件： 无
+     *
+     * 思路2：位运算解决
      */
     public List<List<Integer>> subsets(int[] nums) {
         List<Integer> path = new ArrayList<>();
