@@ -25,6 +25,74 @@ public class Level22 {
     //电话号码的字母组合 以及 生成括号 都是经典问题。同时，请确保你可以独立完成 全排列 和 子集的解法，它们也是非常经典的例题。
 
     /**
+     * 子集
+     * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+     * 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [1,2,3]
+     * 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+     * 示例 2：
+     * <p>
+     * 输入：nums = [0]
+     * 输出：[[],[0]]
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= nums.length <= 10
+     * -10 <= nums[i] <= 10
+     * <p>
+     * nums 中的所有元素 互不相同
+     * 相关标签 位运算 数组 回溯
+     * <p>
+     * 思路：回溯
+     * 1、路径：已经选择过的数字
+     * 2、选择列表： 可以选择的数字
+     * 3、结束条件： 无
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+
+        subsetsBacktrack(path, nums, 0, res);
+        return res;
+    }
+
+    private void subsetsBacktrack(List<Integer> path, int[] nums, int index, List<List<Integer>> res) {
+        res.add(new ArrayList<>(path));
+
+        for (int i = index; i < nums.length; i++) {
+            path.add(nums[i]);
+            subsetsBacktrack(path, nums, i + 1, res);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    public List<List<Integer>> subsets1(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        for (int i = 0; i <= nums.length; i++) {
+            subsetsDfs(nums, 0, i, cur, res);
+        }
+        return res;
+    }
+
+    private void subsetsDfs(int[] nums, int index, int len, List<Integer> cur, List<List<Integer>> res) {
+        if (cur.size() == len) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = index; i < nums.length; i++) {
+            cur.add(nums[i]);
+            subsetsDfs(nums, i + 1, len, cur, res);
+            cur.remove(cur.size() - 1);
+        }
+    }
+
+
+    /**
      * 全排列
      * 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
      * <p>

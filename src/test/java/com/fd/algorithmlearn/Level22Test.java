@@ -18,6 +18,14 @@ class Level22Test {
 
 
     @Test
+    void subsets(){
+        int[] x = new int[]{1,2,3};
+        List<List<Integer>> res = test.subsets1(x);
+
+        res.forEach(System.err::println);
+    }
+
+    @Test
     void connect(){
        Integer[] root = new Integer[]{1,2,3,4,5,6,7};
 
