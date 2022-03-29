@@ -25,6 +25,126 @@ public class Level22 {
     //电话号码的字母组合 以及 生成括号 都是经典问题。同时，请确保你可以独立完成 全排列 和 子集的解法，它们也是非常经典的例题。
 
     /**
+     * 单词搜索
+     * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+     * <p>
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     * <p>
+     * 示例 1：
+     * <p>
+     * <p>
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+     * 输出：true
+     * 示例 2：
+     * <p>
+     * <p>
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+     * 输出：true
+     * 示例 3：
+     * <p>
+     * <p>
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+     * 输出：false
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * m == board.length
+     * n = board[i].length
+     * 1 <= m, n <= 6
+     * 1 <= word.length <= 15
+     * board 和 word 仅由大小写英文字母组成
+     *  
+     * <p>
+     * 进阶：你可以使用搜索剪枝的技术来优化解决方案，使其在 board 更大的情况下可以更快解决问题？
+     * 相关标签 数组 回溯 矩阵
+     * <p>
+     * <p>
+     * 思路：回溯
+     * 1、路径：走过的路径
+     * 2、选择列表： 相邻的且没被选过的字符
+     * 3、结束条件： 单词完全被匹配 | 无法继续匹配
+     * ps:空间优化，使用board[][]自身标记是否访问过
+     */
+    public boolean exist(char[][] board, String word) {
+        char[] ws = word.toCharArray();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (existBacktrack(board, i, j, ws, 0)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean existBacktrack(char[][] board, int i, int j, char[] ws, int index) {
+        if (index == ws.length) {
+            return true;
+        }
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length) {
+            return false;
+        }
+        if (ws[index] != board[i][j]) {
+            return false;
+        }
+
+        board[i][j] = '\0';
+        boolean res = existBacktrack(board, i + 1, j, ws, index + 1)
+                || existBacktrack(board, i - 1, j, ws, index + 1)
+                || existBacktrack(board, i, j + 1, ws, index + 1)
+                || existBacktrack(board, i, j - 1, ws, index + 1);
+        board[i][j] = ws[index];
+
+        return res;
+    }
+
+    public boolean exist1(char[][] board, String word) {
+        boolean[][] valid = new boolean[board.length][board[0].length];
+        char[] ws = word.toCharArray();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (existBacktrack(board, i, j, ws, 0, valid)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean existBacktrack(char[][] board, int i, int j, char[] ws, int index, boolean[][] valid) {
+        if (index == ws.length) {
+            return true;
+        }
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length) {
+            return false;
+        }
+
+        if (valid[i][j]) {
+            return false;
+        }
+
+        if (ws[index] != board[i][j]) {
+            return false;
+        }
+
+        valid[i][j] = true;
+        boolean a = existBacktrack(board, i + 1, j, ws, index + 1, valid);
+        boolean b = existBacktrack(board, i - 1, j, ws, index + 1, valid);
+        boolean c = existBacktrack(board, i, j + 1, ws, index + 1, valid);
+        boolean d = existBacktrack(board, i, j - 1, ws, index + 1, valid);
+        valid[i][j] = false;
+
+        return a || b || c || d;
+    }
+
+    /**
      * 子集
      * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
      * 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
@@ -51,7 +171,7 @@ public class Level22 {
      * 1、路径：已经选择过的数字
      * 2、选择列表： 可以选择的数字
      * 3、结束条件： 无
-     *
+     * <p>
      * 思路2：位运算解决
      */
     public List<List<Integer>> subsets(int[] nums) {
