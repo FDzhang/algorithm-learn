@@ -16,6 +16,12 @@ import java.util.List;
 class Level22Test {
     private Level22 test = new Level22();
 
+    @Test
+    public void sortColors(){
+        int[] x  = new int[]{2,0,2,1,1,0};
+        test.sortColors(x);
+        System.err.println(Arrays.toString(x));
+    }
 
     @Test
     void subsets(){
