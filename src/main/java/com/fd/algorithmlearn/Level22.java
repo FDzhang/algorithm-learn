@@ -25,6 +25,78 @@ public class Level22 {
     // 我们推荐一下题目：分类颜色，搜索范围，合并区间，搜索旋转排序数组 和 搜索二维矩阵 II。
     //
 
+    /**
+     * 前 K 个高频元素
+     * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
+     * <p>
+     *  
+     * <p>
+     * 示例 1:
+     * 输入: nums = [1,1,1,2,2,3], k = 2
+     * 输出: [1,2]
+     * 示例 2:
+     * <p>
+     * 输入: nums = [1], k = 1
+     * 输出: [1]
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= nums.length <= 105
+     * k 的取值范围是 [1, 数组中不相同的元素的个数]
+     * 题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的
+     *  
+     * <p>
+     * 进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。
+     * <p>
+     * 相关标签 数组 哈希表 分治 桶排序 计数 快速选择 排序 堆（优先队列）
+     * <p>
+     * 思路1：哈希计数+优先队列
+     * 1、哈希计数: 数字 x 对应的频率 xF
+     * 2、将 {x, xF} 放入最大堆 （优先队列）
+     * 3、从最大堆中取出前k个元素
+     * <p>
+     * 思路2：哈希计数+桶排序
+     */
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> xxF = new HashMap<>();
+
+        Arrays.stream(nums).forEach(x -> {
+            xxF.merge(x, 1, Integer::sum);
+        });
+
+        PriorityQueue<int[]> priority = new PriorityQueue<>((a, b) -> Integer.compare(b[1], a[1]));
+        xxF.forEach((x, xF) -> {
+            priority.offer(new int[]{x, xF});
+        });
+
+        int[] res = new int[k];
+        for (int i = 0; i < res.length; i++) {
+            if (!priority.isEmpty()) {
+                res[i] = priority.poll()[0];
+            }
+        }
+        return res;
+    }
+
+    public int[] topKFrequent1(int[] nums, int k) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(b[1], a[1]));
+
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            Integer cnt = map.getOrDefault(num, 0);
+            map.put(num, ++cnt);
+        }
+        for (Map.Entry<Integer, Integer> e : map.entrySet()) {
+            pq.offer(new int[]{e.getKey(), e.getValue()});
+        }
+        int[] res = new int[k];
+        for (int i = 0; i < k; i++) {
+            res[i] = pq.poll()[0];
+        }
+        return res;
+    }
+
 
     /**
      * 颜色分类
