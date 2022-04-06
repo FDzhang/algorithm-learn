@@ -4,6 +4,7 @@ import com.fd.algorithmlearn.entity.Node;
 import com.fd.algorithmlearn.entity.TreeNode;
 import com.fd.algorithmlearn.linked.ListNode;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -24,6 +25,101 @@ public class Level22 {
     //
     // 我们推荐一下题目：分类颜色，搜索范围，合并区间，搜索旋转排序数组 和 搜索二维矩阵 II。
     //
+
+    /**
+     * 数组中的第K个最大元素
+     * 给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
+     * <p>
+     * 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     * 示例 1:
+     * <p>
+     * 输入: [3,2,1,5,6,4] 和 k = 2
+     * 输出: 5
+     * 示例 2:
+     * <p>
+     * 输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+     * 输出: 4
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= k <= nums.length <= 104
+     * -104 <= nums[i] <= 104
+     * 相关标签 数组 分治 快速选择 排序 堆（优先队列）
+     * <p>                   1  2  3   4
+     * eg: [3,2,3,1,2,4,5,5,6]
+     * 思路1：排序+遍历
+     * 1、排序后，倒数第k个元素
+     * ps!!!: 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     * 思路2：优先队列
+     * 思路3：快速排序
+     * 概念：快速排序是先选择一个中枢（一般我们选第一个），然后遍历后面的元素，最终会把数组分为两部分，前面部分比中枢值小，后面部分大于或等于中枢值。
+     * 1、利用快速排序的概念
+     * a、依据中枢值，把指定区间的分为两个部分，前面部分比中枢值大，后面部分小于或等于中枢值。
+     * b、若中枢的下标p == k-1, 则为第K个最大元素
+     * c、若中枢的下标p != k-1, 则依据p, 在子区间继续进行（a、b、c）步骤
+     */
+    public int findKthLargest(int[] nums, int k) {
+        Arrays.sort(nums);
+        return nums[nums.length - k];
+    }
+
+    public int findKthLargest3(int[] nums, int k) {
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int p = left;
+            for (int q = left + 1; q <= right; q++) {
+                if (nums[q] > nums[left]) {
+                    swap(nums, q, ++p);
+                }
+            }
+            swap(nums, left, p);
+            if (p == k - 1) {
+                return nums[p];
+            } else if (p > k - 1) {
+                right = p - 1;
+            } else {
+                left = p + 1;
+            }
+        }
+        return -1;
+    }
+
+    public int findKthLargest2(int[] nums, int k) {
+        k = nums.length - k;
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int p = left;
+            for (int q = left + 1; q <= right; q++) {
+                if (nums[q] < nums[left]) {
+                    swap(nums, q, ++p);
+                }
+            }
+            swap(nums, left, p);
+            if (p == k) {
+                return nums[p];
+            } else if (p > k) {
+                right = p - 1;
+            } else {
+                left = p + 1;
+            }
+        }
+        return -1;
+    }
+
+    public int findKthLargest1(int[] nums, int k) {
+        Arrays.sort(nums);
+        int res = -1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            res = nums[i];
+            if (--k == 0) {
+                break;
+            }
+        }
+        return res;
+    }
 
     /**
      * 前 K 个高频元素

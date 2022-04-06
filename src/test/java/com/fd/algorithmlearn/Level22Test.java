@@ -17,23 +17,32 @@ class Level22Test {
     private Level22 test = new Level22();
 
     @Test
-    public void sortColors(){
-        int[] x  = new int[]{2,0,2,1,1,0};
+    public void sortColors() {
+        int[] x = new int[]{2, 0, 2, 1, 1, 0};
         test.sortColors(x);
         System.err.println(Arrays.toString(x));
     }
 
     @Test
-    void subsets(){
-        int[] x = new int[]{1,2,3};
+    public void findKthLargestTest() {
+//        int[] x = new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6};
+        int[] x = new int[]{3,2,1,5,6,4};
+//        int res = test.findKthLargest(x, 4);
+        int res = test.findKthLargest3(x, 2);
+        System.err.println(res);
+    }
+
+    @Test
+    void subsets() {
+        int[] x = new int[]{1, 2, 3};
         List<List<Integer>> res = test.subsets1(x);
 
         res.forEach(System.err::println);
     }
 
     @Test
-    void connect(){
-       Integer[] root = new Integer[]{1,2,3,4,5,6,7};
+    void connect() {
+        Integer[] root = new Integer[]{1, 2, 3, 4, 5, 6, 7};
 
         Node input = Node.build(root);
         Node res = test.connect(input);
@@ -41,7 +50,7 @@ class Level22Test {
     }
 
     @Test
-    void generateParenthesis(){
+    void generateParenthesis() {
         List<String> strings = test.generateParenthesis(3);
         System.err.println(strings);
     }
@@ -78,16 +87,16 @@ class Level22Test {
     }
 
     @Test
-    void buildTreeTest(){
-       int[] preorder = new int[]{3,9,20,15,7};
-       int[] inorder = new int[]{9,3,15,20,7};
+    void buildTreeTest() {
+        int[] preorder = new int[]{3, 9, 20, 15, 7};
+        int[] inorder = new int[]{9, 3, 15, 20, 7};
 
         TreeNode res = test.buildTree(preorder, inorder);
         IUtil.printNodes(res);
     }
 
     @Test
-    void test1(){
+    void test1() {
         int res = Arrays.binarySearch(new int[]{1, 2, 3}, 2);
         System.err.println(res);
     }
