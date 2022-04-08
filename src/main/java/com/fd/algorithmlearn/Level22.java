@@ -27,6 +27,71 @@ public class Level22 {
     //
 
     /**
+     * 在排序数组中查找元素的第一个和最后一个位置
+     * 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+     * <p>
+     * 如果数组中不存在目标值 target，返回 [-1, -1]。
+     * <p>
+     * 进阶：
+     * 你可以设计并实现时间复杂度为 O(log n) 的算法解决此问题吗？
+     *  
+     * <p>
+     * 示例 1：
+     * 输入：nums = [5,7,7,8,8,10], target = 8
+     * 输出：[3,4]
+     * <p>
+     * 示例 2：
+     * 输入：nums = [5,7,7,8,8,10], target = 6
+     * 输出：[-1,-1]
+     * <p>
+     * 示例 3：
+     * 输入：nums = [], target = 0
+     * 输出：[-1,-1]
+     * <p>
+     * 提示：
+     * <p>
+     * 0 <= nums.length <= 105
+     * -109 <= nums[i] <= 109
+     * nums 是一个非递减数组
+     * -109 <= target <= 109
+     * <p>
+     * 相关标签 数组 二分查找
+     * 思路：二分查找
+     * 1、利用二分查找，找到目标值的左边界
+     * 2、若没有找目标值返回 [-1,-1]
+     * 3、若找到了目标值，则从左边界开始遍历，找到对应的右边界，返回左右边界的下标
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        int[] rIndex = new int[]{-1, -1};
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            int midV = nums[mid];
+            if (midV == target) {
+                rIndex[0] = mid;
+                right = mid - 1;
+            } else if (midV > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        if (rIndex[0] == -1) {
+            return rIndex;
+        } else {
+            int l = rIndex[0];
+            int r = rIndex[0];
+            while (r < nums.length && nums[l] == nums[r]) {
+                rIndex[1] = r++;
+            }
+            return rIndex;
+        }
+    }
+
+    /**
      * 寻找峰值
      * 峰值元素是指其值严格大于左右相邻值的元素。
      * <p>
@@ -53,7 +118,7 @@ public class Level22 {
      * -231 <= nums[i] <= 231 - 1
      * 对于所有有效的 i 都有 nums[i] != nums[i + 1]
      * 相关标签 数组 二分查找
-     *
+     * <p>
      * 思路：数组遍历
      * 1、处理特殊情况：数组的开头，结尾， 数组长度<2的情况
      * 2、找下标，满足nums[i-1]<num[i]>nums[i+1] 的 i
