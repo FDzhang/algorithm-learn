@@ -6,6 +6,7 @@ import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.util.IUtil;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,9 +25,16 @@ class Level22Test {
     }
 
     @Test
+    public void mergeTest() {
+        int[][] x = new int[][]{{1, 2}, {3, 9}, {8, 10}, {15, 18}};
+        int[][] merge = test.merge(x);
+        IUtil.print(merge);
+    }
+
+    @Test
     public void findKthLargestTest() {
 //        int[] x = new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6};
-        int[] x = new int[]{3,2,1,5,6,4};
+        int[] x = new int[]{3, 2, 1, 5, 6, 4};
 //        int res = test.findKthLargest(x, 4);
         int res = test.findKthLargest3(x, 2);
         System.err.println(res);

@@ -27,6 +27,131 @@ public class Level22 {
     //
 
     /**
+     * 合并区间
+     * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。
+     * 请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+     * 输出：[[1,6],[8,10],[15,18]]
+     * 解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+     * 示例 2：
+     * <p>
+     * 输入：intervals = [[1,4],[4,5]]
+     * 输出：[[1,5]]
+     * 解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= intervals.length <= 104
+     * intervals[i].length == 2
+     * 0 <= starti <= endi <= 10^4
+     * 相关标签 数组 排序
+     * <p>
+     * 思路：先排序，再遍历
+     * 1、依据左端点排序
+     * 2、遍历 intervals
+     * a、pre = 当前区间，再判断是否还有下一个区间
+     * b、判断是否有下一个区间，则令 next = 下一个区间，
+     * b1、依据 pre的右端点 和 next的左端点，判断是否需要合并区间
+     * b2、pre的右端点 >= next的左端点，则pre的右端点 = Math.max(pre的右端点, next的右端点)
+     * b3、循环执行 b,b1,b2
+     * c、将pre加入结果集
+     * 3、返回结果集
+     * <p>
+     * 思路1：先排序，再遍历
+     * 1、依据左端点排序
+     * 2、遍历 intervals
+     * a、pre = 当前区间
+     * b、循环遍历下一个区间
+     * b1、令next = 下一个区间
+     * b2、若存在，pre的右端点 >= next的左端点，则合并区间，令pre的右端点 = Math.max(pre的右端点, next的右端点)
+     * b3、反之，则无法继续合并，跳出当前循环，进行下一次合并
+     * c、将pre加入结果集
+     * 3、返回结果集
+     * <p>
+     * 思路2：bit数组 （参考详情中的2ms答案）
+     * 1、声明一个 BitSet
+     * 2、遍历 intervals, 将对应范围的所有bit位 置为true, 并记录最远处的 bit位 max
+     * 3、遍历bitSet (max之内), 找到每一段的true的左右边界，计入结果集
+     * 4、返回结果集
+     */
+    public int[][] merge2(int[][] intervals) {
+        BitSet bitSet = new BitSet();
+        int max = 0;
+        for (int[] interval : intervals) {
+            int left = interval[0] * 2;
+            int right = interval[1] * 2 + 1;
+            bitSet.set(left, right, true);
+            max = Math.max(right, max);
+        }
+
+        int index = 0, count = 0;
+        while (index < max) {
+            int start = bitSet.nextSetBit(index);
+            int end = bitSet.nextClearBit(start);
+
+            int[] item = {start / 2, (end - 1) / 2};
+            intervals[count++] = item;
+
+            index = end;
+        }
+        int[][] ret = new int[count][2];
+        if (count >= 0) {
+            System.arraycopy(intervals, 0, ret, 0, count);
+        }
+        return ret;
+    }
+
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+        List<int[]> res = new ArrayList<>();
+        for (int i = 0; i < intervals.length; i++) {
+            int[] pre = intervals[i];
+            if (++i < intervals.length) {
+                int[] next = intervals[i];
+                while (pre[1] >= next[0]) {
+                    pre[1] = Math.max(pre[1], next[1]);
+                    if (++i >= intervals.length) {
+                        break;
+                    }
+                    next = intervals[i];
+                }
+                i--;
+            }
+            res.add(pre);
+        }
+
+        return res.toArray(new int[res.size()][]);
+    }
+
+    public int[][] merge1(int[][] intervals) {
+        List<int[]> res = new ArrayList<>();
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+        for (int i = 0; i < intervals.length; i++) {
+            int[] m = intervals[i];
+
+            for (int j = i + 1; j < intervals.length; j++, i++) {
+                int[] n = intervals[j];
+                if (m[1] >= n[0]) {
+                    m[1] = Math.max(m[1], n[1]);
+                } else {
+                    break;
+                }
+            }
+
+            res.add(m);
+        }
+        return res.toArray(new int[res.size()][]);
+    }
+
+
+    /**
      * 在排序数组中查找元素的第一个和最后一个位置
      * 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
      * <p>
