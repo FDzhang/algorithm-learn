@@ -877,7 +877,7 @@ public class Level2 {
      * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvc64r/
      * <p>
-     * 思路：
+     * 思路： 二分
      * 1、从右上角开始搜索 （从左上角的话 向右和向下都是变大，而从右上角 向左是变小， 向下是变大，天然二分）
      * 2、m[i][j] > target 向左， m[i][j] < target 向下
      * 3、结束条件： m[i][j] == target 或者 到了最左边和最下面 为止
