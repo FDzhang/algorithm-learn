@@ -33,6 +33,128 @@ public class Level22 {
     // 我们推荐以下题目：不同路径，零钱兑换 和 最长递增子序列
 
     /**
+     * 零钱兑换
+     * 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
+     * <p>
+     * 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
+     * <p>
+     * 你可以认为每种硬币的数量是无限的。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：coins = [1, 2, 5], amount = 11
+     * 输出：3
+     * 解释：11 = 5 + 5 + 1
+     * 示例 2：
+     * <p>
+     * 输入：coins = [2], amount = 3
+     * 输出：-1
+     * 示例 3：
+     * <p>
+     * 输入：coins = [1], amount = 0
+     * 输出：0
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= coins.length <= 12
+     * 1 <= coins[i] <= 231 - 1
+     * 0 <= amount <= 10^4
+     * 相关标签 广度优先搜索  数组 动态规划
+     * <p>
+     * 思路：动态规划
+     * 1、dp[i]: 到达当前值的最小硬币数
+     * 2、初始化：dp[i]初始化为Integer.MAX_VALUE - 1
+     * 3、递推公式：若 coin <= i ,则  dp[i] = Math.min(dp[i], dp[i - coin]) + 1
+     */
+
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        for (int i = 1; i < dp.length; i++) {
+            int temp = Integer.MAX_VALUE - 1;
+            for (int coin : coins) {
+                if (coin <= i) {
+                    temp = Math.min(temp, dp[i - coin]);
+                }
+            }
+            dp[i] = temp + 1;
+        }
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+    }
+
+    public int coinChange1(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for (int i = 0; i < dp.length; i++) {
+            for (int coin : coins) {
+                int next = coin + i;
+                if (next >= 0 && next < dp.length && dp[i] != Integer.MAX_VALUE) {
+                    dp[next] = Math.min(dp[i] + 1, dp[next]);
+                }
+            }
+        }
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+    }
+
+
+    /**
+     * 不同路径
+     * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+     * <p>
+     * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+     * <p>
+     * 问总共有多少条不同的路径？
+     * <p>
+     * 示例 1：
+     * 输入：m = 3, n = 7
+     * 输出：28
+     * 示例 2：
+     * <p>
+     * 输入：m = 3, n = 2
+     * 输出：3
+     * 解释：
+     * 从左上角开始，总共有 3 条路径可以到达右下角。
+     * 1. 向右 -> 向下 -> 向下
+     * 2. 向下 -> 向下 -> 向右
+     * 3. 向下 -> 向右 -> 向下
+     * 示例 3：
+     * <p>
+     * 输入：m = 7, n = 3
+     * 输出：28
+     * 示例 4：
+     * <p>
+     * 输入：m = 3, n = 3
+     * 输出：6
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= m, n <= 100
+     * 题目数据保证答案小于等于 2 * 10^9
+     * 相关标签
+     * 数学
+     * 动态规划
+     * 组合数学
+     * <p>
+     * 思路：动态规划
+     * 1、到达前网格的不同路径数（dp[i][j]） = 到达左边网格的不同路径数(dp[i][j-1]) + 到达上边网格的不同路径数(dp[i-1][j])
+     * 2、返回dp[m-1][n-1]
+     * ps: 空间优化 ：由于当前行的状态，由上一行推出，所以 dp[i][j] -> dp[j]
+     */
+    public int uniquePaths(int m, int n) {
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[j] += dp[j - 1];
+            }
+        }
+        return dp[n - 1];
+    }
+
+    /**
      * 跳跃游戏
      * 给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。
      * <p>
@@ -83,6 +205,7 @@ public class Level22 {
         }
         return false;
     }
+
     public boolean canJump2(int[] nums) {
         int maxFar = nums[0];
         for (int i = 1; i < nums.length; i++) {
@@ -92,7 +215,6 @@ public class Level22 {
         }
         return maxFar >= nums.length - 1;
     }
-
 
 
     // -------------------------- 动态规划 ------------------------------

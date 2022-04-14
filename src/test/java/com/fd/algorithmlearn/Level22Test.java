@@ -18,6 +18,14 @@ class Level22Test {
     private Level22 test = new Level22();
 
     @Test
+    public void coinChange() {
+        int[] x = new int[]{1,2147483647};
+        int res = test.coinChange(x, 2);
+
+        System.err.println(res);
+    }
+
+    @Test
     public void sortColors() {
         int[] x = new int[]{2, 0, 2, 1, 1, 0};
         test.sortColors(x);
