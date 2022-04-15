@@ -18,8 +18,18 @@ class Level22Test {
     private Level22 test = new Level22();
 
     @Test
+    public void lengthOfLIS() {
+
+        int[] x = {10, 9, 2, 5, 3, 7, 101, 18};
+
+//        int[] x = {1, 3, 6, 7, 9, 4, 10, 5, 6};
+        int res = test.lengthOfLIS1(x);
+        System.err.println(res);
+    }
+
+    @Test
     public void coinChange() {
-        int[] x = new int[]{1,2147483647};
+        int[] x = new int[]{1, 2147483647};
         int res = test.coinChange(x, 2);
 
         System.err.println(res);
