@@ -6,6 +6,7 @@ import com.fd.algorithmlearn.linked.ListNode;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 中级算法
@@ -18,13 +19,120 @@ import java.util.*;
  */
 public class Level22 {
 
-    /**
-     * 动态规划
-     * 本章为大家介绍一些经典动态规划问题。
-     *
-     * 我们推荐以下题目：不同路径，零钱兑换 和 最长递增子序列
-     */
 
+    // -------------------------- 设计问题 ------------------------------
+    // 设计问题
+    // 这类问题通常要求你实现一个给定的类的接口，并可能涉及使用一种或多种数据结构。 这些问题对于提高数据结构是很好的练习。
+    //
+    // 我们推荐以下题目：二叉树的序列化和反序列化 和 常数时间插入、删除和获取随机元素。
+
+    /**
+     * 二叉树的序列化与反序列化
+     * 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
+     * <p>
+     * 请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
+     * <p>
+     * 提示: 输入输出格式与 LeetCode 目前使用的方式一致，详情请参阅 LeetCode 序列化二叉树的格式。你并非必须采取这种方式，你也可以采用其他的方法解决这个问题。
+     * <p>
+     * 示例 1：
+     * 输入：root = [1,2,3,null,null,4,5]
+     * 输出：[1,2,3,null,null,4,5]
+     * 示例 2：
+     * 输入：root = []
+     * 输出：[]
+     * 示例 3：
+     * 输入：root = [1]
+     * 输出：[1]
+     * 示例 4：
+     * 输入：root = [1,2]
+     * 输出：[1,2]
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 树中结点数在范围 [0, 104] 内
+     * -1000 <= Node.val <= 1000
+     * 相关标签 树 深度优先搜索 广度优先搜索 设计 字符串 二叉树
+     * <p>
+     * 思路：（前序 or 后序 or 层序； 中序不可行）
+     * 1、二叉树的前序遍历
+     */
+    private final String NULL = "#";
+    private final String SEP = ",";
+
+    // Encodes a tree to a single string.
+    public String serialize1(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        preFor(root, sb);
+        return sb.toString();
+    }
+
+    private void preFor(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append(NULL).append(SEP);
+            return;
+        }
+        sb.append(root.val).append(SEP);
+        preFor(root.left, sb);
+        preFor(root.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize1(String data) {
+        LinkedList<String> nodes = new LinkedList<>(Arrays.asList(data.split(SEP)));
+        return preForD(nodes);
+    }
+
+    private TreeNode preForD(LinkedList<String> nodes) {
+        if (nodes.isEmpty()) {
+            return null;
+        }
+        String val = nodes.removeFirst();
+        if (val.equals(NULL)) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(val));
+        root.left = preForD(nodes);
+        root.right = preForD(nodes);
+
+        return root;
+    }
+
+    // 方式2 使用数组避免频繁删除 6ms
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize2(String data) {
+        return preForD2(data.split(SEP));
+    }
+    private int idx = 0;
+    private TreeNode preForD2(String[] nodes) {
+        if (nodes.length == 0) {
+            return null;
+        }
+        String val = nodes[idx++];
+        if (val.equals(NULL)) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(val));
+        root.left = preForD2(nodes);
+        root.right = preForD2(nodes);
+
+        return root;
+    }
+
+    public TreeNode root;
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        this.root = root;
+        return "";
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        return this.root;
+    }
+
+    // -------------------------- 设计问题 ------------------------------
 
     // -------------------------- 动态规划 ------------------------------
     // 动态规划
