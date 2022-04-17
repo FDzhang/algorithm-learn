@@ -4,9 +4,7 @@ import com.fd.algorithmlearn.entity.Node;
 import com.fd.algorithmlearn.entity.TreeNode;
 import com.fd.algorithmlearn.linked.ListNode;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 中级算法
@@ -25,6 +23,102 @@ public class Level22 {
     // 这类问题通常要求你实现一个给定的类的接口，并可能涉及使用一种或多种数据结构。 这些问题对于提高数据结构是很好的练习。
     //
     // 我们推荐以下题目：二叉树的序列化和反序列化 和 常数时间插入、删除和获取随机元素。
+
+    /**
+     * 常数时间插入、删除和获取随机元素
+     * 实现RandomizedSet 类：
+     * <p>
+     * RandomizedSet() 初始化 RandomizedSet 对象
+     * bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。
+     * bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。
+     * int getRandom() 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。
+     * 你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 O(1) 。
+     * <p>
+     *  
+     * <p>
+     * 示例：
+     * <p>
+     * 输入
+     * ["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]
+     * [[], [1], [2], [2], [], [1], [2], []]
+     * 输出
+     * [null, true, false, true, 2, true, false, 2]
+     * <p>
+     * 解释
+     * RandomizedSet randomizedSet = new RandomizedSet();
+     * randomizedSet.insert(1); // 向集合中插入 1 。返回 true 表示 1 被成功地插入。
+     * randomizedSet.remove(2); // 返回 false ，表示集合中不存在 2 。
+     * randomizedSet.insert(2); // 向集合中插入 2 。返回 true 。集合现在包含 [1,2] 。
+     * randomizedSet.getRandom(); // getRandom 应随机返回 1 或 2 。
+     * randomizedSet.remove(1); // 从集合中移除 1 ，返回 true 。集合现在包含 [2] 。
+     * randomizedSet.insert(2); // 2 已在集合中，所以返回 false 。
+     * randomizedSet.getRandom(); // 由于 2 是集合中唯一的数字，getRandom 总是返回 2 。
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * -231 <= val <= 231 - 1
+     * 最多调用 insert、remove 和 getRandom 函数 2 * 105 次zeng
+     * 在调用 getRandom 方法时，数据结构中 至少存在一个 元素。
+     * 相关标签 设计 数组 哈希表 数学 随机化
+     * <p>
+     * 思路：
+     * 1、vi : 值，索引;  iv: 索引，值;  Random : 随机数; 索引idx
+     * 2、添加：存在，则返回false； 不存在，则将值和索引分别放入两个map， idx++
+     * 3、删除：不存在，则返回false， 存在则，
+     * a、判断要删除的，是否是最后一个，是则直接删除
+     * b、不是，则将要最后一个位置的值更新到要删除的位置，再删除最后一个位置的。
+     * 4、随机获取； list.get(random.next(idx))
+     */
+    static class RandomizedSet {
+
+        private HashMap<Integer, Integer> iv;
+        private HashMap<Integer, Integer> vi;
+        private Random random;
+        private int idx;
+
+        public RandomizedSet() {
+            iv = new HashMap<>();
+            vi = new HashMap<>();
+            random = new Random();
+            idx = 0;
+        }
+
+        public boolean insert(int val) {
+            if (vi.containsKey(val)) {
+                return false;
+            }
+
+            iv.put(idx, val);
+            vi.put(val, idx);
+
+            idx++;
+            return true;
+        }
+
+        public boolean remove(int val) {
+            if (!vi.containsKey(val)) {
+                return false;
+            }
+
+            idx--;
+            Integer rIdx = vi.remove(val);
+            if (rIdx != idx) {
+                Integer lastVal = iv.get(idx);
+
+                // 更新
+                iv.put(rIdx, lastVal);
+                vi.put(lastVal, rIdx);
+            }
+            iv.remove(idx);
+
+            return true;
+        }
+
+        public int getRandom() {
+            return iv.get(random.nextInt(idx));
+        }
+    }
 
     /**
      * 二叉树的序列化与反序列化
@@ -103,7 +197,9 @@ public class Level22 {
     public TreeNode deserialize2(String data) {
         return preForD2(data.split(SEP));
     }
+
     private int idx = 0;
+
     private TreeNode preForD2(String[] nodes) {
         if (nodes.length == 0) {
             return null;

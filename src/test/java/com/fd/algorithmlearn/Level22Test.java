@@ -28,6 +28,25 @@ class Level22Test {
     }
 
     @Test
+    public void randomizedSetTest() {
+        Level22.RandomizedSet set = new Level22.RandomizedSet();
+        set.insert(0);
+        set.insert(1);
+        set.remove(0);
+        set.insert(2);
+        set.remove(1);
+        set.insert(3);
+        set.insert(4);
+        set.insert(5);
+        System.err.println(set.getRandom());
+        System.err.println(set.getRandom());
+        System.err.println(set.getRandom());
+        System.err.println(set.getRandom());
+        System.err.println(set.getRandom());
+        System.err.println(set.getRandom());
+    }
+
+    @Test
     public void coinChange() {
         int[] x = new int[]{1, 2147483647};
         int res = test.coinChange(x, 2);
