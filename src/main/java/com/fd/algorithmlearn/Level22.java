@@ -18,6 +18,88 @@ import java.util.*;
 public class Level22 {
 
 
+    // -------------------------- 数学 ------------------------------
+    // 数学
+    // 面试中提出的大部分数学问题都不需要超出初中阶段的数学知识。
+    //
+    // 我们推荐以下题目：Excel 表列序号，Pow(x, n) 和 两数相除。
+
+    /**
+     * 快乐数
+     * 编写一个算法来判断一个数 n 是不是快乐数。
+     * <p>
+     * 「快乐数」 定义为：
+     * 对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。
+     * 然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。
+     * 如果这个过程 结果为 1，那么这个数就是快乐数。
+     * 如果 n 是 快乐数 就返回 true ；不是，则返回 false 。
+     * <p>
+     * 示例 1：
+     * 输入：n = 19
+     * 输出：true
+     * 解释：
+     * 1^2 + 9^2 = 82
+     * 8^2 + 2^2 = 68
+     * 6^2 + 8^2 = 100
+     * 1^2 + 0^2 + 0^2 = 1
+     * 示例 2：
+     * 输入：n = 2
+     * 输出：false
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= n <= 2^31 - 1
+     * 相关标签  哈希表 数学 双指针
+     * <p>
+     * 思路：哈希表
+     * 1、按照定义计算x，并放入set
+     * 2、若set中重复出现，则无限循环，返回false
+     * 3、若出现结果等于1，则返回true
+     * 思路2：快慢指针
+     * 1、quick，slow，quick 先走一步，之后 quick 每次走两步，slow每次走一步
+     * 2、循环结束条件：quick==1 || quick==slow， 前者为true，后者为false
+     */
+    public boolean isHappy(int n) {
+        HashSet<Integer> set = new HashSet<>();
+        while (n != 1) {
+            set.add(n);
+            int temp = 0;
+            while (n != 0) {
+                int y = n % 10;
+                temp += y * y;
+                n /= 10;
+            }
+            n = temp;
+            if (set.contains(n)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isHappy2(int n) {
+        int slow = n;
+        int quick = getNext(n);
+        while (quick != 1 && quick != slow) {
+            slow = getNext(slow);
+            quick = getNext(getNext(quick));
+        }
+        return quick == 1;
+    }
+
+    private int getNext(int n) {
+        int sum = 0;
+        while (n != 0) {
+            int a = n % 10;
+            n /= 10;
+            sum += a * a;
+        }
+        return sum;
+    }
+
+
+    // -------------------------- 数学 ------------------------------
     // -------------------------- 设计问题 ------------------------------
     // 设计问题
     // 这类问题通常要求你实现一个给定的类的接口，并可能涉及使用一种或多种数据结构。 这些问题对于提高数据结构是很好的练习。
