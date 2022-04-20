@@ -6,7 +6,6 @@ import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.util.IUtil;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +24,14 @@ class Level22Test {
 //        int[] x = {1, 3, 6, 7, 9, 4, 10, 5, 6};
         int res = test.lengthOfLIS1(x);
         System.err.println(res);
+    }
+
+    @Test
+    public void test() {
+//        for (int i = 0; i < 26; i++) {
+//            System.err.print("'"+(char) ('A'+i) +"'"+",");
+//        }
+        System.err.println('A' - 64);
     }
 
     @Test
