@@ -6,7 +6,9 @@ import com.fd.algorithmlearn.linked.ListNode;
 import com.fd.algorithmlearn.util.IUtil;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,6 +34,26 @@ class Level22Test {
 //            System.err.print("'"+(char) ('A'+i) +"'"+",");
 //        }
         System.err.println('A' - 64);
+        List<Integer> x = new ArrayList<>();
+        x.add(1);
+        x.add(1);
+        x.add(1);
+        x.add(2);
+        x.add(3);
+        Iterator<Integer> iterator = x.iterator();
+        while (iterator.hasNext()){
+            Integer next = iterator.next();
+            if (next.equals(1)){
+                iterator.remove();
+            }
+        }
+        x.forEach(System.out::println);
+    }
+
+    @Test
+    public void myPowTest(){
+        double res = test.myPow(2.0, 10);
+        System.err.println(res);
     }
 
     @Test

@@ -25,6 +25,63 @@ public class Level22 {
     // 我们推荐以下题目：Excel 表列序号，Pow(x, n) 和 两数相除。
 
     /**
+     * Pow(x, n)
+     * 实现 pow(x, n) ，即计算 x 的 n 次幂函数（即，xn ）。
+     * <p>
+     * 示例 1：
+     * 输入：x = 2.00000, n = 10
+     * 输出：1024.00000
+     * 示例 2：
+     * 输入：x = 2.10000, n = 3
+     * 输出：9.26100
+     * 示例 3：
+     * 输入：x = 2.00000, n = -2
+     * 输出：0.25000
+     * 解释：2-2 = 1/22 = 1/4 = 0.25
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * -100.0 < x < 100.0
+     * -2^31 <= n <= 2^31-1
+     * -10^4 <= x^n <= 10^4
+     * 相关标签 递归 数学
+     *
+     * 思路： 折半计算
+     * 1、2^8 == (2*2)^4
+     * 2、n为奇数时， res需要多乘一个x
+     * 3、n>=0,返回res; n<0返回 1/res
+     */
+    public double myPow(double x, int n) {
+        double res = 1.0;
+        int m = n;
+        while (m != 0) {
+            if ((m % 2) != 0) {
+                res *= x;
+            }
+            x *= x;
+            m /= 2;
+        }
+        return n >= 0 ? res : 1 / res;
+    }
+
+    public double myPow2(double x, int n) {
+        double res = myPowH(x, n);
+        return n >= 0 ? res : 1 / res;
+    }
+
+    public double myPowH(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        if ((n & 1) == 1) {
+            return x * myPowH(x * x, n / 2);
+        }
+        return myPowH(x * x, n / 2);
+    }
+
+
+    /**
      * Excel表列序号
      * 给你一个字符串 columnTitle ，表示 Excel 表格中的列名称。返回 该列名称对应的列序号 。
      * <p>
