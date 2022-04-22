@@ -25,6 +25,72 @@ public class Level22 {
     // 我们推荐以下题目：Excel 表列序号，Pow(x, n) 和 两数相除。
 
     /**
+     * x 的平方根
+     * 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
+     * <p>
+     * 由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+     * <p>
+     * 注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：x = 4
+     * 输出：2
+     * 示例 2：
+     * <p>
+     * 输入：x = 8
+     * 输出：2
+     * 解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 0 <= x <= 231 - 1
+     * 相关标签 数学 二分查找
+     * <p>
+     * 思路：二分查找
+     * 1、eg: x=8, 则 2*2< 8 <3*3; x=9, 则 2*2< 9 <=3*3; x=4, 则 2*2<= 4 <3*3
+     * 2、从eg中可以得出，若 a=x/y、b=x/(y+1)、a >= y && b <= y, 则y为x的平方根的整数部分
+     * 3、在[0~x]内使用二分查找找目标值y，若y小了则收缩左边界，大了则收缩右边界
+     * ps：乘法溢出了，所以使用了除法
+     */
+    public int mySqrt(int x) {
+        int left = 0;
+        int right = x;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int c = sqrtCheck(mid, x);
+            if (c == 0) {
+                return mid;
+            } else if (c > 0) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return 0;
+    }
+
+    //  0:满足条件，-1:y*y<target，1:y*y>target
+    public int sqrtCheck(int y, int target) {
+        if (y == 0) {
+            return -1;
+        }
+        // 8/2 = 4
+        int a = target / y;
+        int b = target / (y + 1);
+        if (a >= y && b <= y) {
+            return 0;
+        } else if (a < y) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
      * Pow(x, n)
      * 实现 pow(x, n) ，即计算 x 的 n 次幂函数（即，xn ）。
      * <p>
@@ -46,7 +112,7 @@ public class Level22 {
      * -2^31 <= n <= 2^31-1
      * -10^4 <= x^n <= 10^4
      * 相关标签 递归 数学
-     *
+     * <p>
      * 思路： 折半计算
      * 1、2^8 == (2*2)^4
      * 2、n为奇数时， res需要多乘一个x

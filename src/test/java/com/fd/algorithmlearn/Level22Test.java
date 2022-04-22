@@ -27,6 +27,13 @@ class Level22Test {
         int res = test.lengthOfLIS1(x);
         System.err.println(res);
     }
+    @Test
+    public void sqrtTest(){
+//        int x = 2147395599;
+        int x = 1;
+        int res = test.mySqrt(x);
+        System.err.println(res);
+    }
 
     @Test
     public void test() {
