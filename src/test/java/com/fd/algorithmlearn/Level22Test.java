@@ -27,6 +27,14 @@ class Level22Test {
         int res = test.lengthOfLIS1(x);
         System.err.println(res);
     }
+
+    @Test
+    public void divideTest(){
+
+        int divide = test.divide(-2147483648, 1);
+        System.err.println(divide);
+    }
+
     @Test
     public void sqrtTest(){
 //        int x = 2147395599;

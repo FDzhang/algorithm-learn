@@ -33,18 +33,18 @@ public class Level2 {
 
     /**
      * 岛屿数量
-     *
+     * <p>
      * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
      * 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
      * 此外，你可以假设该网格的四条边均被水包围。
-     *
+     * <p>
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvtsnm/
-     *
+     * <p>
      * 思路： 回溯
      * 路径：走过的岛屿
      * 选择列表：没有走过的且为 ‘1’ 的路径
      * 结束条件：除了走过的 只剩下 '0'
-     *
+     * <p>
      * 空间优化：可以使用grid本身进行标记, 走过的岛屿 置为 '0'
      */
     public int numIslands(char[][] grid) {
@@ -77,7 +77,6 @@ public class Level2 {
         landsBackTrack(grid, p, q + 1, tags);
         landsBackTrack(grid, p, q - 1, tags);
     }
-
 
 
     /**
@@ -340,8 +339,9 @@ public class Level2 {
     }
 
     public int divide2(int dividend, int divisor) {
-        if (dividend == Integer.MIN_VALUE && divisor == -1)
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
             return Integer.MAX_VALUE;
+        }
 
         boolean k = (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0);
         int result = 0;
