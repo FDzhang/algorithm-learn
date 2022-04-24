@@ -29,10 +29,16 @@ class Level22Test {
     }
 
     @Test
-    public void divideTest(){
+    public void fractionToDecimalTest(){
+        String res = test.fractionToDecimal(4, 333);
+        System.err.println(res);
+    }
 
-        int divide = test.divide(-2147483648, 1);
-        System.err.println(divide);
+    @Test
+    public void divideTest(){
+        System.err.println(2%1);
+//        int divide = test.divide(-2147483648, 1);
+//        System.err.println(divide);
     }
 
     @Test

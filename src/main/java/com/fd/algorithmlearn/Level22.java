@@ -25,6 +25,92 @@ public class Level22 {
     // 我们推荐以下题目：Excel 表列序号，Pow(x, n) 和 两数相除。
 
     /**
+     * 分数到小数
+     * 给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以 字符串形式返回小数 。
+     * <p>
+     * 如果小数部分为循环小数，则将循环的部分括在括号内。
+     * <p>
+     * 如果存在多个答案，只需返回 任意一个 。
+     * <p>
+     * 对于所有给定的输入，保证 答案字符串的长度小于 104 。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：numerator = 1, denominator = 2
+     * 输出："0.5"
+     * 示例 2：
+     * <p>
+     * 输入：numerator = 2, denominator = 1
+     * 输出："2"
+     * 示例 3：
+     * <p>
+     * 输入：numerator = 4, denominator = 333
+     * 输出："0.(012)"
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * -231 <= numerator, denominator <= 231 - 1
+     * denominator != 0
+     * 相关标签 哈希表 数学 字符串
+     * <p>
+     * 思路：数学+哈希表
+     * 0、处理边界
+     * 1、处理正负号
+     * 2、处理整数部分 （判断是否能整除，不能则继续）
+     * 3、处理小数部分
+     * a.添加小数点
+     * b.num!=0 && num（被除数）不曾出现过, 否则跳转到f
+     * c.记录 num 对应的 index
+     * d.num *= 10; res += (num/den); num %= den;
+     * e.从b继续
+     * f.若 num 重复出现过 则添加 "()"
+     */
+    public String fractionToDecimal(int numerator, int denominator) {
+        if (denominator == 0) {
+            return "";
+        }
+        if (numerator == 0) {
+            return "0";
+        }
+        StringBuilder res = new StringBuilder();
+        long num = numerator;
+        long den = denominator;
+
+        //1
+        if ((num >= 0) ^ (den >= 0)) {
+            res.append("-");
+        }
+        num = Math.abs(num);
+        den = Math.abs(den);
+
+        //2
+        res.append(num / den);
+        num %= den;
+        if (num == 0) {
+            return res.toString();
+        }
+
+        //3
+        res.append(".");
+        int index = res.length() - 1;
+        Map<Long, Integer> record = new HashMap<>();
+        while (num != 0 && !record.containsKey(num)) {
+            record.put(num, ++index);
+            num *= 10;
+            res.append(num / den);
+            num %= den;
+        }
+        if (record.containsKey(num)) {
+            res.insert(record.get(num), "(");
+            res.append(")");
+        }
+        return res.toString();
+    }
+
+    /**
      * 两数相除
      * 给定两个整数，被除数 dividend 和除数 divisor。将两数相除，要求不使用乘法、除法和 mod 运算符。
      * <p>
