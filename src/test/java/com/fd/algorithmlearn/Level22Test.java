@@ -27,6 +27,12 @@ class Level22Test {
         int res = test.lengthOfLIS1(x);
         System.err.println(res);
     }
+    @Test
+    public void evalTest(){
+        String[] x = {"2","1","+","3","*"};
+        int res = test.evalRPN(x);
+        System.err.println(res);
+    }
 
     @Test
     public void fractionToDecimalTest(){
