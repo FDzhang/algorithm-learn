@@ -25,6 +25,83 @@ public class Level22 {
     // 我们推荐以下题目：求众数 和 任务安排。
 
     /**
+     * 多数元素
+     * 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+     * <p>
+     * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [3,2,3]
+     * 输出：3
+     * 示例 2：
+     * <p>
+     * 输入：nums = [2,2,1,1,1,2,2]
+     * 输出：2
+     *  
+     * <p>
+     * 提示：
+     * n == nums.length
+     * 1 <= n <= 5 * 104
+     * -109 <= nums[i] <= 109
+     *  
+     * <p>
+     * 进阶：尝试设计时间复杂度为 O(n)、空间复杂度为 O(1) 的算法解决此问题。
+     * <p>
+     * 相关标签 数组 哈希表 分治 计数 排序
+     * 思路1：哈希 计数
+     * 1、创建一个map<数字，计数>，循环nums
+     * a、对应数字计数+1
+     * b、依据记录次数，更新最大的次数
+     * 2、返回结果
+     * 思路2：对拼消耗 form 讨论区top1
+     * 1、遍历nums
+     * a、如果当前计数为0，则令 key = num, cnt = 1;
+     * b、如果当前计数不为0，判断key == num ? cnt++:cnt--;
+     * 2、返回key
+     * 思路3、先sort，再取 num[len/2]
+     *
+     */
+    public int majorityElement(int[] nums) {
+        int cnt = 0;
+        int key = -1;
+        for (int num : nums) {
+            if (cnt == 0) {
+                key = num;
+                cnt = 1;
+            } else {
+                cnt = key == num ? cnt + 1 : cnt - 1;
+            }
+        }
+        return key;
+    }
+
+    public int majorityElement2(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = Integer.MIN_VALUE;
+        int maxCnt = 0;
+
+        for (int num : nums) {
+            map.merge(num, 1, Integer::sum);
+
+            if (map.get(num) > maxCnt) {
+                max = num;
+                maxCnt = map.get(num);
+            }
+        }
+        return max;
+    }
+
+
+    // 思路2、先sort，再取 num[len/2]
+    public int majorityElement3(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+
+    /**
      * 逆波兰表达式求值
      * 根据 逆波兰表示法，求表达式的值。
      * <p>
