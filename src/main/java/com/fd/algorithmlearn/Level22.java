@@ -25,6 +25,206 @@ public class Level22 {
     // 我们推荐以下题目：求众数 和 任务安排。
 
     /**
+     * 任务调度器
+     * 给你一个用字符数组 tasks 表示的 CPU 需要执行的任务列表。其中每个字母表示一种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。在任何一个单位时间，CPU 可以完成一个任务，或者处于待命状态。
+     * <p>
+     * 然而，两个 相同种类 的任务之间必须有长度为整数 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。
+     * <p>
+     * 你需要计算完成所有任务所需要的 最短时间 。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：tasks = ["A","A","A","B","B","B"], n = 2
+     * 输出：8
+     * 解释：A -> B -> (待命) -> A -> B -> (待命) -> A -> B
+     * 在本示例中，两个相同类型任务之间必须间隔长度为 n = 2 的冷却时间，而执行一个任务只需要一个单位时间，所以中间出现了（待命）状态。
+     * 示例 2：
+     * <p>
+     * 输入：tasks = ["A","A","A","B","B","B"], n = 0
+     * 输出：6
+     * 解释：在这种情况下，任何大小为 6 的排列都可以满足要求，因为 n = 0
+     * ["A","A","A","B","B","B"]
+     * ["A","B","A","B","A","B"]
+     * ["B","B","B","A","A","A"]
+     * ...
+     * 诸如此类
+     * 示例 3：
+     * <p>
+     * 输入：tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2
+     * 输出：16
+     * 解释：一种可能的解决方案是：
+     * A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> (待命) -> (待命) -> A -> (待命) -> (待命) -> A
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= task.length <= 104
+     * tasks[i] 是大写英文字母
+     * n 的取值范围为 [0, 100]
+     * 相关标签 贪心 数组 哈希表 计数 排序 堆（优先队列）
+     * <p>
+     * 思路：优先队列 (暂时不通： 区间间隔问题，无法排序的问题)
+     * 1、定义优先队列：int[任务t，上一次执行的节点last，任务数量x], cpu计数时间cnt
+     * 2、遍历优先队列
+     * a、若cnt-last<=n，则无操作，然后cpu时间计数+1
+     * b、若cnt-last>n 且 任务数量不为0，则任务数量-1，last=cnt，cpu时间计数+1，若x>0，则需再加回优先队列
+     * 3、返回cpu时间计数
+     * ps: 优先队列规则：满足cnt-last>n，则x大的在前面，反之，cnt小的在前面
+     * <p>
+     * 思路：贪心
+     * 1、在存在任务，满足时间间隔大于n的情况下，选择任务数量组多的进行执行
+     * <p>
+     * 思路1：计数 哈希
+     * 1、记录各种类型任务的数量
+     * 2、遍历所有种类的任务，进行任务调度，没有任务时，退出
+     * a、调度规则：满足调度间隔 -> 调度任务数量最大的任务
+     * b、依据调度规则找到，调度的任务下标
+     * c、调度成功，则更新调度时间、对应任务数量-1、总任务数-1，反之则是一次空调度
+     * 3、返回完成所有任务的时间数
+     * <p>
+     * <p>
+     * 思路2：(数学归纳) 从讨论区和搜素学习
+     * 1、int[26] 记录每个字符出现的次数
+     * 2、字符的最大出现次数 记为 maxCnt, maxCnt 对应的字符有几个 记为cnt (例如：【A,A,B,B,C】 maxCnt=2, cnt=2; A,B 都出现了两次)
+     * 3、使用公式 (maxCnt-1)*(n+1)+cnt
+     * <p>
+     * 公式理解：
+     * eg: 输入：tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2
+     * 一种可能的解决方案是：A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> (待命) -> (待命) -> A -> (待命) -> (待命) -> A
+     * 由于任务是交替执行的，数量最多的任务必然应该安排到每个n的节点上以求达到最短时间，如下（其中“#”代表除A以外的其他字符）：
+     * A -> # -> # -> A -> # -> # -> A -> # -> # -> A -> # -> # -> A -> # -> # -> A
+     * 这时可以看到ans至少等于（A的数量-1）*（n + 1）+ 1，其它数量小于等于A的字符就可以被安插在“#”的位置。
+     * 这时数量等于A的字符必然会占到最后一个A后面“#”的位置，这时ans的数量就要加一
+     * 特殊情況： ["A","A","A","B","B","B"] 0
+     * 此时公式计算的结果 < tasks.length
+     */
+    public int leastInterval0(char[] tasks, int n) {
+        int[] taskCnt = new int[26];
+        for (char t : tasks) {
+            taskCnt[t - 'A']++;
+
+        }
+
+        int maxCnt = 0;
+        for (int c : taskCnt) {
+            maxCnt = Math.max(maxCnt, c);
+        }
+
+        int cnt = 0;
+        for (int c : taskCnt) {
+            if (c == maxCnt) {
+                cnt++;
+            }
+        }
+
+        int len = tasks.length;
+        int res = (maxCnt - 1) * (n + 1) + cnt;
+        return Math.max(res, len);
+    }
+
+    public int leastInterval11(char[] tasks, int n) {
+        // 计数
+        int[][] cnt = new int[26][2];
+        for (char task : tasks) {
+            cnt[task - 'A'][0] = -n;
+            cnt[task - 'A'][1]++;
+        }
+        // 每次调度任务时，遍历所有种类的任务
+        // 没有任务时，退出
+        int res = 0;
+        int len = tasks.length;
+        while (len > 0) {
+            res++;
+            int tIndex = -1;
+            int max = 0;
+            for (int i = 0; i < cnt.length; i++) {
+                if (res - cnt[i][0] > n && cnt[i][1] > max) {
+                    tIndex = i;
+                    max = cnt[i][1];
+                }
+            }
+            // 调度成功
+            if (tIndex != -1) {
+                cnt[tIndex][0] = res;
+                cnt[tIndex][1]--;
+                len--;
+            }
+        }
+        return res;
+    }
+
+    public int leastInterval(char[] tasks, int n) {
+        // 计数
+        int[][] cnt = new int[26][2];
+        for (char task : tasks) {
+            cnt[task - 'A'][0] = -n;
+            cnt[task - 'A'][1]++;
+        }
+        // 每次调度任务时，遍历所有种类的任务
+        // 没有任务时，退出
+        int res = 0;
+        boolean has = true;
+        while (has) {
+            has = false;
+            res++;
+            int tIndex = -1;
+            int max = 0;
+            for (int i = 0; i < cnt.length; i++) {
+                if (res - cnt[i][0] > n && cnt[i][1] > max) {
+                    tIndex = i;
+                    max = cnt[i][1];
+                }
+                if (cnt[i][1] > 0) {
+                    has = true;
+                }
+            }
+            // 调度成功
+            if (tIndex != -1) {
+                cnt[tIndex][0] = res;
+                cnt[tIndex][1]--;
+            }
+            if (!has) {
+                res--;
+            }
+        }
+        return res;
+    }
+
+
+    // fail
+    public int leastInterval1(char[] tasks, int n) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+                (a, b) -> a[2] != b[2] ? Integer.compare(a[1], n) : Integer.compare(b[1], a[1]));
+        int[][] x = new int[26][3];
+        for (char task : tasks) {
+            x[task - 'A'][0] = task;
+            x[task - 'A'][1] = -n;
+            x[task - 'A'][2]++;
+        }
+        for (int[] ints : x) {
+            if (ints[2] > 0) {
+                pq.add(ints);
+            }
+        }
+
+        int cnt = 0;
+        while (!pq.isEmpty()) {
+            cnt++;
+            int[] peek = pq.poll();
+            if (cnt - peek[1] > n) {
+                peek[2]--;
+                peek[1] = cnt;
+            }
+            if (peek[2] > 0) {
+                pq.add(peek);
+            }
+        }
+        return cnt;
+    }
+
+    /**
      * 多数元素
      * 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
      * <p>
@@ -62,7 +262,6 @@ public class Level22 {
      * b、如果当前计数不为0，判断key == num ? cnt++:cnt--;
      * 2、返回key
      * 思路3、先sort，再取 num[len/2]
-     *
      */
     public int majorityElement(int[] nums) {
         int cnt = 0;

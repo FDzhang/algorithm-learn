@@ -27,6 +27,16 @@ class Level22Test {
         int res = test.lengthOfLIS1(x);
         System.err.println(res);
     }
+
+    @Test
+    public void leastIntervalTest(){
+//        char[] x = {'A','A','A','B','B','B'};
+        char[] x = {'A','A','A','A','A','A','B','C','D','E','F','G'};
+        int n = 2;
+        int res = test.leastInterval(x, n);
+        System.err.println(res);
+    }
+
     @Test
     public void evalTest(){
         String[] x = {"2","1","+","3","*"};
