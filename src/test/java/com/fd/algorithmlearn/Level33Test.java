@@ -22,4 +22,11 @@ class Level33Test {
         IUtil.print(list);
     }
 
+
+    @Test
+    void test2() {
+        Integer x =0;
+        System.err.println(x.equals(null));
+    }
+
 }
