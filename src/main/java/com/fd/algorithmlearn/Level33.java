@@ -53,6 +53,7 @@ public class Level33 {
      * 2、一开始 宽度（j-i）是最大的，指针向中间靠齐，宽度相当于一直在减小，那么需要尽可能的让高度变大。
      * 3、所以将height[i],height[j]中值较小的指针向中间移动。
      * 4、返回遍历过程中的最大值。
+     * 优化：由于需要“高度”尽可能变大，所以若height[i+1]<=height[i]，则不需要计算，让i继续左移即可，j同理。
      */
     public int maxArea(int[] height) {
         int i = 0;
@@ -70,7 +71,7 @@ public class Level33 {
         }
         return res;
     }
-
+    // 优化：由于需要“高度”尽可能变大，所以若height[i+1]<=height[i]，则不需要计算，让i继续左移即可，j同理。
     public int maxArea2(int[] height) {
         int i = 0;
         int j = height.length - 1;
