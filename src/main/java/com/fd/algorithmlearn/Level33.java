@@ -24,6 +24,75 @@ public class Level33 {
     // 除自身以外数组的乘积
 
     /**
+     * 最长连续序列
+     * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+     * <p>
+     * 请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
+     * <p>
+     *  
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [100,4,200,1,3,2]
+     * 输出：4
+     * 解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+     * 示例 2：
+     * <p>
+     * 输入：nums = [0,3,7,2,5,8,4,6,0,1]
+     * 输出：9
+     *  1, 2, 3, 4, 77
+     * <p>
+     * 提示：
+     * <p>
+     * 0 <= nums.length <= 105
+     * -109 <= nums[i] <= 109
+     * 相关标签 并查集 数组 哈希表
+     *
+     * 思路：数组排序，去重
+     * 1、sort 数组nums
+     * 2、遍历nums，连续则 更新最大的连续长度max，此外重复元素 不中断，不增加 当前最大连续长度cur
+     */
+    public int longestConsecutive(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        Arrays.sort(nums);
+        int max = 1;
+        int cur = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i - 1]) {
+                continue;
+            }
+            if (nums[i - 1] == nums[i] - 1) {
+                cur++;
+            } else {
+                cur = 1;
+            }
+            max = Math.max(max, cur);
+        }
+        return max;
+    }
+
+    public int longestConsecutive2(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+        int max = 0;
+        for (Integer num : set) {
+            if (!set.contains(num - 1)) {
+                int cur = 1;
+                while (set.contains(num + cur)){
+                    cur++;
+                }
+                max = Math.max(max, cur);
+            }
+        }
+        return max;
+    }
+
+
+    /**
      * 缺失的第一个正数
      * 给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。
      * <p>
