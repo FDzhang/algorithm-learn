@@ -15,9 +15,15 @@ class Level33Test {
     private Level33 test = new Level33();
 
     @Test
+    void testFirstMissingPositive() {
+        int[] x = {0,1,2};
+        System.out.println(test.firstMissingPositive(x));
+    }
+
+    @Test
     void test1() {
 //        int[][] m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        int[][] m = {{1,2,3,4},{5,6,7,8},{9,10,11,12}};
+        int[][] m = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
         List<Integer> list = test.spiralOrder(m);
         IUtil.print(list);
     }
@@ -25,7 +31,7 @@ class Level33Test {
 
     @Test
     void test2() {
-        Integer x =0;
+        Integer x = 0;
         System.err.println(x.equals(null));
     }
 
