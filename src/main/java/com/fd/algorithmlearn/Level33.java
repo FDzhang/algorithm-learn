@@ -24,6 +24,80 @@ public class Level33 {
     // 除自身以外数组的乘积
 
     /**
+     * 寻找重复数
+     * 给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
+     * <p>
+     * 假设 nums 只有 一个重复的整数 ，返回 这个重复的数 。
+     * <p>
+     * 你设计的解决方案必须 不修改 数组 nums 且只用常量级 O(1) 的额外空间。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [1,3,4,2,2]
+     * 输出：2
+     * 示例 2：
+     * <p>
+     * 输入：nums = [3,1,3,4,2]
+     * 输出：3
+     *  
+     * <p>
+     * 提示：
+     * <p>
+     * 1 <= n <= 105
+     * nums.length == n + 1
+     * 1 <= nums[i] <= n
+     * nums 中 只有一个整数 出现 两次或多次 ，其余整数均只出现 一次
+     *  
+     * <p>
+     * 进阶：
+     * 如何证明 nums 中至少存在一个重复的数字?
+     * 你可以设计一个线性级时间复杂度 O(n) 的解决方案吗？
+     * 相关标签 位运算 数组 双指针 二分查找
+     * <p>
+     * 思路1：位运算
+     * 1、申请一个位set
+     * 2、遍历nums，
+     * a、判断当前num对应的位置是否为true，是则返回num
+     * b、不是则将当前num位置设置为true
+     * <p>
+     * 思路2：成环法的应用
+     * ps: 理解为何 k 是环长度的整数倍, 以及如何找到环的起点（重复数）
+     * <p>
+     * [287.寻找重复数 - 寻找重复数 - 力扣（LeetCode）](https://leetcode-cn.com/problems/find-the-duplicate-number/solution/287xun-zhao-zhong-fu-shu-by-kirsche/)
+     */
+    public int findDuplicate(int[] nums) {
+        BitSet set = new BitSet(nums.length);
+        for (int num : nums) {
+            if (set.get(num)) {
+                return num;
+            } else {
+                set.set(num);
+            }
+        }
+        return -1;
+    }
+
+    public int findDuplicate2(int[] nums) {
+        int fast = 0;
+        int slow = 0;
+
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        }
+
+        slow = 0;
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return slow;
+    }
+
+
+    /**
      * 最长连续序列
      * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
      * <p>
@@ -47,7 +121,7 @@ public class Level33 {
      * 0 <= nums.length <= 105
      * -109 <= nums[i] <= 109
      * 相关标签 并查集 数组 哈希表
-     *
+     * <p>
      * 思路：数组排序，去重
      * 1、sort 数组nums
      * 2、遍历nums，连续则 更新最大的连续长度max，此外重复元素 不中断，不增加 当前最大连续长度cur
@@ -82,7 +156,7 @@ public class Level33 {
         for (Integer num : set) {
             if (!set.contains(num - 1)) {
                 int cur = 1;
-                while (set.contains(num + cur)){
+                while (set.contains(num + cur)) {
                     cur++;
                 }
                 max = Math.max(max, cur);
