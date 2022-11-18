@@ -5,9 +5,7 @@ import java.util.*;
 public class Solution {
 
     /**
-     * 2 1 3
-     * <p>
-     * dp[i][j]: i 到 j 的子序列的宽度
+     * 题解：https://leetcode.cn/problems/sum-of-subsequence-widths/solutions/1977682/by-endlesscheng-upd1/
      */
     public int sumSubseqWidths(int[] nums) {
         int mod = (int) 1e9 + 7;
