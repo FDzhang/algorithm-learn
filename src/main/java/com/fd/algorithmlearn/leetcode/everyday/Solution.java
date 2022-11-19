@@ -4,6 +4,50 @@ import java.util.*;
 
 public class Solution {
 
+    public int largestAltitude(int[] gain) {
+        int ans = 0;
+        int now = 0;
+        for (int g : gain) {
+            now += g;
+            ans = Math.max(ans, now);
+        }
+        return ans;
+    }
+
+    static final char[] digits = {
+            '0', '1', '2', '3', '4', '5',
+            '6', '7', '8', '9', 'a', 'b',
+            'c', 'd', 'e', 'f', 'g', 'h',
+            'i', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't',
+            'u', 'v', 'w', 'x', 'y', 'z'
+    };
+
+    public String toHex(int x) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            int y = cut(x, i);
+            sb.append(to16(y));
+        }
+        return sb.reverse().toString();
+    }
+
+    /**
+     * 1111
+     * 1111 0000
+     * 0001 0000
+     * 0001 0000
+     */
+    private int cut(int x, int i) {
+        int m = 15;
+        return (x >> (i * 4)) & m;
+    }
+
+    public char to16(int num) {
+        return digits[num];
+    }
+
+
     /**
      * 题解：https://leetcode.cn/problems/sum-of-subsequence-widths/solutions/1977682/by-endlesscheng-upd1/
      */
@@ -111,12 +155,16 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        String s = "abcde";
-        String[] ss = {"a", "bb", "acd", "ace"};
 
+//        String s = "abcde";
+//        String[] ss = {"a", "bb", "acd", "ace"};
+//
         Solution solution = new Solution();
-        int cnt = solution.numMatchingSubseq(s, ss);
-        System.err.println(cnt);
+//        int cnt = solution.numMatchingSubseq(s, ss);
+//        System.err.println(cnt);
+
+//        System.err.println(solution.toHex(15));
+        System.err.println(solution.toHex(16));
     }
 
 
