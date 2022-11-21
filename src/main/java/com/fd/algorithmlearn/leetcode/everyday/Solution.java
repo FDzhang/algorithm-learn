@@ -4,6 +4,32 @@ import java.util.*;
 
 public class Solution {
 
+    /**
+     * 100
+     * 0.25 * 1 +
+     */
+    public double soupServings(int n) {
+        n = (int) Math.ceil((double) n / 25);
+        if (n >= 179) {
+            return 1.0;
+        }
+        double[][] dp = new double[n + 1][n + 1];
+        dp[0][0] = 0.5;
+        for (int i = 1; i <= n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                double a = dp[Math.max(i - 4, 0)][j];
+                double b = dp[Math.max(i - 3, 0)][Math.max(j - 1, 0)];
+                double c = dp[Math.max(i - 2, 0)][Math.max(j - 2, 0)];
+                double d = dp[Math.max(i - 1, 0)][Math.max(j - 3, 0)];
+                dp[i][j] = 0.25 * (a + b + c + d);
+            }
+        }
+        return dp[n][n];
+    }
+
     public int largestAltitude(int[] gain) {
         int ans = 0;
         int now = 0;
@@ -155,6 +181,7 @@ public class Solution {
     }
 
     public static void main(String[] args) {
+//        System.err.println(Math.ceil(2.5));
 
 //        String s = "abcde";
 //        String[] ss = {"a", "bb", "acd", "ace"};
@@ -162,9 +189,10 @@ public class Solution {
         Solution solution = new Solution();
 //        int cnt = solution.numMatchingSubseq(s, ss);
 //        System.err.println(cnt);
+        System.err.println(solution.soupServings(200 * 25));
 
 //        System.err.println(solution.toHex(15));
-        System.err.println(solution.toHex(16));
+//        System.err.println(solution.toHex(16));
     }
 
 
