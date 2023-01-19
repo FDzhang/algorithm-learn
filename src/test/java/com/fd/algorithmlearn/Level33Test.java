@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author : zxq
  * @create : 2022/5/11 16:35
  */
-class Level33Test {
+public class Level33Test {
     private Level33 test = new Level33();
 
     @Test

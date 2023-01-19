@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
  * @author zhangxinqiang
  * @create 2021/10/14 11:15
  */
-class Level3Test {
+public class Level3Test {
 
     private Level3 test = new Level3();
 
@@ -46,7 +46,7 @@ class Level3Test {
     }
 
     @Test
-    void largestRectangleAreaTest(){
+    void largestRectangleAreaTest() {
         int[] x = {1, 1};
         int res = test.largestRectangleArea(x);
         System.err.println(res);

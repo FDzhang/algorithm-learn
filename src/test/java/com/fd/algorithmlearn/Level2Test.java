@@ -1,5 +1,6 @@
 package com.fd.algorithmlearn;
 
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.List;
  * @author zhangxinqiang
  * @create 2021/8/16 13:52
  */
-class Level2Test {
+public class Level2Test {
     private Level2 test = new Level2();
 
     @Test
@@ -21,11 +22,11 @@ class Level2Test {
     }
 
     @Test
-    void test(){
+    void test() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("123");
-        sb.insert(3,"x");
+        sb.insert(3, "x");
 
         System.err.println(sb.toString());
     }
@@ -38,33 +39,33 @@ class Level2Test {
     }
 
     @Test
-    void leastIntervalTest(){
-       char[] tasks =  {'A','A','A','B','B','B'};
+    void leastIntervalTest() {
+        char[] tasks = {'A', 'A', 'A', 'B', 'B', 'B'};
         int res = test.leastInterval(tasks, 0);
         System.err.println(res);
     }
 
     @Test
-    void fractionToDecimalTest(){
+    void fractionToDecimalTest() {
         String res = test.fractionToDecimal(0, -5);
         System.err.println(res);
     }
 
     @Test
-    void  titleToNumberTest(){
+    void titleToNumberTest() {
         int res = test.titleToNumber("AB");
         System.err.println(res);
     }
 
     @Test
-    void myPowTest(){
+    void myPowTest() {
         double res = test.myPow(2, 1);
         System.err.println(res);
     }
 
 
     @Test
-    void isHappyTest(){
+    void isHappyTest() {
         boolean happy = test.isHappy(19);
         System.err.println(happy);
     }
